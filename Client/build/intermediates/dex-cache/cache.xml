@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_0ba3efda93bff35c6dcdb4908af5a5a38c07f946/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ba47ef7f3393f50e7484fb885f782b46fb84c3a4">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_b23a443e156902ce8636dc5a1e98954ba6c27120/classes.dex" />
+    </item>
+
+</items>
