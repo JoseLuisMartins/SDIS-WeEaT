@@ -8,3 +8,4 @@ server/.idea/
 /captures
 .externalNativeBuild
 .gitignore
+server/out
