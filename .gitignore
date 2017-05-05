@@ -1,9 +1,10 @@
 *.iml
 .gradle
 /local.properties
-*/.idea/*
+server/.idea/
+.idea/
 .DS_Store
 /build
 /captures
 .externalNativeBuild
-
+.gitignore
