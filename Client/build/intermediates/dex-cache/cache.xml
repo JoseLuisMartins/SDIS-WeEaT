@@ -3,21 +3,84 @@
 
     <item
         is-multidex="true"
-        jar="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="C:\Users\PeaceOff\.android\build-cache\942d5ef6bdc50cdb34b279d99dc86cebe76d8f94\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c7626a9aa507bbbdc16188bc9a9f9bf3370c1ddd">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_55b2fdadbd51c30250d3c16b5f9f81f458e0ac21\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\.android\build-cache\0449bd3c1acf005791336098f52bf34a8e23c840\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_39c0fbe9b2ad10770734656f4e647cb1cc818a84\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\.android\build-cache\90db61adf09ad8389fb9b2c04b813d47e120ca71\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6003d64df88a6ce5e961fa2bad7f1b9b97689ac1">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_81b2b3673dc2f817891ba5150fff83106b22f14b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\.android\build-cache\f15c3f05d4e38239f23abc26ec33ea0b250a95af\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bdcc2a9572f18b8c90a3a157cab6cdfc97c6c736">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c335fedba5bd006d8e4f3e9eb03decf5e6f31624\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
-        <dex dex="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_0ba3efda93bff35c6dcdb4908af5a5a38c07f946/classes.dex" />
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_3fd13ae2ff403753e0a44d59b47eac91269ead18\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="C:\Users\PeaceOff\.android\build-cache\7c8fc93208fd70cf79c3c118da079843c8d5302e\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="ba47ef7f3393f50e7484fb885f782b46fb84c3a4">
-        <dex dex="/home/josemartins/github/SDIS-WeEaT_Client/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_b23a443e156902ce8636dc5a1e98954ba6c27120/classes.dex" />
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7ccc819be29f8cb82c0e0a5ed778e70e2e7693f7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\.android\build-cache\f2f894024777c8c1fbed3575b383d31d0f4f89e8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ab384e09a54e9d6383e4933686715986ccda2058\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2300737d561e9163bc994adb3bcf76ae69fce283">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_181fba5b5fff2142884c8c9e74dc297bce52a20b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\.android\build-cache\7ae0b721875e4555f416243b89e11b7969c553ba\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="19696dc358ac668e341f28c41e3387d61ccdb81d">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8d4384f91e272f74cd1ab47546c0e53cf7e82e64\classes.dex" />
     </item>
 
 </items>
