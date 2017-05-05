@@ -1,23 +1,20 @@
-package gui;
+package network;
 
 
+import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 
 public class Server {
 
-    public static void main(String [ ] args) throws Exception {
 
-        System.out.println("WeEat Server");
-
+    public Server() throws Exception {
 
         //SSL CONTEXT
 
@@ -36,18 +33,16 @@ public class Server {
         KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
         kmf.init ( keyStore, password );
 
-        /*
-        // setup the trust manager factory
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance ( "SunX509" );
-        tmf.init ( keyStore );
-        */
+
 
         serverContext.init(kmf.getKeyManagers(), null, null);
 
-
         //CREATE HTTPSSERVER
-        HttpsServer server = HttpsServer.create(new InetSocketAddress(8080), 0);
+        HttpsServer server = HttpsServer.create(new InetSocketAddress(8000), 0);
         server.setHttpsConfigurator(new HttpsConfigurator(serverContext));
+
+        server.createContext("/",new ServerHttpHandler());
+
         server.setExecutor(null);
         server.start();
 
