@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    tools:context="com.example.josemartins.sdis_weeat.ChooseLocal">
+    tools:context="com.example.josemartins.sdis_weeat.gui.ChooseLocal">
 
 
 

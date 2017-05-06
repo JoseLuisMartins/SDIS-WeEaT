@@ -17,7 +17,7 @@
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCDmvfkFQgLAmlMENLAt4Z8OqGHUDY3ZRs"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".gui.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -26,11 +26,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChooseLocal"
+            android:name=".gui.ChooseLocal"
             android:label="@string/title_activity_choose_local"
              />
         <activity
-            android:name=".ChatActivity"
+            android:name=".gui.ChatActivity"
             android:label="@string/title_activity_chat" ></activity>
     </application>
 
