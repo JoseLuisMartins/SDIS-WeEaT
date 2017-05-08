@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.josemartins.sdis_weeat.R;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,10 +25,13 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 public class Client {
@@ -35,38 +40,37 @@ public class Client {
     SSLContext sslContext;
 
     public Client(Context context) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException, UnrecoverableKeyException {
-
+        Log.d("debug","0Client-----");
         initSSLContext(context);
         Log.d("debug","Client-----");
 
+        //make request
         Request req = new Request();
         req.execute();
+    }
+
+    static {
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
+        {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
     }
 
 
     public void initSSLContext(Context context) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException {
 
-        char[] password = "123456".toCharArray ();
-        //client
-        KeyStore keyStoreCient = KeyStore.getInstance ( "JKS" );
-        keyStoreCient.load( context.getAssets().open("keys/client.keys"), password);
+        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        keyStore.load(context.getResources().openRawResource(R.raw.truststore), "123456".toCharArray());
 
-        // setup the key manager factory
-        KeyManagerFactory kmfClient = KeyManagerFactory.getInstance ( KeyManagerFactory.getDefaultAlgorithm() );
-        kmfClient.init ( keyStoreCient, password );
-
-
-        KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(context.getAssets().open("keys/truststore.bks"), password);
-
-       // Create a TrustManager that trusts the CAs in our KeyStore
+        // Create a TrustManager that trusts the CAs in our KeyStore
         String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-        tmf.init(trustStore);
+        tmf.init(keyStore);
 
         sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(kmfClient.getKeyManagers(), tmf.getTrustManagers(), null);
-
+        sslContext.init(null, tmf.getTrustManagers(), null);
     }
 
     class Request extends AsyncTask<Void, Void, Void> {
@@ -79,14 +83,21 @@ public class Client {
 
                 URL url = new URL("https://192.168.1.64:8000");
 
+
                 HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
                 urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-                urlConnection.setRequestMethod("GET");
+
+
+                /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                InputStream is = urlConnection.getInputStream();
+                int n;
+                while ((n = is.read()) != -1) baos.write(n);
+                is.close();
+*/
+
                 //urlConnection.connect();
 
-                print_https_cert(urlConnection);
-                print_content(urlConnection);
-
+              //  Log.d("debug","asyncTasktest-> " + baos.toByteArray());
                 Log.d("debug","asyncTask-----> " + String.valueOf(urlConnection.getResponseCode()) + " " + urlConnection.getResponseMessage() + "\r\n" );
 
             } catch (MalformedURLException e) {
@@ -99,63 +110,6 @@ public class Client {
 
             return null;
         }
-
-        private void print_https_cert(HttpsURLConnection con){
-
-            if(con!=null){
-
-                try {
-
-                    Log.d("debug","Response Code : " + con.getResponseCode());
-                    Log.d("debug","Cipher Suite : " + con.getCipherSuite());
-                    Log.d("debug","\n");
-
-                    Certificate[] certs = con.getServerCertificates();
-                    for(Certificate cert : certs){
-                        Log.d("debug","Cert Type : " + cert.getType());
-                        Log.d("debug","Cert Hash Code : " + cert.hashCode());
-                        Log.d("debug","Cert Public Key Algorithm : "
-                                + cert.getPublicKey().getAlgorithm());
-                        Log.d("debug","Cert Public Key Format : "
-                                + cert.getPublicKey().getFormat());
-                        Log.d("debug","\n");
-                    }
-
-                } catch (SSLPeerUnverifiedException e) {
-                    e.printStackTrace();
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-
-        private void print_content(HttpsURLConnection con){
-            if(con!=null){
-
-                try {
-
-                    Log.d("debug","****** Content of the URL ********");
-                    BufferedReader br =
-                            new BufferedReader(
-                                    new InputStreamReader(con.getInputStream()));
-
-                    String input;
-
-                    while ((input = br.readLine()) != null){
-                        Log.d("debug",input);
-                    }
-                    br.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-
 
 
         @Override

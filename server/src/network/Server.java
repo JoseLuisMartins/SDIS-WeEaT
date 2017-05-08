@@ -28,28 +28,27 @@ public class Server {
 
         // initialise the keystore
         char[] password = "123456".toCharArray ();
-        KeyStore keyStore = KeyStore.getInstance ( "JKS" );
+        KeyStore keyStore = KeyStore.getInstance( "JKS" );
         FileInputStream fis = new FileInputStream ( "src/keys/server.keys" );
         keyStore.load( fis, password );
 
         // setup the key manager factory
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance ( KeyManagerFactory.getDefaultAlgorithm() );
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
         kmf.init ( keyStore, password );
 
-
-        KeyStore trustStore = KeyStore.getInstance("JKS");
+/*
+        KeyStore trustStore = KeyStore.getInstance("bks-v1");
         FileInputStream fi = new FileInputStream ( "src/keys/truststore.bks" );
         trustStore.load(fi, password);
 
         // Create a TrustManager that trusts the CAs in our KeyStore
         String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-        tmf.init(trustStore);
+        tmf.init(trustStore);*/
 
 
 
-
-        serverContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        serverContext.init(kmf.getKeyManagers(),null, null);
 
         //CREATE HTTPSSERVER
         HttpsServer server = HttpsServer.create(new InetSocketAddress(8000), 0);
