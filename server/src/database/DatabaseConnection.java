@@ -18,7 +18,7 @@ public class DatabaseConnection {
         try {
 
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/weeat","postgres", "im80re93");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/weeat","postgres", "q1w2e3r4t5");
             conn.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
@@ -83,15 +83,15 @@ public class DatabaseConnection {
             stmt = conn.createStatement();
 
             String sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Alberto Joao');";
+                    + "VALUES ('Manuelinho');";
             stmt.executeUpdate(sql);
 
             sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Felismino');";
+                    + "VALUES ('Roberta Freitas');";
             stmt.executeUpdate(sql);
 
             sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Botato Suporifero');";
+                    + "VALUES ('Scoopy Potato');";
             stmt.executeUpdate(sql);
 
             ResultSet rs = stmt.executeQuery( "SELECT * FROM user_weeat;");

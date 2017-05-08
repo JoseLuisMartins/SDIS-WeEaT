@@ -105,11 +105,12 @@ public class DatabaseManager {
 
     private static void launch_process(ProcessBuilder pb) {
 
-        pb.environment().put("PGPASSWORD", "im80re93");
+        pb.environment().put("PGPASSWORD", "q1w2e3r4t5");
 
         try {
             Process p = pb.start();
 
+            /*
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = buf.readLine();
@@ -119,7 +120,7 @@ public class DatabaseManager {
                 line = buf.readLine();
             }
             buf.close();
-
+*/
             p.waitFor();
             p.destroy();
         } catch (IOException e) {
