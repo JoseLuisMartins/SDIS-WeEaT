@@ -9,6 +9,7 @@ import network.messaging.ServerMessageParser;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
@@ -29,15 +30,26 @@ public class Server {
         char[] password = "123456".toCharArray ();
         KeyStore keyStore = KeyStore.getInstance ( "JKS" );
         FileInputStream fis = new FileInputStream ( "src/keys/server.keys" );
-        keyStore.load ( fis, password );
+        keyStore.load( fis, password );
 
         // setup the key manager factory
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance ( KeyManagerFactory.getDefaultAlgorithm() );
         kmf.init ( keyStore, password );
 
 
+        KeyStore trustStore = KeyStore.getInstance("JKS");
+        FileInputStream fi = new FileInputStream ( "src/keys/truststore.bks" );
+        trustStore.load(fi, password);
 
-        serverContext.init(kmf.getKeyManagers(), null, null);
+        // Create a TrustManager that trusts the CAs in our KeyStore
+        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+        tmf.init(trustStore);
+
+
+
+
+        serverContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
         //CREATE HTTPSSERVER
         HttpsServer server = HttpsServer.create(new InetSocketAddress(8000), 0);

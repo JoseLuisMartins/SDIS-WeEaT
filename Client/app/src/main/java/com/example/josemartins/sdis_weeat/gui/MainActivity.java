@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.example.josemartins.sdis_weeat.R;
@@ -13,16 +14,19 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 public class MainActivity extends AppCompatActivity {
+
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Context context = this;
+        this.context = this;
         try {
             Client client = new Client(context);
         } catch (CertificateException e) {
@@ -35,11 +39,32 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
         }
 
     }
 
     public void login(View v){
+        try {
+            Client client = new Client(context);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("debug","activity-----");
+
+
         Intent i = new Intent(this,ChooseLocal.class);
         startActivity(i);
 
