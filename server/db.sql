@@ -1,10 +1,4 @@
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-SET search_path = public, pg_catalog;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
+DROP TABLE IF EXISTS chat_member CASCADE;
 
 CREATE TABLE chat_member (
     chat_id integer NOT NULL,
@@ -13,6 +7,7 @@ CREATE TABLE chat_member (
 
 ALTER TABLE chat_member OWNER TO postgres;
 
+DROP TABLE IF EXISTS chatroom CASCADE;
 CREATE TABLE chatroom (
     id integer NOT NULL,
     location point NOT NULL,
@@ -22,6 +17,7 @@ CREATE TABLE chatroom (
 
 ALTER TABLE chatroom OWNER TO postgres;
 
+DROP TABLE IF EXISTS message CASCADE;
 CREATE TABLE message (
     id integer NOT NULL,
     date timestamp with time zone NOT NULL,
@@ -32,6 +28,7 @@ CREATE TABLE message (
 
 ALTER TABLE message OWNER TO postgres;
 
+DROP TABLE IF EXISTS user_weeat CASCADE;
 CREATE TABLE user_weeat (
     username text NOT NULL
 );
