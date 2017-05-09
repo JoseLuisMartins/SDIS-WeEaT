@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f094c51bb4ce5dbbd9bf3bd27e19fe7102623851">
+        <dex dex="C:\Users\PeaceOff\Documents\GitHub\sdis_weeat\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_181fba5b5fff2142884c8c9e74dc297bce52a20b\classes.dex" />
+    </item>
+
+</items>
