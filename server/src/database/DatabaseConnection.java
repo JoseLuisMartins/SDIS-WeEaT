@@ -1,5 +1,6 @@
 package database;
 
+import org.postgresql.geometric.PGpoint;
 import org.postgresql.util.PSQLException;
 
 import java.awt.*;
@@ -51,7 +52,7 @@ public class DatabaseConnection {
 
                 int id = rs.getInt("id");
                 Timestamp date = rs.getTimestamp("date");
-                Point location = (Point)rs.getObject("location");
+                PGpoint location = (PGpoint)rs.getObject("location");
                 String creator = rs.getString("creator");
 
                 res.add(new ChatRoom(id,location,creator,date));
@@ -123,14 +124,15 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(Point location, Timestamp date,String creator) {
+    public void add_chatroom(PGpoint location, Timestamp date,String creator) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chatroom (location, creator, date) VALUES (?, ?, ?)");
-            stmt.setObject(1,location);
-            stmt.setString(2,creator);
-            stmt.setObject(3,date);
+            stmt = conn.prepareStatement("INSERT INTO chatroom (location, creator, date) VALUES (point(?,?), ?, ?)");
+            stmt.setDouble(1,location.x);
+            stmt.setDouble(2,location.y);
+            stmt.setString(3,creator);
+            stmt.setObject(4,date);
 
             Boolean rs = stmt.execute();
 
@@ -261,6 +263,46 @@ public class DatabaseConnection {
 
         DatabaseConnection db = new DatabaseConnection();
 
+        db.close();
+        DatabaseManager.database_delete();
+        DatabaseManager.database_create();
+        DatabaseManager.database_init();
+        db.connect();
+        db.print();
+        System.out.println(db.get_chatrooms().toString());
+        System.out.println(db.get_chat_members(1).toString());
+        System.out.println(db.get_chat_members(2).toString());
+        System.out.println(db.get_chat_messages(1).toString());
+        System.out.println(db.get_chat_messages(2).toString());
+
+        System.out.println("--------------------------------------------------------------------------------");
+
+        db.add_user("Marcelinho");
+        db.add_user("josezinho");
+        db.add_user("joaozinho");
+        db.add_user("davidzinho");
+
+        db.add_chatroom(new PGpoint(1,32),new Timestamp(Long.parseLong("4124214")),"Marcelinho");
+        db.add_chatroom(new PGpoint(6,9),new Timestamp(Long.parseLong("24124214")),"josezinho");
+
+        db.add_chat_member(1,"joaozinho");
+        db.add_chat_member(1,"davidzinho");
+        db.add_chat_member(2,"joaozinho");
+        db.add_chat_member(2,"davidzinho");
+
+        db.add_message("Bom dia!",1,"davidzinho");
+        db.add_message("Batatas!",1,"joaozinho");
+        db.add_message("Batatas!",2,"joaozinho");
+        db.add_message("Bom dia!",2,"davidzinho");
+
+        db.print();
+        System.out.println(db.get_chatrooms().toString());
+        System.out.println(db.get_chat_members(1).toString());
+        System.out.println(db.get_chat_members(2).toString());
+        System.out.println(db.get_chat_messages(1).toString());
+        System.out.println(db.get_chat_messages(2).toString());
+
+        /*
         db.print();
         DatabaseManager.database_backup();
 
@@ -271,8 +313,9 @@ public class DatabaseConnection {
         //DatabaseManager.database_init();
         DatabaseManager.database_restore();
 
+        //Command : psql -h localhost -p 5432 -U postgres weeat < db.sql
         db.print();
-
+*/
         System.out.println("Closing...");
         db.close();
 

@@ -9,18 +9,18 @@ ALTER TABLE chat_member OWNER TO postgres;
 
 DROP TABLE IF EXISTS chatroom CASCADE;
 CREATE TABLE chatroom (
-    id integer NOT NULL,
+    id SERIAL,
     location point NOT NULL,
     creator text NOT NULL,
-    date timestamp with time zone DEFAULT now()
+    date timestamp with time zone NOT NULL
 );
 
 ALTER TABLE chatroom OWNER TO postgres;
 
 DROP TABLE IF EXISTS message CASCADE;
 CREATE TABLE message (
-    id integer NOT NULL,
-    date timestamp with time zone NOT NULL,
+    id SERIAL,
+    date timestamp with time zone DEFAULT now(),
     content text NOT NULL,
     chat_id integer NOT NULL,
     poster text NOT NULL
