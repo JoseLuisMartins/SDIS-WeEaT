@@ -12,4 +12,12 @@ public class ChatMember {
         this.chat_id = chat_id;
         this.member = member;
     }
+
+    @Override
+    public String toString() {
+        return "ChatMember{" +
+                "chat_id=" + chat_id +
+                ", member='" + member + '\'' +
+                '}';
+    }
 }

@@ -16,8 +16,6 @@ public class DatabaseManager {
         DatabaseManager.bin_path = root_path;
     }
 
-
-
     public static void database_create(){
 
         List<String> commands = get_commands("createdb");
@@ -92,7 +90,6 @@ public class DatabaseManager {
 
         try {
             Process p = pb.start();
-
 
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));

@@ -16,4 +16,14 @@ public class ChatRoom {
         creator = _creator;
         date = _date;
     }
+
+    @Override
+    public String toString() {
+        return "ChatRoom{" +
+                "id=" + id +
+                ", location=" + location +
+                ", creator='" + creator + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

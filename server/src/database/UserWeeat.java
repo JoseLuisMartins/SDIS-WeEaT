@@ -10,4 +10,11 @@ public class UserWeeat {
     public UserWeeat(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "UserWeeat{" +
+                "username='" + username + '\'' +
+                '}';
+    }
 }

@@ -18,4 +18,15 @@ public class MessageDB {
         this.chat_id = chat_id;
         this.poster = poster;
     }
+
+    @Override
+    public String toString() {
+        return "MessageDB{" +
+                "id=" + id +
+                ", date=" + date +
+                ", content='" + content + '\'' +
+                ", chat_id=" + chat_id +
+                ", poster='" + poster + '\'' +
+                '}';
+    }
 }
