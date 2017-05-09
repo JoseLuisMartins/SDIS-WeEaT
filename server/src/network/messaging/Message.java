@@ -3,22 +3,25 @@ package network.messaging;
 
 import com.sun.net.httpserver.HttpExchange;
 
-public class Message {
+import java.io.Serializable;
 
-    private String classID;
+public class Message implements Serializable{
+
+    private int actionID;
     private Object content;
-    private HttpExchange httpExchange;
+    private transient HttpExchange httpExchange;
 
-    public Message(String classID, Object content, HttpExchange httpExchange){
-        this.classID = classID;
+    public Message(int actionID, Object content, HttpExchange httpExchange){
+        this.actionID = actionID;
         this.content = content;
         this.httpExchange = httpExchange;
     }
 
-    public String getClassID(){
-        return classID;
-    }
+    public int getClassID(){ return actionID;}
 
+    public void setHttpExchange(HttpExchange e){
+        httpExchange = e;
+    }
     public Object getContent(){
         return content;
     }
