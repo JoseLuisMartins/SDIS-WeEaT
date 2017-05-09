@@ -2,9 +2,7 @@ package network.messaging.worker;
 
 import java.util.HashMap;
 
-/**
- * Created by joao on 5/5/17.
- */
+
 public class WorkerManager {
 
     public static HashMap<String,Worker> workers = new HashMap<String,Worker>();

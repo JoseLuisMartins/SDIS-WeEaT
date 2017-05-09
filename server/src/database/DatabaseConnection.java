@@ -1,4 +1,4 @@
-package src.database;
+package database;
 
 import java.awt.*;
 import java.sql.*;

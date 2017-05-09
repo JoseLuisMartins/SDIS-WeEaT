@@ -36,16 +36,6 @@ public class Server {
         KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
         kmf.init ( keyStore, password );
 
-/*
-        KeyStore trustStore = KeyStore.getInstance("bks-v1");
-        FileInputStream fi = new FileInputStream ( "src/keys/truststore.bks" );
-        trustStore.load(fi, password);
-
-        // Create a TrustManager that trusts the CAs in our KeyStore
-        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-        tmf.init(trustStore);*/
-
 
 
         serverContext.init(kmf.getKeyManagers(),null, null);
@@ -59,9 +49,6 @@ public class Server {
         server.setExecutor(null);
         server.start();
 
-        ServerMessageParser mp = new ServerMessageParser();
-
-        mp.ReceiveMessage(new Message("WorkerAlert","Friend Hi!".getBytes()));
 
 
     }

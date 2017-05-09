@@ -1,16 +1,18 @@
 package network.messaging;
 
-/**
- * Created by joao on 5/5/17.
- */
+
+import com.sun.net.httpserver.HttpExchange;
+
 public class Message {
 
     private String classID;
     private Object content;
+    private HttpExchange httpExchange;
 
-    public Message(String classID, Object content){
+    public Message(String classID, Object content, HttpExchange httpExchange){
         this.classID = classID;
         this.content = content;
+        this.httpExchange = httpExchange;
     }
 
     public String getClassID(){
@@ -21,4 +23,7 @@ public class Message {
         return content;
     }
 
+    public HttpExchange getHttpExchange() {
+        return httpExchange;
+    }
 }
