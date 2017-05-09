@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1077664049472",
+    "project_id": "weeat-166318"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077664049472:android:5904620ec5401782",
+        "android_client_info": {
+          "package_name": "com.example.josemartins.sdis_weeat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077664049472-28kaormv1qla422j0jjkr2e6j5icbqke.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.josemartins.sdis_weeat",
+            "certificate_hash": "a45f336da45369ec432d6e80b4b76f7de0d5114f"
+          }
+        },
+        {
+          "client_id": "1077664049472-kcih82jenig0b27oge2ubekqqk5414qp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASGQGH2eO2wDRN9Hj_MGyP8yby84hwwpw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

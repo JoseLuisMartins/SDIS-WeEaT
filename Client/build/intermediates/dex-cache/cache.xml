@@ -3,21 +3,75 @@
 
     <item
         is-multidex="true"
-        jar="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="bf50b737d9eae9a320f62a8c84575a020936a55c">
-        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e14082d3238fa6422993784fa0912083e6255f26/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
         <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_d03c3eacf0a1e2778bb18a9eed7385afb058abb7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/dbb98f7f2acc92d2545e8096870fd16700b79933/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="25f55515117e14a658120a7b01a9ea5170409db4">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_529f4ff2b8e33c4489f6904a0e1501f8243a1f26/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/7ad8374da92743182bc9700f7c01b4ce9e961428/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0a5d5553c308643a9022f15513ebdd59e9c78d82">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ae4cca2ab9ae8bfe1572001267438e213e21dab5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/cd1a4f53556756694b2a0a026d84ddace6687889/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="399f75732ff1ac159f9e73611536f1508bf18d3b">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e584f1ef4a8a9288fbf4787a791f03e281cfb3dd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/011081f13576f945757b573f67ceaa0d2f20aa0d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="888983f51cf34f57a93ff16832552f2f15937212">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_faffbf3ebb119176d84e338d1c84a8ab6e34476b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c9cd4ad28aa1b58bda36311506c732bc858e9683">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e14082d3238fa6422993784fa0912083e6255f26/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/bd2d2268404f5dfd5ae9f3a7f81dbc44707271d0/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a1aa1dd9917e887bfe732cc5e561ae6ae8f9a84a">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_84b1d8dda1f9eef7073d87cf8d7259315373977c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/.android/build-cache/8ffa0ccacf08e74ae328350bf87653e4ffc5f7af/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="12032271e6be735e811ad529cb08ff066c381640">
+        <dex dex="/home/josemartins/github/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6f77643d96b3b5807c48dce4cae4365ba8eccf5b/classes.dex" />
     </item>
 
 </items>
