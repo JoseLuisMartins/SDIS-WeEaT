@@ -1,4 +1,4 @@
-package src.network.messaging;
+package network.messaging;
 
 
 import com.sun.net.httpserver.HttpExchange;

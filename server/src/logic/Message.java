@@ -1,4 +1,4 @@
-package src.logic;
+package logic;
 
 /**
  * Created by josemartins on 05-05-2017.

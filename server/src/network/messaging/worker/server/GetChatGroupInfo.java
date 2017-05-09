@@ -1,7 +1,7 @@
-package src.network.messaging.worker.server;
+package network.messaging.worker.server;
 
 
-import src.network.messaging.worker.Worker;
+import network.messaging.worker.Worker;
 
 import com.sun.net.httpserver.HttpExchange;
 

@@ -1,7 +1,7 @@
-package src.gui;
+package gui;
 
 
-import src.network.Server;
+import network.Server;
 
 public class WeEatServer {
 

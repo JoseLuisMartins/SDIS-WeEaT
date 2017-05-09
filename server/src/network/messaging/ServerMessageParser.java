@@ -1,10 +1,10 @@
-package src.network.messaging;
+package network.messaging;
 
 
-import src.network.messaging.worker.Worker;
-import src.network.messaging.worker.WorkerManager;
-import src.network.messaging.worker.server.AuthUser;
-import src.network.messaging.worker.server.WorkerAlert;
+import network.messaging.worker.Worker;
+import network.messaging.worker.WorkerManager;
+import network.messaging.worker.server.AuthUser;
+import network.messaging.worker.server.WorkerAlert;
 
 
 public class ServerMessageParser extends MessageParser {

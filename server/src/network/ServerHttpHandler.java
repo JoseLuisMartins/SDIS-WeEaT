@@ -1,10 +1,9 @@
-package src.network;
-
+package network;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import src.network.messaging.Message;
-import src.network.messaging.ServerMessageParser;
+import network.messaging.Message;
+import network.messaging.ServerMessageParser;
 
 
 import java.io.ByteArrayOutputStream;
