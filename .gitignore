@@ -9,3 +9,4 @@ client/.idea/
 /captures
 .externalNativeBuild
 server/out
+Client/build

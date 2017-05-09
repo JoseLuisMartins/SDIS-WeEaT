@@ -10,6 +10,7 @@ import com.example.josemartins.sdis_weeat.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -26,7 +27,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
-public class Client {
+public class Client implements Serializable {
 
 
     SSLContext sslContext;

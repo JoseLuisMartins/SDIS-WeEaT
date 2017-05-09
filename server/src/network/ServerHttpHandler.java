@@ -43,7 +43,7 @@ public class ServerHttpHandler implements HttpHandler {
 
 
         //Check authentication here
-        
+
         messageParser.ReceiveMessage(new Message(workerId,body,httpExchange));
     }
 
