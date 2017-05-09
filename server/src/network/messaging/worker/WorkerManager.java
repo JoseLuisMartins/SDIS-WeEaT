@@ -1,4 +1,4 @@
-package network.messaging.worker;
+package src.network.messaging.worker;
 
 import java.util.HashMap;
 

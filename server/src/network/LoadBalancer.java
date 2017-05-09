@@ -1,4 +1,4 @@
-package network;
+package src.network;
 
 
 import com.sun.net.httpserver.HttpServer;

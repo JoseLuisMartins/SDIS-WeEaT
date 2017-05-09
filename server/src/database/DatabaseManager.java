@@ -33,9 +33,10 @@ public class DatabaseManager {
 
         List<String> commands = get_commands("psql");
 
+        commands.add("-d");
         commands.add("weeat");
-        commands.add("<");
-        commands.add(".." + File.separator + "db.sql");
+        commands.add("-f");
+        commands.add("." + File.separator + "db.sql");
 
         launch_process(commands);
 
@@ -61,7 +62,7 @@ public class DatabaseManager {
         commands.add("c");
         commands.add("-v");
         commands.add("-f");
-        commands.add('.' + File.separator + "db.backup");
+        commands.add("." + File.separator + "db.backup");
         commands.add("weeat");
 
         launch_process(commands);
@@ -76,7 +77,7 @@ public class DatabaseManager {
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
         commands.add("-v");
-        commands.add('.' + File.separator + "db.backup"); // local do file output após backup
+        commands.add("." + File.separator + "db.backup"); // local do file output após backup
 
         launch_process(commands);
 
@@ -87,6 +88,7 @@ public class DatabaseManager {
 
         ProcessBuilder pb = new ProcessBuilder(commands);
         pb.environment().put("PGPASSWORD", "q1w2e3r4t5");
+        System.out.println("Running : " + pb.command().toString());
 
         try {
             Process p = pb.start();

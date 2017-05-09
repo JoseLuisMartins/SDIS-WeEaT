@@ -1,7 +1,7 @@
-package network.messaging;
+package src.network.messaging;
 
-import logic.Message;
-import network.messaging.worker.Worker;
+import src.logic.Message;
+import src.network.messaging.worker.Worker;
 
 
 public class MessageParser {

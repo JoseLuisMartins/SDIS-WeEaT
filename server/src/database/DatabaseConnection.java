@@ -1,5 +1,7 @@
 package src.database;
 
+import org.postgresql.util.PSQLException;
+
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -105,6 +107,9 @@ public class DatabaseConnection {
             rs.close();
             stmt.close();
 
+        } catch (PSQLException e) {
+            System.out.println("PostgreSQL error! " + e.getMessage());
+            //e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -135,16 +140,19 @@ public class DatabaseConnection {
 
     public static void main(String args[]) {
 
+        System.out.println("Working Directory = " +
+                System.getProperty("user.dir"));
+
         DatabaseConnection db = new DatabaseConnection();
 
-        //db.test();
+        db.print();
         DatabaseManager.database_backup();
 
         db.close();
         DatabaseManager.database_delete();
         DatabaseManager.database_create();
-        //DatabaseManager.database_init();
         db.connect();
+        //DatabaseManager.database_init();
         DatabaseManager.database_restore();
 
         db.print();

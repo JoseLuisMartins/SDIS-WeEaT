@@ -1,11 +1,11 @@
-package network;
+package src.network;
 
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
-import network.messaging.Message;
-import network.messaging.ServerMessageParser;
+import src.network.messaging.Message;
+import src.network.messaging.ServerMessageParser;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
