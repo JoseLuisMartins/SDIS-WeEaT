@@ -1,4 +1,4 @@
-package database;
+package src.database;
 
 import java.awt.*;
 import java.sql.*;
@@ -137,12 +137,13 @@ public class DatabaseConnection {
 
         DatabaseConnection db = new DatabaseConnection();
 
-        db.test();
+        //db.test();
         DatabaseManager.database_backup();
 
         db.close();
         DatabaseManager.database_delete();
         DatabaseManager.database_create();
+        //DatabaseManager.database_init();
         db.connect();
         DatabaseManager.database_restore();
 

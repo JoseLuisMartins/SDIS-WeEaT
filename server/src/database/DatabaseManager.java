@@ -1,4 +1,4 @@
-package database;
+package src.database;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,56 +16,47 @@ public class DatabaseManager {
         DatabaseManager.bin_path = root_path;
     }
 
+
+
     public static void database_create(){
 
-        List<String> commands = new ArrayList<String>();
+        List<String> commands = get_commands("createdb");
 
-        commands.add(bin_path + File.separator + "createdb");
-        commands.add("-h");
-        commands.add("localhost");
-        commands.add("-p");
-        commands.add("5432");
-        commands.add("-U");
-        commands.add("postgres");
         commands.add("weeat");
 
-        ProcessBuilder pb = new ProcessBuilder(commands);
-
-        launch_process(pb);
+        launch_process(commands);
 
         System.out.println("Create Successfull");
     };
 
-    public static void database_delete(){
-        List<String> commands = new ArrayList<String>();
+    public static void database_init(){
 
-        commands.add(bin_path + File.separator + "dropdb");
-        commands.add("-h");
-        commands.add("localhost");
-        commands.add("-p");
-        commands.add("5432");
-        commands.add("-U");
-        commands.add("postgres");
+        List<String> commands = get_commands("psql");
+
+        commands.add("weeat");
+        commands.add("<");
+        commands.add(".." + File.separator + "db.sql");
+
+        launch_process(commands);
+
+        System.out.println("Init Successfull");
+    };
+
+    public static void database_delete(){
+
+        List<String> commands = get_commands("dropdb");
+
         commands.add("weeat");
 
-        ProcessBuilder pb = new ProcessBuilder(commands);
-
-        launch_process(pb);
+        launch_process(commands);
 
         System.out.println("Delete Successfull");
     };
 
     public static void database_backup(){
 
-        List<String> commands = new ArrayList<String>();
+        List<String> commands = get_commands("pg_dump");
 
-        commands.add(bin_path + File.separator + "pg_dump");
-        commands.add("-h");
-        commands.add("localhost");
-        commands.add("-p");
-        commands.add("5432");
-        commands.add("-U");
-        commands.add("postgres");
         commands.add("-F");
         commands.add("c");
         commands.add("-v");
@@ -73,44 +64,34 @@ public class DatabaseManager {
         commands.add('.' + File.separator + "db.backup");
         commands.add("weeat");
 
-        ProcessBuilder pb = new ProcessBuilder(commands);
-
-        launch_process(pb);
+        launch_process(commands);
 
         System.out.println("Backup Successfull");
     };
 
     public static void database_restore(){
 
-        List<String> commands = new ArrayList<String>();
+        List<String> commands = get_commands("pg_restore");
 
-        commands.add(bin_path + File.separator + "pg_restore");
-        commands.add("-h");
-        commands.add("localhost");
-        commands.add("-p");
-        commands.add("5432");
-        commands.add("-U");
-        commands.add("postgres");    // username do postgres
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
         commands.add("-v");
         commands.add('.' + File.separator + "db.backup"); // local do file output após backup
 
-        ProcessBuilder pb = new ProcessBuilder(commands);
-
-        launch_process(pb);
+        launch_process(commands);
 
         System.out.println("Restore Successfull");
     };
 
-    private static void launch_process(ProcessBuilder pb) {
+    private static void launch_process(List<String> commands) {
 
+        ProcessBuilder pb = new ProcessBuilder(commands);
         pb.environment().put("PGPASSWORD", "q1w2e3r4t5");
 
         try {
             Process p = pb.start();
 
-            /*
+
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = buf.readLine();
@@ -120,7 +101,7 @@ public class DatabaseManager {
                 line = buf.readLine();
             }
             buf.close();
-*/
+
             p.waitFor();
             p.destroy();
         } catch (IOException e) {
@@ -128,5 +109,20 @@ public class DatabaseManager {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static List<String> get_commands(String cmd) {
+
+        List<String> res = new ArrayList<String>();
+
+        res.add(bin_path + File.separator + cmd);
+        res.add("-h");
+        res.add("localhost");
+        res.add("-p");
+        res.add("5432");
+        res.add("-U");
+        res.add("postgres");
+
+        return res;
     }
 }
