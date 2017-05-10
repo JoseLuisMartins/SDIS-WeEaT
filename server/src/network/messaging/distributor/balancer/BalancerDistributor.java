@@ -1,12 +1,13 @@
 package network.messaging.distributor.balancer;
 
-import com.sun.corba.se.impl.orbutil.ObjectWriter;
+import com.sun.net.httpserver.Headers;
 import network.load_balancer.LoadBalancer;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.server.ServerDistributor;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 /**
  * Created by joao on 5/9/17.
@@ -14,12 +15,15 @@ import java.io.ObjectOutputStream;
 public class BalancerDistributor extends Distributor {
 
     public final static int REQUEST_SERVER = 0;
+    public final static int STORE_SERVER = 1;
+
 
     private LoadBalancer loadBalancer;
 
     public BalancerDistributor(LoadBalancer balancer){
         loadBalancer = balancer;
         addAction(REQUEST_SERVER, (Message m) -> requestServer(m));
+        addAction(STORE_SERVER  , (Message m) -> storeServer(m));
     }
 
     public void requestServer(Message m){
@@ -27,16 +31,34 @@ public class BalancerDistributor extends Distributor {
         System.out.println((String)m.getContent());
 
         try {
-            ObjectOutputStream out = new ObjectOutputStream(m.getHttpExchange().getResponseBody());
-
-            out.writeObject(new Message(0, "Hola!",null));
-
-            out.close();
-
+           Distributor.SendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE,"HelloMan", null));
+           System.out.println("MEssage Sent");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void storeServer(Message m){
+        JSONObject obj = new JSONObject((String)m.getContent());
+        String ip = "";
+        System.out.println(m.getHttpExchange().getRequestHeaders().toString());
+        Headers header = m.getHttpExchange().getRequestHeaders();
+        for(String e : header.keySet()){
+
+            System.out.println(e + " - " + header.get(e));
+
+        }
+
+
+        int res = loadBalancer.storeServer(obj.getString("location"), ip , obj.getInt("port"));
+        try {
+            Distributor.SendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE, res));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

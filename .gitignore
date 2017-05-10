@@ -10,3 +10,4 @@ client/.idea/
 .externalNativeBuild
 server/out
 Client/build
+Client/local.properties

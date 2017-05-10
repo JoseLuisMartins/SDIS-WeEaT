@@ -9,6 +9,6 @@ public class WeEatServer {
 
         System.out.println("WeEat Server");
 
-        Server server= new Server();
+        Server server= new Server("127.0.0.1",8000,8888);
     }
 }

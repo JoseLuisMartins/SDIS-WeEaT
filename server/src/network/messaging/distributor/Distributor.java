@@ -2,6 +2,9 @@ package network.messaging.distributor;
 
 import network.messaging.Message;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 /**
@@ -18,6 +21,15 @@ public class Distributor {
     protected void addAction(int id, Action action){
         actions.put(id, action);
     }
+
+
+    protected static void SendMessage(OutputStream o, Message m) throws IOException {
+
+        ObjectOutputStream out = new ObjectOutputStream(o);
+        out.writeObject(m);
+        out.close();
+    }
+
 
     public void distribute(Message m){
         if(actions.containsKey(m.getClassID()))

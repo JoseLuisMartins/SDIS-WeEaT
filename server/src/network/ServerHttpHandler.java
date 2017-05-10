@@ -3,7 +3,6 @@ package network;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import network.messaging.Message;
-import network.messaging.MessageParser;
 import network.messaging.distributor.Distributor;
 
 
@@ -14,15 +13,11 @@ import java.io.OutputStream;
 import java.net.URI;
 
 public class ServerHttpHandler implements HttpHandler {
-    MessageParser messageParser;
-
+    Distributor dist;
     public ServerHttpHandler() {
-        messageParser = new MessageParser(new Distributor() {
-            @Override
-            public void distribute(Message m) {
+        dist = new Distributor(){
 
-            }
-        });
+        };
     }
 
     @Override
@@ -49,7 +44,7 @@ public class ServerHttpHandler implements HttpHandler {
 
         //Check authentication here
 
-        messageParser.ReceiveMessage(new Message(0,body,httpExchange));
+        dist.distribute(new Message(0,body,httpExchange));
     }
 
 
