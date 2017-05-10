@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE = 9001;
     private TextView loginInfo;
-
+    private static final String TAG = "SignInActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
     
 
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     private void handleResult(GoogleSignInResult result){
+        loginInfo.setText(result.toString());
         if(result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
@@ -105,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             String token =  account.getIdToken();
 
             loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
+            updateUI(true);
+        }else{
+            updateUI(false);
         }
 
     }
@@ -117,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         startActivity(i);
     }
 
+
+    private void updateUI(boolean signedIn){
+        if(signedIn){
+            findViewById(R.id.signInButton).setVisibility(View.GONE);
+        }else{
+
+        }
+    }
 
 
 }
