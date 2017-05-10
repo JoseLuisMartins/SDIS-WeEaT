@@ -10,7 +10,7 @@ import java.util.List;
 public class DatabaseManager {
 
     //Root path for pgsql folder
-    public static String bin_path = "C:\\PostgreSQL\\pg96\\bin";
+    public static String bin_path = "/usr/bin";//"C:\\PostgreSQL\\pg96\\bin";
 
     public static void setRoot_path(String root_path) {
         DatabaseManager.bin_path = root_path;

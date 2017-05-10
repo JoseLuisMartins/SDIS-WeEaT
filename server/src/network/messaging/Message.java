@@ -2,6 +2,7 @@ package network.messaging;
 
 
 import com.sun.net.httpserver.HttpExchange;
+import network.Utils;
 import network.messaging.distributor.Distributor;
 
 import javax.net.ssl.*;
@@ -42,37 +43,13 @@ public class Message implements Serializable{
     public HttpExchange getHttpExchange() {
         return httpExchange;
     }
-    public static SSLContext getFactory() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException, IOException, CertificateException, java.security.cert.CertificateException {
-
-        SSLContext sslContext;
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(new FileInputStream("src/keys/truststore") , "123456".toCharArray());
-
-        // Create a TrustManager that trusts the CAs in our KeyStore
-        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-        tmf.init(keyStore);
-
-        sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, tmf.getTrustManagers(), null);
-
-        return sslContext;
-    }
-    static {
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
-        {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-    }
 
     public static void SendURLMessage(URL url, Message message, Distributor distributor) throws IOException, ClassNotFoundException {
 
 
         HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
         try {
-            con.setSSLSocketFactory(getFactory().getSocketFactory());
+            con.setSSLSocketFactory(Utils.sslContext.getSocketFactory());
         } catch (Exception e) {
             e.printStackTrace();
         }

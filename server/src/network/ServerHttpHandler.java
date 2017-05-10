@@ -15,9 +15,8 @@ import java.net.URI;
 public class ServerHttpHandler implements HttpHandler {
     Distributor dist;
     public ServerHttpHandler() {
-        dist = new Distributor(){
+        dist = new Distributor();
 
-        };
     }
 
     @Override

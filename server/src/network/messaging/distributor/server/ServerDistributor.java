@@ -27,4 +27,6 @@ public class ServerDistributor extends Distributor {
     public void setMode(Message m){
         server.setMode((int)m.getContent());
     }
+
+
 }

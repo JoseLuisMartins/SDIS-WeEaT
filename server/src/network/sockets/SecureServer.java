@@ -1,29 +1,31 @@
-package network.secure;
+package network.sockets;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.ServerSocket;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
 /**
  * Created by joao on 5/10/17.
  */
-public class SecureClient {
+public class SecureServer {
 
-    private SSLSocket socket;
+    SSLServerSocketFactory factory;
+    ServerSocket serverSocket;
 
-    public SecureClient(String ip, int port) throws Exception {
 
-        SSLSocketFactory factory = getSSLServerSocketFactory("src/keys/client.keys","src/keys/truststore");
+    public SecureServer(int port) throws Exception {
 
-        socket = (SSLSocket) factory.createSocket();
+        factory = getSSLServerSocketFactory("src/keys/server.keys","src/keys/truststore");
 
-        socket.connect(new InetSocketAddress(ip,port));
+        serverSocket = factory.createServerSocket(port);
+        System.out.println("Accepting connections");
+        serverSocket.accept();
+        System.out.println("End;");
     }
 
-    public static SSLSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{
+    public static SSLServerSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{
 
         char[] password = "123456".toCharArray();
         FileInputStream keyFile = new FileInputStream(keyPath);
@@ -49,8 +51,8 @@ public class SecureClient {
 
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagers, trustManagers , null);
-        return sslContext.getSocketFactory();
+        sslContext.init(keyManagers, trustManagers , new SecureRandom());
+        return sslContext.getServerSocketFactory();
 
     }
 

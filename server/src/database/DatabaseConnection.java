@@ -12,7 +12,7 @@ public class DatabaseConnection {
     public Connection conn = null;
 
     public DatabaseConnection() {
-
+        DatabaseManager.database_init();
         connect();
 
     }

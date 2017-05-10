@@ -6,14 +6,13 @@ import com.sun.net.httpserver.HttpsServer;
 import network.messaging.Message;
 import network.messaging.distributor.balancer.BalancerDistributor;
 import network.messaging.distributor.server.ServerDistributor;
-import network.secure.SecureClient;
+import network.sockets.SecureClient;
 import org.json.JSONObject;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.security.*;
@@ -44,14 +43,14 @@ public class Server {
 
     public Server(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
         request = loadBalancerIP;
-        new SecureClient("192.168.1.97",27015);
+       // new SecureClient("192.168.1.64",27015);
+       /*
         URL balancer = new URL("https://"+loadBalancerIP+":" + loadBalancerPort);
         JSONObject object = new JSONObject();
-
         object.put("location", "Porto");
         object.put("port", port);
         Message.SendURLMessage(balancer, new Message(BalancerDistributor.STORE_SERVER, object.toString()) ,distributor);
-
+*/
 
         HttpsServer server = getHttpsServer(port);
         server.createContext("/",new ServerHttpHandler());
@@ -62,7 +61,6 @@ public class Server {
     }
 
     public static HttpsServer getHttpsServer(int port) throws IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
-             //SSL CONTEXT
 
         SSLContext serverContext = SSLContext.getInstance("TLS");
 
@@ -78,7 +76,6 @@ public class Server {
         // setup the key manager factory
         KeyManagerFactory kmf = KeyManagerFactory.getInstance ( "SunX509" );
         kmf.init ( keyStore, password );
-
 
 
         serverContext.init(kmf.getKeyManagers(),null, null);

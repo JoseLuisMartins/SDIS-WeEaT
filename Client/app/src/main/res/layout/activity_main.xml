@@ -56,5 +56,16 @@
         android:textSize="30dp"
         android:text="Login info" />
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/request"
+        android:layout_alignRight="@+id/request"
+        android:layout_below="@+id/signInButton"
+        android:layout_marginTop="23dp"
+        android:onClick="logout"
+        android:text="Logout" />
+
 
 </RelativeLayout>

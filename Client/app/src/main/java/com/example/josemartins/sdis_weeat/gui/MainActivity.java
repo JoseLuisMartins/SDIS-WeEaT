@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }else{
             updateUI(false);
         }
+    }
 
+
+    public void logout(View v){
+        Auth.GoogleSignInApi.signOut(googleApiClient);
     }
 
     public void request(View v){
