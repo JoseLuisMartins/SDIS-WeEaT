@@ -69,7 +69,7 @@ public class LoadBalancer implements HttpHandler {
 
         ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
 
-        httpExchange.sendResponseHeaders(201, 0);
+        httpExchange.sendResponseHeaders(200, 0);
 
         try {
             Message m = (Message)in.readObject();

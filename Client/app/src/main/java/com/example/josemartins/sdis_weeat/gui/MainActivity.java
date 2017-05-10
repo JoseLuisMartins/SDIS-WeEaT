@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -45,19 +47,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         try {
             Utils.client = new Client(context);
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
 
 
         loginInfo= (TextView) findViewById(R.id.loginInfo);
@@ -99,23 +92,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     private void handleResult(GoogleSignInResult result){
-        loginInfo.setText(result.toString());
+        //loginInfo.setText(result.toString());
         if(result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
             String token =  account.getIdToken();
-
             loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
-            updateUI(true);
-        }else{
-            updateUI(false);
+
+            findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
+            findViewById(R.id.logout).setVisibility(View.VISIBLE);
+
         }
     }
 
 
     public void logout(View v){
-        Auth.GoogleSignInApi.signOut(googleApiClient);
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Log.d("debug","logout");
+                findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
+                findViewById(R.id.logout).setVisibility(View.INVISIBLE);
+                loginInfo.setText("");
+            }
+        });
     }
 
     public void request(View v){
@@ -127,13 +128,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-    private void updateUI(boolean signedIn){
-        if(signedIn){
-            findViewById(R.id.signInButton).setVisibility(View.GONE);
-        }else{
 
-        }
-    }
 
 
 }

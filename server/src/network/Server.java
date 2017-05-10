@@ -3,6 +3,7 @@ package network;
 
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
+import database.DatabaseConnection;
 import network.messaging.Message;
 import network.messaging.distributor.balancer.BalancerDistributor;
 import network.messaging.distributor.server.ServerDistributor;
@@ -27,8 +28,10 @@ public class Server {
     private String request = "";
     public static void main(String args[]){
 
+
         try {
-            Server s = new Server("127.0.0.1", 8000,8888);
+
+            Server s = new Server("127.0.0.1", 8888,8000);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +56,7 @@ public class Server {
 */
 
         HttpsServer server = getHttpsServer(port);
-        server.createContext("/",new ServerHttpHandler());
+        server.createContext("/",new ServerHttpHandler(this));
 
         server.setExecutor(null);
         server.start();

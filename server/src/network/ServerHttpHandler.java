@@ -4,46 +4,41 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.server.ServerDistributor;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
+import java.util.Map;
 
 public class ServerHttpHandler implements HttpHandler {
     Distributor dist;
-    public ServerHttpHandler() {
-        dist = new Distributor();
+
+
+
+    public ServerHttpHandler(Server server) {
+        dist = new ServerDistributor(server);
+
 
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        System.out.println("handle request");
+        Map<String, Object > attributes =  httpExchange.getHttpContext().getAttributes();
 
-        String method = httpExchange.getRequestMethod();
-        URI uri = httpExchange.getRequestURI();
+        ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
 
-        String workerId = uri.getPath().replaceFirst("/","");
-        System.out.println("method-> " + method + " workerId-> " + workerId);
+        httpExchange.sendResponseHeaders(200, 0);
 
-        //get request body
-        InputStream is = httpExchange.getRequestBody();
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int b;
-        while ((b = is.read()) != -1) {
-            buffer.write(b);
+        try {
+            Message m = (Message)in.readObject();
+            in.close();
+            m.setHttpExchange(httpExchange);
+            dist.distribute(m);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        buffer.flush();
-        byte[] body = buffer.toByteArray();
-        System.out.println("Body-> " + new String(body));
-
-
-        //Check authentication here
-
-        dist.distribute(new Message(0,body,httpExchange));
     }
 
 

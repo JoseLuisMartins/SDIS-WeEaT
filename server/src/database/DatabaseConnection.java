@@ -11,7 +11,14 @@ public class DatabaseConnection {
 
     public Connection conn = null;
 
+    /*
+    * Commands to change the postgres user password
+    * sudo -u postgres psql template1
+    * ALTER USER postgres with encrypted password 'sua_senha';
+    * sudo systemctl restart postgresql.service
+    */
     public DatabaseConnection() {
+        DatabaseManager.database_create();
         DatabaseManager.database_init();
         connect();
 

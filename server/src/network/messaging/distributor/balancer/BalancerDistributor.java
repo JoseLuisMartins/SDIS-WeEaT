@@ -32,7 +32,7 @@ public class BalancerDistributor extends Distributor {
 
         try {
            Distributor.SendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE,"HelloMan", null));
-           System.out.println("MEssage Sent");
+           System.out.println("Message Sent");
         } catch (IOException e) {
             e.printStackTrace();
         }

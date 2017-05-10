@@ -48,6 +48,9 @@ public class Message implements Serializable{
 
 
         HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
+
+        con.setHostnameVerifier((hostname, session) -> true);
+
         try {
             con.setSSLSocketFactory(Utils.sslContext.getSocketFactory());
         } catch (Exception e) {
@@ -66,8 +69,8 @@ public class Message implements Serializable{
         System.out.println(con.getResponseCode());
         ObjectInputStream inputStream = new ObjectInputStream(con.getInputStream());
 
-        Message messageReceived = null;
-        messageReceived = (Message)inputStream.readObject();
+
+        Message messageReceived = (Message)inputStream.readObject();
 
         distributor.distribute(messageReceived);
 

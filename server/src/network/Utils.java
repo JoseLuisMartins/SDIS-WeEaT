@@ -1,6 +1,8 @@
 package network;
 
 
+import database.DatabaseConnection;
+
 import javax.net.ssl.*;
 import javax.security.cert.CertificateException;
 import java.io.FileInputStream;
@@ -13,9 +15,13 @@ import java.security.NoSuchAlgorithmException;
 public class Utils {
 
     public static SSLContext sslContext;
+    public static DatabaseConnection db;
 
     static {
+
         try {
+
+            db = new DatabaseConnection();
 
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(new FileInputStream("src/keys/truststore"), "123456".toCharArray());
@@ -28,21 +34,11 @@ public class Utils {
             sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
 
-            sslContext = sslContext;
-
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    static {
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
-        {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-    }
 
 
 
