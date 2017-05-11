@@ -27,7 +27,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView msgList;
     private ImageView button;
     private ChatArrayAdapter chatArrayAdapter;
-    private boolean side = false;
+    private boolean side = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +74,19 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private boolean sendMessage(){
-        chatArrayAdapter.add(new ChatMessage(message.getText().toString(), side, null));
-        message.setText("Write a message");
-        return true;
+
+        if(!(message.getText().length() == 0)){
+            chatArrayAdapter.add(new ChatMessage(message.getText().toString(), side, null));
+            message.setText("");
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public void setTitle(String _title){
+        title.setText(_title);
     }
 
 }

@@ -14,7 +14,8 @@
         android:layout_weight="1"
         android:textColorHint="#CFD8DC"
         android:textColor="#CFD8DC"
-        android:hint="Write a message" />
+        android:hint="Write a message"
+        android:text=""/>
 
     <ImageView
         android:id="@+id/sendButton"
