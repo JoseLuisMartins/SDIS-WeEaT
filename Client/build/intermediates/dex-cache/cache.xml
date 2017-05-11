@@ -2,22 +2,229 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/f128cfed205be9e2b1e43b488cd6230ebd3120d8/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="3c5723cd685b952dd8b02cbc6cfa21a050b3cf9b">
-        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_b3272a2a5c4059860fe24b75fecd7299dc335304/classes.dex" />
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_29d28c490633f1694d5c82802e2b2d7964d48f6e.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/eb908ff07c307e2d4b0b61c67962fd56df1be71b/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
-        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_505d2278ba74bb9d65add4fd78bd9b3694d7409b/classes.dex" />
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_d7e960ec9ee0d0e8127cad73be87fcd96558f956.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/884af5596e63c12a7e1dfcf07bb96713d20219e0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6003d64df88a6ce5e961fa2bad7f1b9b97689ac1">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_23f49eb605da0e8a24ab73e2be7458dd3f4bcfbb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/bd2d2268404f5dfd5ae9f3a7f81dbc44707271d0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a1aa1dd9917e887bfe732cc5e561ae6ae8f9a84a">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_84b1d8dda1f9eef7073d87cf8d7259315373977c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_e4ca48c0fdb29e6d8faf15fda8afce104461617f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/6203eae4d0a845aee5e4f38dac4bea9baeda77ce/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_025b8f17d2300f738c761992c520644db4001893.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/3d627b054dc54c050df6c9bccca13dd4dc84c93b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7113302c965566b66df46c6ca75ea301576114a5">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_118ccb4693c5e168e9b9104fe93dcc243ef749d5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/011081f13576f945757b573f67ceaa0d2f20aa0d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="888983f51cf34f57a93ff16832552f2f15937212">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_faffbf3ebb119176d84e338d1c84a8ab6e34476b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/8ffa0ccacf08e74ae328350bf87653e4ffc5f7af/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="12032271e6be735e811ad529cb08ff066c381640">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_6f77643d96b3b5807c48dce4cae4365ba8eccf5b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.1/constraint-layout-solver-1.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1ad79631209e77b0a2730fc112b4cc0c66a95132">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.1_c64b77902912310046323e08ec6af5b62b27e1ed.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/80b4505406d339a340abaeaaf2d4a2b6b6e669c9/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bdcc2a9572f18b8c90a3a157cab6cdfc97c6c736">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_62b327ec850b6ab8d07f073312ddd0d7b75a57c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/ec1406df3514c134e6dbf882f4b1dff801cfb2f7/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_b84be6dad8c6eeeac0a38af5ada1c6be5364270b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/a97e8ff3d90f8432f810bd3ffaca3dada35dc122/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="19696dc358ac668e341f28c41e3387d61ccdb81d">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_49e9fa9f7c10b000858697d23a095217b78a9830.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/dab8f4e74a3fb1ec9d7c2d77cd6b6ca289d56273/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_18d55bb4d8a1f2952dc4a0e05de98dbeea2fd654.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/a1e21e476b34d8527efb975e0838d9010c621254/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_d4cdbd82c46001efc7fac3407fef34a394c7f3c4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/dbb98f7f2acc92d2545e8096870fd16700b79933/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="25f55515117e14a658120a7b01a9ea5170409db4">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_529f4ff2b8e33c4489f6904a0e1501f8243a1f26.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/a6495156976801b9b48722ebfd4f9f5a7ede7b96/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_2bd29f64807fa6669d43cf3aa5faeb6c2d37d94d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/4f254f5b34610d683e1a324801e552d457f499a1/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_d2dd59996e25057131616660a4e19d92ca0c761a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/e6b45f6bfc1fa1bd6a67849bdd68f3d27f117296/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c7626a9aa507bbbdc16188bc9a9f9bf3370c1ddd">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_ccb417b68cacbf81c43c17d4c6e43145fd052015.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/cd1a4f53556756694b2a0a026d84ddace6687889/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="399f75732ff1ac159f9e73611536f1508bf18d3b">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_e584f1ef4a8a9288fbf4787a791f03e281cfb3dd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/884feaf7f86a13c1f92d5e3ef43e4defed265c0b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_a6340d725dfe154a6a880b6f1227f17352961970.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/7ad8374da92743182bc9700f7c01b4ce9e961428/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0a5d5553c308643a9022f15513ebdd59e9c78d82">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_ae4cca2ab9ae8bfe1572001267438e213e21dab5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/a1d4e703022598626bf74b86d6b4ebbb035ee40c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_2936471555fb2847818d0ad868ad5bd8777c65d5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/ec7f784ade6e1b8883d77cf0796ef756aba759a8/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_29c5eea1f8297303de11f194d4b7841fe66f4849.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/josemartins/.android/build-cache/cbf1e7db57a34e268ebda0ce37c33331d9cae7a9/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/pre-dexed/debug/classes_52aae972a0a309ba84970e4f3faf904d00d8f9dd.jar" />
     </item>
 
 </items>
