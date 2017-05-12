@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,10 +22,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener{
 
     MapView mMapView;
     private GoogleMap googleMap;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,10 +55,7 @@ public class MapFragment extends Fragment {
 
                 googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-
+                LatLng sydney = new LatLng(-33.87365, 151.20689);
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -91,6 +90,15 @@ public class MapFragment extends Fragment {
         mMapView.onLowMemory();
     }
 
+    private void addMarker(LatLng latLng, String title , String snippet){
 
+        googleMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
 
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+        addMarker(latLng, "nice", "clear");
+    }
 }
