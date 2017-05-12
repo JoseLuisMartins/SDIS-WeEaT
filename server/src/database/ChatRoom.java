@@ -18,7 +18,7 @@ public class ChatRoom {
         location = _location;
         date = _date;
     }
-ls
+
     public JSONObject toJson(){
         JSONObject res= new JSONObject();
         res.put("id",id);

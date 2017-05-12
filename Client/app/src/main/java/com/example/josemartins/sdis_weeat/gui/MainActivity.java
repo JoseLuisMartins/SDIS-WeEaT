@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.Utils;
-import com.example.josemartins.sdis_weeat.network.Client;
+import network.Client;
+import network.messaging.Message;
+import network.messaging.distributor.server.ServerDistributor;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,12 +24,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -108,19 +105,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     public void logout(View v){
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
                 findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logout).setVisibility(View.INVISIBLE);
                 loginInfo.setText("");
             }
-        });
+        );
     }
 
     public void request(View v){
-        Utils.client.makeRequest("AuthUser","POST","Body".getBytes());
 
+
+        try {
+            JSONObject jsonUser = new JSONObject();
+            jsonUser.put("name","migo");
+
+            Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Log.d("debug","activity-----");
         Intent i = new Intent(this,ChooseLocal.class);
         startActivity(i);

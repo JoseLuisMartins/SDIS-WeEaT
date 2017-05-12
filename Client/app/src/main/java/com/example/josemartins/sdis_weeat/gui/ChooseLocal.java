@@ -9,8 +9,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
-import com.example.josemartins.sdis_weeat.logic.Utils;
-import com.example.josemartins.sdis_weeat.network.Client;
 
 public class ChooseLocal extends AppCompatActivity {
 
@@ -25,7 +23,7 @@ public class ChooseLocal extends AppCompatActivity {
 
         time = (Spinner) findViewById(R.id.time);
 
-        Utils.client.makeRequest("AuthUser","POST","Body-> handle location".getBytes());
+        //Utils.client.makeRequest("AuthUser","POST","Body-> handle location".getBytes());
 
         android.app.FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

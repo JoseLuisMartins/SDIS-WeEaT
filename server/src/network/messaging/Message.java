@@ -16,6 +16,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class Message implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+
     private int actionID;
     private Object content;
     private transient HttpExchange httpExchange;

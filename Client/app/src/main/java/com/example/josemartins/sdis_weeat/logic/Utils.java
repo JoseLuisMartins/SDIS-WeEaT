@@ -1,7 +1,7 @@
 package com.example.josemartins.sdis_weeat.logic;
 
 
-import com.example.josemartins.sdis_weeat.network.Client;
+import network.Client;
 
 public class Utils {
 
