@@ -20,6 +20,8 @@ import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 
+import static com.example.josemartins.sdis_weeat.logic.Utils.client;
+
 public class ChatActivity extends AppCompatActivity {
 
     private TextView title;
@@ -76,6 +78,10 @@ public class ChatActivity extends AppCompatActivity {
     private boolean sendMessage(){
 
         if(!(message.getText().length() == 0)){
+
+            //send  message
+            //client.makeRequest("AuthUser", "POST", message.toString().getBytes());
+
             chatArrayAdapter.add(new ChatMessage(message.getText().toString(), side, null));
             message.setText("");
             return true;
