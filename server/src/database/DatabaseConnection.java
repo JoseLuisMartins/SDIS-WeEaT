@@ -3,7 +3,6 @@ package database;
 import org.postgresql.geometric.PGpoint;
 import org.postgresql.util.PSQLException;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -203,64 +202,101 @@ public class DatabaseConnection {
         }
     }
 
-    public void test(){
+    public void debug_users(){
 
         Statement stmt = null;
         try {
+
             stmt = conn.createStatement();
 
-            String sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Manuelinho');";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Roberta Freitas');";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO user_weeat (username) "
-                    + "VALUES ('Scoopy Potato');";
-            stmt.executeUpdate(sql);
-
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM user_weeat;");
+            System.out.println("*** USER_WEEAT ***");
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM user_weeat;" );
             while ( rs.next() ) {
                 String username = rs.getString("username");
-
                 System.out.println( "Username = " + username );
             }
 
-            conn.commit();
             rs.close();
             stmt.close();
-
-        } catch (PSQLException e) {
-            System.out.println("PostgreSQL error! " + e.getMessage());
-            //e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void print(){
+    public void debug_chatrooms(){
 
         Statement stmt = null;
         try {
-
             stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM chatroom;" );
 
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM user_weeat;" );
+            System.out.println("*** CHATROOMS ***");
             while ( rs.next() ) {
-                String username = rs.getString("username");
 
-                System.out.println( "Username = " + username );
+                int id = rs.getInt("id");
+                Timestamp date = rs.getTimestamp("date");
+                PGpoint location = (PGpoint)rs.getObject("location");
+                String creator = rs.getString("creator");
+
+                ChatRoom cr = new ChatRoom(id,location,creator,date);
+                System.out.println(cr.toString());
             }
 
             rs.close();
             stmt.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    public void debug_chatmembers(){
+
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM chat_member;" );
+
+            System.out.println("*** CHAT_MEMBERS ***");
+            while ( rs.next() ) {
+
+                int r_chat_id = rs.getInt("chat_id");
+                String member = rs.getString("member");
+                ChatMember cm = new ChatMember(r_chat_id,member);
+                System.out.println(cm.toString());
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void debug_chatmessages(){
+
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM message;" );
+
+            System.out.println("*** CHAT_MESSAGES ***");
+            while ( rs.next() ) {
+
+                int id = rs.getInt("id");
+                int r_chat_id = rs.getInt("chat_id");
+                String poster = rs.getString("poster");
+                String content = rs.getString("content");
+                Timestamp date = rs.getTimestamp("date");
+
+                MessageDB mdb = new MessageDB(id,date,content,r_chat_id,poster);
+                System.out.println(mdb.toString());
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String args[]) {
@@ -275,7 +311,7 @@ public class DatabaseConnection {
         DatabaseManager.database_create();
         DatabaseManager.database_init();
         db.connect();
-        db.print();
+        db.debug_users();
         System.out.println(db.get_chatrooms().toString());
         System.out.println(db.get_chat_members(1).toString());
         System.out.println(db.get_chat_members(2).toString());
@@ -302,29 +338,14 @@ public class DatabaseConnection {
         db.add_message("Batatas!",2,"joaozinho");
         db.add_message("Bom dia!",2,"davidzinho");
 
-        db.print();
+        db.debug_users();
         System.out.println(db.get_chatrooms().toString());
         System.out.println(db.get_chat_members(1).toString());
         System.out.println(db.get_chat_members(2).toString());
         System.out.println(db.get_chat_messages(1).toString());
         System.out.println(db.get_chat_messages(2).toString());
 
-        /*
-        db.print();
-        DatabaseManager.database_backup();
-
-        db.close();
-        DatabaseManager.database_delete();
-        DatabaseManager.database_create();
-        db.connect();
-        //DatabaseManager.database_init();
-        DatabaseManager.database_restore();
-
-        //Command : psql -h localhost -p 5432 -U postgres weeat < db.sql
-        db.print();
-*/
         System.out.println("Closing...");
         db.close();
-
     }
 }
