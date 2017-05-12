@@ -29,7 +29,8 @@ ALTER TABLE message OWNER TO postgres;
 
 DROP TABLE IF EXISTS user_weeat CASCADE;
 CREATE TABLE user_weeat (
-    username text NOT NULL
+    username text NOT NULL,
+    email text NOT NULL
 );
 
 ALTER TABLE user_weeat OWNER TO postgres;
@@ -45,12 +46,12 @@ ALTER TABLE ONLY chatroom
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY user_weeat
-    ADD CONSTRAINT user_weeat_pkey PRIMARY KEY (username);
+    ADD CONSTRAINT user_weeat_pkey PRIMARY KEY (email);
 ALTER TABLE ONLY chat_member
     ADD CONSTRAINT chat_member_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
 ALTER TABLE ONLY chat_member
-    ADD CONSTRAINT chat_member_member_fkey FOREIGN KEY (member) REFERENCES user_weeat(username) ON DELETE CASCADE;
+    ADD CONSTRAINT chat_member_member_fkey FOREIGN KEY (member) REFERENCES user_weeat(email) ON DELETE CASCADE;
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
 ALTER TABLE ONLY message
-    ADD CONSTRAINT message_poster_fkey FOREIGN KEY (poster) REFERENCES user_weeat(username) ON DELETE CASCADE;
+    ADD CONSTRAINT message_poster_fkey FOREIGN KEY (poster) REFERENCES user_weeat(email) ON DELETE CASCADE;

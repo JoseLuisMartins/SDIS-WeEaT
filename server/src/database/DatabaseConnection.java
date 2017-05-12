@@ -185,12 +185,13 @@ public class DatabaseConnection {
         }
     }
 
-    public void add_user(String username) {
+    public void add_user(String username,String email) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO user_weeat (username) VALUES (?)");
+            stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email) VALUES (?,?)");
             stmt.setString(1,username);
+            stmt.setString(2,email);
 
             Boolean rs = stmt.execute();
 
@@ -232,6 +233,8 @@ public class DatabaseConnection {
             while ( rs.next() ) {
                 String username = rs.getString("username");
                 System.out.println( "Username = " + username );
+                String email = rs.getString("email");
+                System.out.println( "Email = " + email );
             }
 
             rs.close();
@@ -336,11 +339,6 @@ public class DatabaseConnection {
         System.out.println(db.get_chat_messages(2).toString());
 
         System.out.println("--------------------------------------------------------------------------------");
-
-        db.add_user("Marcelinho");
-        db.add_user("josezinho");
-        db.add_user("joaozinho");
-        db.add_user("davidzinho");
 
         db.add_chatroom(new PGpoint(1,32),new Timestamp(Long.parseLong("4124214")));
         db.add_chatroom(new PGpoint(6,9),new Timestamp(Long.parseLong("24124214")));
