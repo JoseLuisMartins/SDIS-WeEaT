@@ -9,13 +9,11 @@ public class ChatRoom {
 
     public int id;
     public PGpoint location;
-    public String creator;
     public Timestamp date;
 
-    public ChatRoom(int _id, PGpoint _location, String _creator, Timestamp _date){
+    public ChatRoom(int _id, PGpoint _location, Timestamp _date){
         id = _id;
         location = _location;
-        creator = _creator;
         date = _date;
     }
 
@@ -24,7 +22,6 @@ public class ChatRoom {
         return "ChatRoom{" +
                 "id=" + id +
                 ", location=" + location +
-                ", creator='" + creator + '\'' +
                 ", date=" + date +
                 '}';
     }

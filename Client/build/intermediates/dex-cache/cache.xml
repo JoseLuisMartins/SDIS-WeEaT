@@ -3,12 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="C:\Users\Marcelo Ferreira\IdeaProjects\WeEaT-SDIS\Client\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jar="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="858495026556f2e0da9ba9e9be8a728ad1b4e1ec">
-        <dex dex="C:\Users\Marcelo Ferreira\IdeaProjects\WeEaT-SDIS\Client\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_584fba06e633b68ce50ed8e809d5b14a44fc8a80\classes.dex" />
+        sha1="f789127424b0817932214f2aa0377b1db49e3e54">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_b3272a2a5c4059860fe24b75fecd7299dc335304/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/home/josemartins/github/WeEat/SDIS-WeEaT/Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_505d2278ba74bb9d65add4fd78bd9b3694d7409b/classes.dex" />
     </item>
 
 </items>

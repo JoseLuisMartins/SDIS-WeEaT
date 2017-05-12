@@ -27,11 +27,12 @@ public class ServerHttpHandler implements HttpHandler {
         Map<String, Object > attributes =  httpExchange.getHttpContext().getAttributes();
 
         ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
-
+        System.out.println("erceived request");
         httpExchange.sendResponseHeaders(200, 0);
 
         try {
             Message m = (Message)in.readObject();
+            System.out.println(m.getContent().toString());
             in.close();
             m.setHttpExchange(httpExchange);
             dist.distribute(m);

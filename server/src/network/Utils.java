@@ -17,11 +17,14 @@ public class Utils {
     public static SSLContext sslContext;
     public static DatabaseConnection db;
 
+    public static void initDB(){
+        db = new DatabaseConnection();
+    }
+
+
     static {
 
         try {
-
-            db = new DatabaseConnection();
 
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(new FileInputStream("src/keys/truststore"), "123456".toCharArray());

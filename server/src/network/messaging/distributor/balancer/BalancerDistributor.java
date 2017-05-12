@@ -31,7 +31,7 @@ public class BalancerDistributor extends Distributor {
         System.out.println((String)m.getContent());
 
         try {
-           Distributor.SendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE,"HelloMan", null));
+           Distributor.sendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE,"HelloMan", null));
            System.out.println("Message Sent");
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class BalancerDistributor extends Distributor {
 
         int res = loadBalancer.storeServer(obj.getString("location"), ip , obj.getInt("port"));
         try {
-            Distributor.SendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE, res));
+            Distributor.sendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE, res));
 
 
         } catch (IOException e) {

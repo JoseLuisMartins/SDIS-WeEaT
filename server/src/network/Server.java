@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.rmi.CORBA.Util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,6 +32,7 @@ public class Server {
 
         try {
 
+            Utils.initDB();
             Server s = new Server("127.0.0.1", 8888,8000);
 
         } catch (Exception e) {

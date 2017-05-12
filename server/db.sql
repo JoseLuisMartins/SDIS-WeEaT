@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS chatroom CASCADE;
 CREATE TABLE chatroom (
     id SERIAL,
     location point NOT NULL,
-    creator text NOT NULL,
     date timestamp with time zone NOT NULL
 );
 
@@ -48,8 +47,6 @@ ALTER TABLE ONLY chat_member
     ADD CONSTRAINT chat_member_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
 ALTER TABLE ONLY chat_member
     ADD CONSTRAINT chat_member_member_fkey FOREIGN KEY (member) REFERENCES user_weeat(username) ON DELETE CASCADE;
-ALTER TABLE ONLY chatroom
-    ADD CONSTRAINT chatroom_creator_fkey FOREIGN KEY (creator) REFERENCES user_weeat(username) ON DELETE CASCADE;
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
 ALTER TABLE ONLY message

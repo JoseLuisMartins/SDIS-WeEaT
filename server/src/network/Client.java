@@ -5,12 +5,11 @@ import network.messaging.distributor.Distributor;
 import network.messaging.distributor.balancer.BalancerDistributor;
 import network.messaging.distributor.client.ClientDistributor;
 import network.messaging.distributor.server.ServerDistributor;
+import org.json.JSONObject;
 
 import java.net.URL;
 
-/**
- * Created by joao on 5/9/17.
- */
+
 public class Client {
 
     public Client(){
@@ -18,7 +17,15 @@ public class Client {
         try {
             URL url = new URL("https://192.168.1.64:8000");
             Distributor d = new ClientDistributor(this);
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_USER, "Hello req chat"), d);
+            JSONObject jsonTest = new JSONObject();
+            jsonTest.put("lat",2.111);
+            jsonTest.put("long",4.555);
+            jsonTest.put("timestamp",2546);
+
+
+            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_GROUP, jsonTest.toString()), d);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

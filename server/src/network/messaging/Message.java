@@ -67,6 +67,7 @@ public class Message implements Serializable{
         con.connect();
 
         System.out.println(con.getResponseCode());
+
         ObjectInputStream inputStream = new ObjectInputStream(con.getInputStream());
 
 

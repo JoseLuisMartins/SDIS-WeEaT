@@ -59,9 +59,8 @@ public class DatabaseConnection {
                 int id = rs.getInt("id");
                 Timestamp date = rs.getTimestamp("date");
                 PGpoint location = (PGpoint)rs.getObject("location");
-                String creator = rs.getString("creator");
 
-                res.add(new ChatRoom(id,location,creator,date));
+                res.add(new ChatRoom(id,location,date));
             }
 
             rs.close();
@@ -130,15 +129,14 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(PGpoint location, Timestamp date,String creator) {
+    public void add_chatroom(PGpoint location, Timestamp date) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chatroom (location, creator, date) VALUES (point(?,?), ?, ?)");
+            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date) VALUES (point(?,?), ?)");
             stmt.setDouble(1,location.x);
             stmt.setDouble(2,location.y);
-            stmt.setString(3,creator);
-            stmt.setObject(4,date);
+            stmt.setObject(3,date);
 
             Boolean rs = stmt.execute();
 
@@ -325,8 +323,8 @@ public class DatabaseConnection {
         db.add_user("joaozinho");
         db.add_user("davidzinho");
 
-        db.add_chatroom(new PGpoint(1,32),new Timestamp(Long.parseLong("4124214")),"Marcelinho");
-        db.add_chatroom(new PGpoint(6,9),new Timestamp(Long.parseLong("24124214")),"josezinho");
+        db.add_chatroom(new PGpoint(1,32),new Timestamp(Long.parseLong("4124214")));
+        db.add_chatroom(new PGpoint(6,9),new Timestamp(Long.parseLong("24124214")));
 
         db.add_chat_member(1,"joaozinho");
         db.add_chat_member(1,"davidzinho");

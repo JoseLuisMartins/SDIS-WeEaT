@@ -7,9 +7,12 @@ import network.Server;
 import network.Utils;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.client.ClientDistributor;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
+import javax.rmi.CORBA.Util;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -48,7 +51,16 @@ public class ServerDistributor extends Distributor {
     public void addUser(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
 
-        Utils.db.add_user(obj.getString("token"));
+        Utils.db.add_user(obj.getString("name"));
+
+        Utils.db.print();
+
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void addChatGroup(Message m){
@@ -57,12 +69,19 @@ public class ServerDistributor extends Distributor {
 
         PGpoint point = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
-        String creator = obj.getString("lat");
 
 
-        Utils.db.add_chatroom(point,ts,creator);
+        Utils.db.add_chatroom(point,ts,"xiroo da vida");
 
+        System.out.println(Utils.db.get_chatrooms().toString());
+
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void addChatMember(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());

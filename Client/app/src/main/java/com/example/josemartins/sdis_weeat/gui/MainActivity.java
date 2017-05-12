@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-                Log.d("debug","logout");
                 findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logout).setVisibility(View.INVISIBLE);
                 loginInfo.setText("");
