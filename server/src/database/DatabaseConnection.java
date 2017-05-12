@@ -1,5 +1,8 @@
 package database;
 
+import jdk.nashorn.api.scripting.JSObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 import org.postgresql.util.PSQLException;
 
@@ -46,9 +49,11 @@ public class DatabaseConnection {
         }
     }
 
-    public ArrayList<ChatRoom> get_chatrooms() {
+    public JSONObject get_chatrooms() {
 
-        ArrayList<ChatRoom> res = new ArrayList<ChatRoom>();
+        JSONArray jsonArray = new JSONArray();
+
+
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
@@ -60,7 +65,8 @@ public class DatabaseConnection {
                 Timestamp date = rs.getTimestamp("date");
                 PGpoint location = (PGpoint)rs.getObject("location");
 
-                res.add(new ChatRoom(id,location,date));
+
+                jsonArray.put(new ChatRoom(id,location,date).toJson());
             }
 
             rs.close();
@@ -69,12 +75,16 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
 
+        JSONObject res = new JSONObject();
+        res.put("chats",jsonArray);
+
         return res;
     }
 
-    public ArrayList<MessageDB> get_chat_messages(int chat_id) {
+    public JSONObject get_chat_messages(int chat_id) {
 
-        ArrayList<MessageDB> res = new ArrayList<MessageDB>();
+        JSONArray jsonArray = new JSONArray();
+
         PreparedStatement stmt = null;
         try {
 
@@ -90,7 +100,8 @@ public class DatabaseConnection {
                 String content = rs.getString("content");
                 Timestamp date = rs.getTimestamp("date");
 
-                res.add(new MessageDB(id,date,content,r_chat_id,poster));
+
+                jsonArray.put(new MessageDB(id,date,content,r_chat_id,poster).toJson());
 
             }
 
@@ -100,12 +111,16 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
 
+        JSONObject res = new JSONObject();
+        res.put("messages",jsonArray);
+
         return res;
     }
 
-    public ArrayList<ChatMember> get_chat_members(int chat_id) {
+    public JSONObject get_chat_members(int chat_id) {
 
-        ArrayList<ChatMember> res = new ArrayList<ChatMember>();
+        JSONArray jsonArray = new JSONArray();
+
         PreparedStatement stmt = null;
 
         try {
@@ -117,7 +132,8 @@ public class DatabaseConnection {
 
                 int r_chat_id = rs.getInt("chat_id");
                 String member = rs.getString("member");
-                res.add(new ChatMember(r_chat_id,member));
+
+                jsonArray.put(new ChatMember(r_chat_id,member).toJson());
             }
 
             rs.close();
@@ -125,6 +141,10 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+        JSONObject res = new JSONObject();
+        res.put("chat_users",jsonArray);
 
         return res;
     }
@@ -234,9 +254,8 @@ public class DatabaseConnection {
                 int id = rs.getInt("id");
                 Timestamp date = rs.getTimestamp("date");
                 PGpoint location = (PGpoint)rs.getObject("location");
-                String creator = rs.getString("creator");
 
-                ChatRoom cr = new ChatRoom(id,location,creator,date);
+                ChatRoom cr = new ChatRoom(id,location,date);
                 System.out.println(cr.toString());
             }
 

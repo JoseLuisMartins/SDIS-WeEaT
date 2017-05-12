@@ -3,11 +3,13 @@ package network.messaging.distributor.server;
 import database.ChatMember;
 import database.ChatRoom;
 import database.MessageDB;
+import jdk.nashorn.api.scripting.JSObject;
 import network.Server;
 import network.Utils;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
@@ -25,9 +27,9 @@ public class ServerDistributor extends Distributor {
     public static final int ADD_CHAT_GROUP = 3;
     public static final int ADD_CHAT_MEMBER = 4;
     public static final int ADD_CHAT_MESSAGE = 5;
-    public static final int GET_CHAT_GROUP = 6;
-    public static final int GET_CHAT_MEMBER = 7;
-    public static final int GET_CHAT_MESSAGE = 8;
+    public static final int GET_CHAT_GROUPS = 6;
+    public static final int GET_CHAT_MEMBERS = 7;
+    public static final int GET_CHAT_MESSAGES = 8;
 
     private Server server;
 
@@ -38,9 +40,9 @@ public class ServerDistributor extends Distributor {
         addAction(ADD_CHAT_GROUP, (Message m) -> addChatGroup(m));
         addAction(ADD_CHAT_MEMBER, (Message m) -> addChatMember(m));
         addAction(ADD_CHAT_MESSAGE, (Message m) -> addChatMessage(m));
-        addAction(GET_CHAT_GROUP, (Message m) -> getChatGroup(m));
-        addAction(GET_CHAT_MEMBER, (Message m) -> getChatMember(m));
-        addAction(GET_CHAT_MESSAGE, (Message m) -> getChatMessage(m));
+        addAction(GET_CHAT_GROUPS, (Message m) -> getChatGroups(m));
+        addAction(GET_CHAT_MEMBERS, (Message m) -> getChatMembers(m));
+        addAction(GET_CHAT_MESSAGES, (Message m) -> getChatMessages(m));
     }
 
 
@@ -53,14 +55,13 @@ public class ServerDistributor extends Distributor {
 
         Utils.db.add_user(obj.getString("name"));
 
-        Utils.db.print();
+        Utils.db.debug_users();
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay"));
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: add user"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void addChatGroup(Message m){
@@ -71,12 +72,12 @@ public class ServerDistributor extends Distributor {
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
 
 
-        Utils.db.add_chatroom(point,ts,"xiroo da vida");
+        Utils.db.add_chatroom(point,ts);
 
-        System.out.println(Utils.db.get_chatrooms().toString());
+        Utils.db.debug_chatrooms();
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay"));
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: chat group"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,12 +87,19 @@ public class ServerDistributor extends Distributor {
     public void addChatMember(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
 
-
         int chat_id = obj.getInt("chat_id");
         String member = obj.getString("member");
 
 
         Utils.db.add_chat_member(chat_id,member);
+
+        Utils.db.debug_chatmembers();
+
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay:chat member"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -104,43 +112,68 @@ public class ServerDistributor extends Distributor {
         String poster = obj.getString("poster");
 
         Utils.db.add_message(content,chat_id,poster);
+
+        Utils.db.debug_chatmessages();
+
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay:messages"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public JSONObject getChatGroup(Message m){
 
-        JSONObject obj = new JSONObject((String)m.getContent());
 
-        ArrayList<ChatRoom> result = Utils.db.get_chatrooms();
+    public void getChatGroups(Message m){
 
-        JSONObject response = new JSONObject(result);
 
-        return response;
+       JSONObject result = Utils.db.get_chatrooms();
+
+
+        System.out.println(result.toString());
+
+        Utils.db.debug_chatmessages();
+
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,result.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
-    public JSONObject getChatMember(Message m){
+    public void getChatMembers(Message m){
 
         JSONObject obj = new JSONObject((String)m.getContent());
 
         int chat_id = obj.getInt("chat_id");
 
-        ArrayList<ChatMember> result = Utils.db.get_chat_members(chat_id);
+        JSONObject res = Utils.db.get_chat_members(chat_id);
 
-        JSONObject response = new JSONObject(result);
-
-        return response;
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,res.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public JSONObject getChatMessage(Message m){
+    public void getChatMessages(Message m){
 
         JSONObject obj = new JSONObject((String)m.getContent());
 
         int chat_id = obj.getInt("chat_id");
 
-        ArrayList<MessageDB> result = Utils.db.get_chat_messages(chat_id);
+        JSONObject res = Utils.db.get_chat_messages(chat_id);
 
-        JSONObject response = new JSONObject(result);
+        try {
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,res.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        return response;
+
     }
 
 

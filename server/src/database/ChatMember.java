@@ -1,5 +1,7 @@
 package database;
 
+import org.json.JSONObject;
+
 /**
  * Created by PeaceOff on 09-05-2017.
  */
@@ -12,6 +14,15 @@ public class ChatMember {
         this.chat_id = chat_id;
         this.member = member;
     }
+
+    public JSONObject toJson(){
+        JSONObject res= new JSONObject();
+        res.put("chat_id",chat_id);
+        res.put("member",member);
+
+        return res;
+    }
+
 
     @Override
     public String toString() {

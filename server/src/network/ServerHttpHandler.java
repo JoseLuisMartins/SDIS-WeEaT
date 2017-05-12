@@ -27,7 +27,7 @@ public class ServerHttpHandler implements HttpHandler {
         Map<String, Object > attributes =  httpExchange.getHttpContext().getAttributes();
 
         ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
-        System.out.println("erceived request");
+        System.out.println("Received request");
         httpExchange.sendResponseHeaders(200, 0);
 
         try {

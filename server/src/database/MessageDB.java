@@ -1,5 +1,7 @@
 package database;
 
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 
 public class MessageDB {
@@ -17,6 +19,17 @@ public class MessageDB {
         this.content = content;
         this.chat_id = chat_id;
         this.poster = poster;
+    }
+
+    public JSONObject toJson(){
+        JSONObject res= new JSONObject();
+        res.put("id",id);
+        res.put("date",date.getTime());
+        res.put("content",content);
+        res.put("chat_id",chat_id);
+        res.put("poster",poster);
+
+        return res;
     }
 
     @Override

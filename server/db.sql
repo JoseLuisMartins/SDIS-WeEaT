@@ -34,6 +34,9 @@ CREATE TABLE user_weeat (
 
 ALTER TABLE user_weeat OWNER TO postgres;
 
+CREATE INDEX index_message_date ON message USING btree (date);
+
+ALTER TABLE message CLUSTER ON index_message_date;
 
 ALTER TABLE ONLY chat_member
     ADD CONSTRAINT chat_member_pkey PRIMARY KEY (chat_id, member);
