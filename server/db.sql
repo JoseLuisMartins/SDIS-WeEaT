@@ -30,7 +30,8 @@ ALTER TABLE message OWNER TO postgres;
 DROP TABLE IF EXISTS user_weeat CASCADE;
 CREATE TABLE user_weeat (
     username text NOT NULL,
-    email text NOT NULL
+    email text NOT NULL,
+    image_url text
 );
 
 ALTER TABLE user_weeat OWNER TO postgres;

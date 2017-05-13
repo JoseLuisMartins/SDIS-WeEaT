@@ -53,7 +53,7 @@ public class ServerDistributor extends Distributor {
     public void addUser(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
 
-        Utils.db.add_user(obj.getString("name"));
+        Utils.db.add_user(obj.getString("name"),obj.getString("email"),obj.getString("image_url"));
 
         Utils.db.debug_users();
 
