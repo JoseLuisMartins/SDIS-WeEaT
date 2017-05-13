@@ -185,13 +185,14 @@ public class DatabaseConnection {
         }
     }
 
-    public void add_user(String username,String email) {
+    public void add_user(String username,String email,String image_url) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email) VALUES (?,?)");
+            stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email,image_url) VALUES (?,?,?)");
             stmt.setString(1,username);
             stmt.setString(2,email);
+            stmt.setString(3,image_url);
 
             Boolean rs = stmt.execute();
 
@@ -235,6 +236,8 @@ public class DatabaseConnection {
                 System.out.println( "Username = " + username );
                 String email = rs.getString("email");
                 System.out.println( "Email = " + email );
+                String image_url = rs.getString("image_url");
+                System.out.println( "Image_url = " + image_url );
             }
 
             rs.close();
