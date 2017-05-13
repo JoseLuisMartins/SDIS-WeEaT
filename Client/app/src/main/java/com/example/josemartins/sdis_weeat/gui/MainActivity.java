@@ -14,6 +14,8 @@ import com.example.josemartins.sdis_weeat.logic.Utils;
 import network.Client;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
+
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         signIn = (SignInButton) findViewById(R.id.signInButton);
         signIn.setOnClickListener(signInListener);
 
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken("1077664049472-kcih82jenig0b27oge2ubekqqk5414qp.apps.googleusercontent.com").build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
 
 
@@ -91,10 +93,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void handleResult(GoogleSignInResult result){
         //loginInfo.setText(result.toString());
         if(result.isSuccess()){
+            Log.d("debug","login");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
-            String token =  account.getIdToken();
+            String token = account.getIdToken();
             loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
 
             findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
