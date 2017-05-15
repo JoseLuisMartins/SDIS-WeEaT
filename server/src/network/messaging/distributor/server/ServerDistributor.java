@@ -49,16 +49,7 @@ public class ServerDistributor extends Distributor {
     }
 
     public void addUser(Message m){
-        JSONObject obj = new JSONObject((String)m.getContent());
-
-
-        JSONObject userInfo= googleLoginChecker((String) obj.get("token"));
-
-        if(userInfo == null){
-            System.out.println("REKT");
-            return;
-        }
-
+       JSONObject userInfo = m.getUserInfo();
 
         Utils.db.add_user((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture"));
         Utils.db.debug_users();

@@ -2,7 +2,6 @@ package network;
 
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
-import network.messaging.distributor.balancer.BalancerDistributor;
 import network.messaging.distributor.client.ClientDistributor;
 import network.messaging.distributor.server.ServerDistributor;
 import org.json.JSONObject;
@@ -54,18 +53,18 @@ public class Client {
             jsonChatMessages.put("chat_id",1);
             jsonChatMessages.put("poster","jose");
 
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_USER, jsonUser.toString()), d);
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_USER, jsonUser1.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_USER, jsonUser.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_USER, jsonUser1.toString()), d);
 
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_GROUP, jsonAddChat.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_GROUP, jsonAddChat.toString()), d);
 
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MEMBER, jsonAddUserToChat.toString()), d);
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MEMBER, jsonAddUserToChat1.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MEMBER, jsonAddUserToChat.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MEMBER, jsonAddUserToChat1.toString()), d);
 
-            Message.SendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()), d);
-            Message.SendURLMessage(url, new Message(ServerDistributor.GET_CHAT_GROUPS, jsonAddMessage.toString()), d);
-            Message.SendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MEMBERS, jsonChatMembers.toString()), d);
-            Message.SendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MESSAGES, jsonChatMessages.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_GROUPS, jsonAddMessage.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MEMBERS, jsonChatMembers.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MESSAGES, jsonChatMessages.toString()), d);
 
 
         } catch (Exception e) {

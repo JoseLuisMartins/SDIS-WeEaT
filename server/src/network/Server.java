@@ -54,7 +54,7 @@ public class Server {
         JSONObject object = new JSONObject();
         object.put("location", "Porto");
         object.put("port", port);
-        Message.SendURLMessage(balancer, new Message(BalancerDistributor.STORE_SERVER, object.toString()) ,distributor);
+        Message.sendURLMessage(balancer, new Message(BalancerDistributor.STORE_SERVER, object.toString()) ,distributor);
 */
 
         HttpsServer server = getHttpsServer(port);

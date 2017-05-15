@@ -95,6 +95,8 @@ public class Client {
 
 
                 HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
+                //put login token in the attributes
+                Log.d("debug","o token mais xiroo: " + token);
                 con.setRequestProperty("token",token);
 
                 try {

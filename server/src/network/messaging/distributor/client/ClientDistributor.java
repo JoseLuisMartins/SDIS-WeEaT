@@ -8,6 +8,7 @@ import network.messaging.distributor.Distributor;
 public class ClientDistributor extends Distributor{
 
     public static final int RESPONSE = 0;
+    public static final int UNLOGGED = 1;
 
     private Client client;
 

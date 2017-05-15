@@ -4,6 +4,7 @@ package network.messaging;
 import com.sun.net.httpserver.HttpExchange;
 import network.Utils;
 import network.messaging.distributor.Distributor;
+import org.json.JSONObject;
 
 import javax.net.ssl.*;
 import javax.security.cert.CertificateException;
@@ -21,16 +22,24 @@ public class Message implements Serializable{
     private int actionID;
     private Object content;
     private transient HttpExchange httpExchange;
+    private transient JSONObject userInfo;
+
+    public Message(int actionID, Object content, JSONObject userInfo){
+        this.httpExchange = null;
+        this.actionID = actionID;
+        this.content = content;
+        this.userInfo = userInfo;
+    }
 
     public Message(int actionID, Object content){
         this.httpExchange = null;
         this.actionID = actionID;
         this.content = content;
     }
-    public Message(int actionID, Object content, HttpExchange httpExchange){
-        this.actionID = actionID;
-        this.content = content;
-        this.httpExchange = httpExchange;
+
+
+    public JSONObject getUserInfo() {
+        return userInfo;
     }
 
     public int getClassID(){ return actionID;}
@@ -46,7 +55,7 @@ public class Message implements Serializable{
         return httpExchange;
     }
 
-    public static void SendURLMessage(URL url, Message message, Distributor distributor) throws IOException, ClassNotFoundException {
+    public static void sendURLMessage(URL url, Message message, Distributor distributor) throws IOException, ClassNotFoundException {
 
 
         HttpsURLConnection con = (HttpsURLConnection)url.openConnection();

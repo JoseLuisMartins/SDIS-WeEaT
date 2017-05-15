@@ -4,12 +4,16 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.client.ClientDistributor;
 import network.messaging.distributor.server.ServerDistributor;
+import org.json.JSONObject;
 
 
 import java.io.*;
 import java.net.URI;
 import java.util.Map;
+
+import static network.GoogleLoginChecker.googleLoginChecker;
 
 public class ServerHttpHandler implements HttpHandler {
     Distributor dist;
@@ -24,14 +28,21 @@ public class ServerHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Map<String, Object > attributes =  httpExchange.getHttpContext().getAttributes();
 
         ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
         System.out.println("Received request");
         httpExchange.sendResponseHeaders(200, 0);
 
         try {
+
             Message m = (Message)in.readObject();
+
+            JSONObject userInfo = googleLoginChecker(httpExchange.getRequestHeaders().getFirst("token"));
+
+            if(userInfo == null) {
+                System.out.println("User not loged in");
+                Distributor.sendMessage(httpExchange.getResponseBody(), new Message(ClientDistributor.UNLOGGED, "mequie", userInfo));
+            }
             System.out.println(m.getContent().toString());
             in.close();
             m.setHttpExchange(httpExchange);
@@ -42,12 +53,4 @@ public class ServerHttpHandler implements HttpHandler {
         }
     }
 
-
-    public static void sendResponse(HttpExchange httpExchange, int code, String res) throws IOException {
-        byte [] response = res.getBytes();
-        httpExchange.sendResponseHeaders(code, response.length);
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response);
-        os.close();
-    }
 }

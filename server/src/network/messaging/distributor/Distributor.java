@@ -24,7 +24,7 @@ public class Distributor {
 
 
     //just for server-> add to the response body
-    protected static void sendMessage(OutputStream o, Message m) throws IOException {
+    public static void sendMessage(OutputStream o, Message m) throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(o);
         out.writeObject(m);
         out.close();
