@@ -28,7 +28,7 @@ public class ChooseLocal extends AppCompatActivity {
         android.app.FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         MapFragment mf =new MapFragment();
-        ft.add(R.id.mapView,mf);
+        ft.add(R.id.map,mf);
         ft.commit();
 
     }

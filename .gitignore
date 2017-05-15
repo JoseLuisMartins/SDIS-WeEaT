@@ -11,3 +11,4 @@ client/.idea/
 server/out
 Client/build
 Client/local.properties
+out/*
