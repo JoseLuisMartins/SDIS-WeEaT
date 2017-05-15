@@ -1,22 +1,19 @@
 package network.messaging.distributor.server;
 
-import database.ChatMember;
-import database.ChatRoom;
-import database.MessageDB;
-import jdk.nashorn.api.scripting.JSObject;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import network.GoogleLoginChecker;
 import network.Server;
 import network.Utils;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
-import org.json.JSONArray;
+
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
-import javax.rmi.CORBA.Util;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+
 
 
 public class ServerDistributor extends Distributor {
@@ -52,9 +49,13 @@ public class ServerDistributor extends Distributor {
 
     public void addUser(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
+        System.out.println("o david e xiroo");
+        GoogleIdToken.Payload payload = Utils.google.check("t");
+        System.out.println("o david e xiroo2");
+        if(payload == null)
+            System.out.println("o david e xiroo");
 
-        Utils.db.add_user(obj.getString("name"),obj.getString("email"),obj.getString("image_url"));
-
+        Utils.db.add_user((String) payload.get("name"),payload.getEmail() , (String) payload.get("picture"));
         Utils.db.debug_users();
 
         try {

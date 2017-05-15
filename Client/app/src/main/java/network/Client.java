@@ -33,6 +33,7 @@ public class Client {
 
     private SSLContext sslContext;
     private Distributor distributor;
+    private String token;
 
 
 
@@ -41,10 +42,16 @@ public class Client {
         distributor = new ClientDistributor();
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
 
     static {
         HttpsURLConnection.setDefaultHostnameVerifier(((hostname, session) -> true));
-
     }
 
     public void makeRequest(String url, String method, Message m) throws IOException {
@@ -88,7 +95,7 @@ public class Client {
 
 
                 HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
-
+                con.setRequestProperty("token",token);
 
                 try {
                     con.setSSLSocketFactory(sslContext.getSocketFactory());

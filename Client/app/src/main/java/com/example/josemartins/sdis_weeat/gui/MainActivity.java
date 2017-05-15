@@ -91,14 +91,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
     private void handleResult(GoogleSignInResult result){
-        //loginInfo.setText(result.toString());
+
         if(result.isSuccess()){
-            Log.d("debug","login");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
             String token = account.getIdToken();
             loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
+            Utils.client.setToken(token);
+
 
             findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
             findViewById(R.id.logout).setVisibility(View.VISIBLE);
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         try {
             JSONObject jsonUser = new JSONObject();
-            jsonUser.put("name","migo");
+            jsonUser.put("token",Utils.client.getToken());
 
             Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
 
