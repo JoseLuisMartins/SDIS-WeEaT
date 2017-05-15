@@ -14,6 +14,7 @@ import org.postgresql.geometric.PGpoint;
 import java.io.IOException;
 import java.sql.Timestamp;
 
+import static network.GoogleLoginChecker.googleLoginChecker;
 
 
 public class ServerDistributor extends Distributor {
@@ -49,13 +50,17 @@ public class ServerDistributor extends Distributor {
 
     public void addUser(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
-        System.out.println("o david e xiroo");
-        GoogleIdToken.Payload payload = Utils.google.check("t");
-        System.out.println("o david e xiroo2");
-        if(payload == null)
-            System.out.println("o david e xiroo");
 
-        Utils.db.add_user((String) payload.get("name"),payload.getEmail() , (String) payload.get("picture"));
+
+        JSONObject userInfo= googleLoginChecker((String) obj.get("token"));
+
+        if(userInfo == null){
+            System.out.println("REKT");
+            return;
+        }
+
+
+        Utils.db.add_user((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture"));
         Utils.db.debug_users();
 
         try {
