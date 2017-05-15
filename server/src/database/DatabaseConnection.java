@@ -22,6 +22,7 @@ public class DatabaseConnection {
     public DatabaseConnection() {
         DatabaseManager.database_create();
         DatabaseManager.database_init();
+        DatabaseManager.database_restore();
         connect();
 
     }
@@ -39,6 +40,7 @@ public class DatabaseConnection {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);
         }
+        DatabaseManager.start_backup();
     }
 
     public void close() {
@@ -166,6 +168,8 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
 
+        DatabaseManager.setOutdated(true);
+
     }
 
     public void add_chat_member(int id_chat,String member) {
@@ -183,6 +187,8 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        DatabaseManager.setOutdated(true);
     }
 
     public void add_user(String username,String email,String image_url) {
@@ -201,6 +207,8 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        DatabaseManager.setOutdated(true);
     }
 
     public void add_message(String content,int chat_id, String poster) {
@@ -220,6 +228,8 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        DatabaseManager.setOutdated(true);
     }
 
     public void debug_users(){

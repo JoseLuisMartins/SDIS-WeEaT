@@ -6,16 +6,43 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DatabaseManager {
 
     //Root path for pgsql folder
-    public static String bin_path = "/usr/bin";//"C:\\PostgreSQL\\pg96\\bin";
+    public static String bin_path = "C:\\PostgreSQL\\pg96\\bin";//"/usr/bin";
+    public static int interval = 15;
+    private static boolean outdated = false;
+
+    public synchronized static boolean isOutdated() {
+        return outdated;
+    }
+
+    public synchronized static void setOutdated(boolean outdated) {
+        DatabaseManager.outdated = outdated;
+    }
 
     public static void setRoot_path(String root_path) {
         DatabaseManager.bin_path = root_path;
     }
 
+    public static void start_backup() {
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                if(DatabaseManager.isOutdated()) {
+                    DatabaseManager.database_backup();
+                    DatabaseManager.setOutdated(false);
+                }
+            }
+
+        }, 0, interval * 1000);
+    }
     public static void database_create(){
 
         List<String> commands = get_commands("createdb");
