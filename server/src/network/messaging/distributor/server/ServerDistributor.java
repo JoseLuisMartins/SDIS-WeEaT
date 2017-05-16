@@ -1,8 +1,6 @@
 package network.messaging.distributor.server;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import network.GoogleLoginChecker;
-import network.Server;
+import network.ServerWeEat;
 import network.Utils;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
@@ -13,8 +11,6 @@ import org.postgresql.geometric.PGpoint;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-
-import static network.GoogleLoginChecker.googleLoginChecker;
 
 
 public class ServerDistributor extends Distributor {
@@ -29,10 +25,10 @@ public class ServerDistributor extends Distributor {
     public static final int GET_CHAT_MEMBERS = 7;
     public static final int GET_CHAT_MESSAGES = 8;
 
-    private Server server;
+    private ServerWeEat serverWeEat;
 
-    public ServerDistributor(Server server){
-        this.server = server;
+    public ServerDistributor(ServerWeEat serverWeEat){
+        this.serverWeEat = serverWeEat;
         addAction(SET_MODE, (Message m) -> setMode(m));
         addAction(ADD_USER, (Message m) -> addUser(m));
         addAction(ADD_CHAT_GROUP, (Message m) -> addChatGroup(m));
@@ -45,7 +41,7 @@ public class ServerDistributor extends Distributor {
 
 
     public void setMode(Message m){
-        server.setMode((int)m.getContent());
+        serverWeEat.setMode((int)m.getContent());
     }
 
     public void addUser(Message m){
@@ -63,13 +59,14 @@ public class ServerDistributor extends Distributor {
 
     public void addChatGroup(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
+        JSONObject userInfo = m.getUserInfo();
 
 
         PGpoint point = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
 
 
-        Utils.db.add_chatroom(point,ts);
+        Utils.db.add_chatroom(point,ts, (String) userInfo.get("email"));
 
         Utils.db.debug_chatrooms();
 
@@ -112,6 +109,7 @@ public class ServerDistributor extends Distributor {
     private void addChatMessage(Message m) {
         JSONObject obj = new JSONObject((String)m.getContent());
         JSONObject userInfo = m.getUserInfo();
+
 
         if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email")) {
             try {

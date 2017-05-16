@@ -3,24 +3,17 @@ package network;
 
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
-import database.DatabaseConnection;
-import network.messaging.Message;
-import network.messaging.distributor.balancer.BalancerDistributor;
 import network.messaging.distributor.server.ServerDistributor;
-import network.sockets.SecureClient;
-import org.json.JSONObject;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.rmi.CORBA.Util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
 
-public class Server {
+public class ServerWeEat {
 
     private int mode = -1;
     private int port = 8888;
@@ -33,7 +26,7 @@ public class Server {
         try {
 
             Utils.initDB();
-            Server s = new Server("127.0.0.1", 8888,8000);
+            ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8000);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,19 +35,18 @@ public class Server {
     }
 
     public void setMode(int mode){
-        System.out.println("Changed Server mode to:" + mode);
+        System.out.println("Changed ServerWeEat mode to:" + mode);
         this.mode = mode;
     }
 
-    public Server(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
-        request = loadBalancerIP;
-       // new SecureClient("192.168.1.64",27015);
-       /*
-        URL balancer = new URL("https://"+loadBalancerIP+":" + loadBalancerPort);
+    public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
+      /*  request = loadBalancerIP;
+        SecureClient balancerClient =  new SecureClient("192.168.1.64",27015,8001);
+
         JSONObject object = new JSONObject();
         object.put("location", "Porto");
         object.put("port", port);
-        Message.sendURLMessage(balancer, new Message(BalancerDistributor.STORE_SERVER, object.toString()) ,distributor);
+        balancerClient.sendData(new Message(BalancerDistributor.STORE_SERVER, object.toString()));
 */
 
         HttpsServer server = getHttpsServer(port);

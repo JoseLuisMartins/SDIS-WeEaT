@@ -1,7 +1,6 @@
 package network.messaging.distributor.client;
 
 import network.Client;
-import network.Server;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 

@@ -1,24 +1,53 @@
 package network.sockets;
 
+import network.messaging.Message;
+
 import javax.net.ssl.*;
-import java.io.FileInputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 
 /**
  * Created by joao on 5/10/17.
  */
-public class SecureClient {
+public class SecureClient extends Thread{
 
     private SSLSocket socket;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
-    public SecureClient(String ip, int port) throws Exception {
+    public SecureClient(String ip, int port, int clientPort) throws Exception {
 
         SSLSocketFactory factory = getSSLServerSocketFactory("src/keys/client.keys","src/keys/truststore");
 
         socket = (SSLSocket) factory.createSocket();
 
+        //ip/ port of the loadbalancer
         socket.connect(new InetSocketAddress(ip,port));
+
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+    }
+
+    @Override
+    public void run() {
+        super.run();
+
+        while (true){
+            try {
+                Message m = (Message) objectInputStream.readObject();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void sendData(Message m) throws IOException {
+        objectOutputStream.writeObject(m);
+        objectOutputStream.close();
     }
 
     public static SSLSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{

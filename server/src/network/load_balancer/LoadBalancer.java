@@ -4,7 +4,7 @@ package network.load_balancer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpsServer;
-import network.Server;
+import network.ServerWeEat;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.balancer.BalancerDistributor;
@@ -13,7 +13,6 @@ import network.sockets.SecureServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
-import java.util.Map;
 
 public class LoadBalancer implements HttpHandler {
 
@@ -34,8 +33,8 @@ public class LoadBalancer implements HttpHandler {
         }
         this.port = port;
         try {
-            server = Server.getHttpsServer(port);
-            server.createContext("/", (HttpHandler)this);
+            server = ServerWeEat.getHttpsServer(port);
+            server.createContext("/", this);
 
 
         } catch (Exception e) {
@@ -64,8 +63,6 @@ public class LoadBalancer implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-
-        Map<String, Object > attributes =  httpExchange.getHttpContext().getAttributes();
 
         ObjectInputStream in = new ObjectInputStream(httpExchange.getRequestBody());
 

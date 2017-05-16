@@ -2,14 +2,18 @@ package network.sockets;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
 /**
  * Created by joao on 5/10/17.
  */
-public class SecureServer {
+public class SecureServer extends Thread{
 
     SSLServerSocketFactory factory;
     ServerSocket serverSocket;
@@ -23,6 +27,37 @@ public class SecureServer {
         System.out.println("Accepting connections");
         serverSocket.accept();
         System.out.println("End;");
+    }
+
+    public void handleSocket(Socket s){
+
+        new Thread( ()->  {
+                   //   new ObjectOutputStream(s.getOutputStream())
+            }
+        ).start();
+
+    }
+
+    @Override
+    public void run() {
+        super.run();
+
+
+        while (true){
+            try {
+                Socket s = serverSocket.accept();
+
+
+
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
     }
 
     public static SSLServerSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{

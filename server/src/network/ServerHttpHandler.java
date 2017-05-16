@@ -10,16 +10,14 @@ import org.json.JSONObject;
 
 
 import java.io.*;
-import java.net.URI;
-import java.util.Map;
 
 import static network.GoogleLoginChecker.googleLoginChecker;
 
 public class ServerHttpHandler implements HttpHandler {
     Distributor dist;
 
-    public ServerHttpHandler(Server server) {
-        dist = new ServerDistributor(server);
+    public ServerHttpHandler(ServerWeEat serverWeEat) {
+        dist = new ServerDistributor(serverWeEat);
     }
 
     @Override
