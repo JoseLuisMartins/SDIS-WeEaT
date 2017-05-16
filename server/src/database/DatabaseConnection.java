@@ -1,6 +1,7 @@
 package database;
 
 import jdk.nashorn.api.scripting.JSObject;
+import network.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
@@ -18,6 +19,8 @@ public class DatabaseConnection {
         WHERE IF(@above, datecol < @param, datecol > @param)
         ORDER BY IF (@above. datecol ASC, datecol DESC)
         LIMIT 1
+
+        SELECT EXISTS(SELECT 1 FROM contact WHERE id=12);
 
 
     * Commands to change the postgres user password
@@ -194,16 +197,19 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(PGpoint location, Timestamp date) {
+    public void add_chatroom(PGpoint location, Timestamp date,String user) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date) VALUES (point(?,?), ?)");
+            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date) VALUES (point(?,?), ?) RETURNING id;");
             stmt.setDouble(1,location.x);
             stmt.setDouble(2,location.y);
             stmt.setObject(3,date);
 
-            Boolean rs = stmt.execute();
+            stmt.execute();
+            int new_id = stmt.getResultSet().getInt("id");
+
+            add_chat_member(new_id,user);
 
             stmt.close();
             conn.commit();
@@ -257,19 +263,32 @@ public class DatabaseConnection {
     public void add_message(String content,int chat_id, String poster) {
 
         PreparedStatement stmt = null;
+        PreparedStatement check_stmt = null;
 
         try {
-            stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?)");
-            stmt.setString(1,content);
-            stmt.setInt(2,chat_id);
-            stmt.setString(3,poster);
 
-            Boolean rs = stmt.execute();
+            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM user_weeat WHERE email = ? ;");
+            check_stmt.setString(1,poster);
 
-            stmt.close();
+            if(check_stmt.execute()) {
+                stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?)");
+                stmt.setString(1, content);
+                stmt.setInt(2, chat_id);
+                stmt.setString(3, poster);
+
+                Boolean rs = stmt.execute();
+
+                stmt.close();
+            } else {
+                throw new Utils.UserIsNotMemberException();
+            }
+
+            check_stmt.close();
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (Utils.UserIsNotMemberException e) {
+            System.out.println("User " + poster + " is not memeber of chat with id " + chat_id);
         }
 
         DatabaseManager.setOutdated(true);
@@ -387,28 +406,7 @@ public class DatabaseConnection {
         DatabaseManager.database_init();
         db.connect();
         db.debug_users();
-        System.out.println(db.get_chatrooms().toString());
-        System.out.println(db.get_chat_members(1).toString());
-        System.out.println(db.get_chat_members(2).toString());
-        System.out.println(db.get_chat_messages(1).toString());
-        System.out.println(db.get_chat_messages(2).toString());
 
-        System.out.println("--------------------------------------------------------------------------------");
-
-        db.add_chatroom(new PGpoint(1,32),new Timestamp(Long.parseLong("4124214")));
-        db.add_chatroom(new PGpoint(6,9),new Timestamp(Long.parseLong("24124214")));
-
-        db.add_chat_member(1,"joaozinho");
-        db.add_chat_member(1,"davidzinho");
-        db.add_chat_member(2,"joaozinho");
-        db.add_chat_member(2,"davidzinho");
-
-        db.add_message("Bom dia!",1,"davidzinho");
-        db.add_message("Batatas!",1,"joaozinho");
-        db.add_message("Batatas!",2,"joaozinho");
-        db.add_message("Bom dia!",2,"davidzinho");
-
-        db.debug_users();
         System.out.println(db.get_chatrooms().toString());
         System.out.println(db.get_chat_members(1).toString());
         System.out.println(db.get_chat_members(2).toString());

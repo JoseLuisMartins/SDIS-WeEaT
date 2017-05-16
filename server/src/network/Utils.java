@@ -52,5 +52,8 @@ public class Utils {
     }
 
 
+    public static class UserIsNotMemberException extends Throwable {
+    }
+
 
 }
