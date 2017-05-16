@@ -376,8 +376,7 @@ public class DatabaseConnection {
 
     public static void main(String args[]) {
 
-        System.out.println("Working Directory = " +
-                System.getProperty("user.dir"));
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
         DatabaseConnection db = new DatabaseConnection();
 

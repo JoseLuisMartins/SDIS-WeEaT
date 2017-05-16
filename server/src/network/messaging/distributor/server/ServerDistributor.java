@@ -99,23 +99,50 @@ public class ServerDistributor extends Distributor {
 
     }
 
+    private boolean checkJson(JSONObject obj,String ... param){
+
+        for (String s :param){
+            if(!obj.has(s))
+                return false;
+        }
+
+        return true;
+    }
+
     private void addChatMessage(Message m) {
         JSONObject obj = new JSONObject((String)m.getContent());
+        JSONObject userInfo = m.getUserInfo();
+
+        if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email")) {
+            try {
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
 
 
         String content = obj.getString("content");
         int chat_id = obj.getInt("chat_id");
-        String poster = obj.getString("poster");
 
-        Utils.db.add_message(content,chat_id,poster);
+
+        System.out.println(obj.toString());
+        System.out.println(userInfo.toString());
+
+        String poster = (String) userInfo.get("email");
+
+        Utils.db.add_message(content, chat_id, poster);
 
         Utils.db.debug_chatmessages();
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay:messages"));
+            sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Ah Gay:messages"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 

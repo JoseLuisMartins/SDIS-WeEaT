@@ -31,16 +31,18 @@ public class ServerHttpHandler implements HttpHandler {
 
         try {
 
-            Message m = (Message)in.readObject();
-
             JSONObject userInfo = googleLoginChecker(httpExchange.getRequestHeaders().getFirst("token"));
 
             if(userInfo == null) {
                 System.out.println("User not loged in");
-                Distributor.sendMessage(httpExchange.getResponseBody(), new Message(ClientDistributor.UNLOGGED, "mequie", userInfo));
+                Distributor.sendMessage(httpExchange.getResponseBody(), new Message(ClientDistributor.UNLOGGED, "mequie"));
+                return;
             }
+
+            Message m = (Message)in.readObject();
             System.out.println(m.getContent().toString());
             in.close();
+            m.setUserInfo(userInfo);
             m.setHttpExchange(httpExchange);
             dist.distribute(m);
 

@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Log.d("debug","activity-----");
         Intent i = new Intent(this,ChooseLocal.class);
         startActivity(i);

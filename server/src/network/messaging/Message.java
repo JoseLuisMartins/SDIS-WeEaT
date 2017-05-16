@@ -42,6 +42,10 @@ public class Message implements Serializable{
         return userInfo;
     }
 
+    public void setUserInfo(JSONObject userInfo) {
+        this.userInfo = userInfo;
+    }
+
     public int getClassID(){ return actionID;}
 
     public void setHttpExchange(HttpExchange e){

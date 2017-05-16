@@ -117,7 +117,7 @@ public class DatabaseManager {
 
         try {
             Process p = pb.start();
-
+/*
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = buf.readLine();
@@ -127,7 +127,7 @@ public class DatabaseManager {
                 line = buf.readLine();
             }
             buf.close();
-
+*/
             p.waitFor();
             p.destroy();
         } catch (IOException e) {

@@ -54,23 +54,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
 
-        if ( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            myMap.setMyLocationEnabled(true);
-
-            LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-
-
-            LatLng currPoint = new LatLng(latitude, longitude);
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            addMarker(currPoint,"Current Position", "Este sitio é muito xiroo");
-        } else {
-            Log.d("debug","no permissions");
-        }
     }
 
     @Override

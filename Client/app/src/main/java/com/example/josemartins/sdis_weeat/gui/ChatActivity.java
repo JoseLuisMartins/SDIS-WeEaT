@@ -13,11 +13,17 @@ import android.widget.TextView;
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
+import com.example.josemartins.sdis_weeat.logic.Utils;
+
+import org.json.JSONObject;
+
+import network.messaging.Message;
+import network.messaging.distributor.server.ServerDistributor;
 
 public class ChatActivity extends AppCompatActivity {
 
     private TextView title;
-    private TextView message;
+    private TextView messageView;
     private ListView msgList;
     private ImageView sendBtn;
     private ChatArrayAdapter chatArrayAdapter;
@@ -29,14 +35,16 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         title = (TextView) findViewById(R.id.title);
-        message = (TextView) findViewById(R.id.message);
+        messageView = (TextView) findViewById(R.id.message);
         msgList = (ListView) findViewById(R.id.msgList);
         sendBtn = (ImageView) findViewById(R.id.sendButton);
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),R.layout.left_message);
         msgList.setAdapter(chatArrayAdapter);
+        msgList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
-        message.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
+
+        messageView.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     return sendMessage();
                 }
@@ -46,9 +54,6 @@ public class ChatActivity extends AppCompatActivity {
 
         sendBtn.setOnClickListener((View arg0) -> sendMessage());
 
-        msgList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        msgList.setAdapter(chatArrayAdapter);
-
 
         chatArrayAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -57,18 +62,44 @@ public class ChatActivity extends AppCompatActivity {
                 msgList.setSelection(chatArrayAdapter.getCount() - 1);
             }
         });
+
+
+
+        try {
+            JSONObject jsonAddChat = new JSONObject();
+            jsonAddChat.put("lat",554.1545);
+            jsonAddChat.put("long",2.454);
+            jsonAddChat.put("timestamp",2546);
+
+            Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_GROUP, jsonAddChat.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 
     private boolean sendMessage(){
 
-        if(!(message.getText().length() == 0)){
+        if(!(messageView.getText().length() == 0)){
 
-            //send  message
-            //client.makeRequest("AuthUser", "POST", message.toString().getBytes());
+            //send  messageView
 
-            chatArrayAdapter.add(new ChatMessage(message.getText().toString(), side, null));
-            message.setText("");
+            try {
+
+                JSONObject jsonAddMessage = new JSONObject();
+                jsonAddMessage.put("content", messageView.getText().toString());
+                jsonAddMessage.put("chat_id",1);
+
+                Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
+
+                chatArrayAdapter.add(new ChatMessage(messageView.getText().toString(), side, null));
+                messageView.setText("");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return true;
         }else{
             return false;
@@ -76,8 +107,8 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void setTitle(String _title){
-        title.setText(_title);
+    public void setTitle(String titleString){
+        title.setText(titleString);
     }
 
 }
