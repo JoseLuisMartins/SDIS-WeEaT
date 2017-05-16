@@ -47,6 +47,7 @@ public class DatabaseConnection {
             System.exit(0);
         }
         DatabaseManager.start_backup();
+        DatabaseManager.start_midnight_delete();
     }
 
     public void close() {
