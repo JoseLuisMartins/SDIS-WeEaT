@@ -4,6 +4,7 @@ package com.example.josemartins.sdis_weeat.gui;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,12 +13,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.TimePicker;
 
 
 import com.example.josemartins.sdis_weeat.R;
@@ -31,23 +30,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static android.app.AlertDialog.*;
 
 
-public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener , OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
+
+public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
 
     private View rootView;
     private GoogleMap myMap;
     private MapView mMapView;
     private final Map<LatLng, Marker> mapMarkers = new ConcurrentHashMap<>();
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-
+    private final int[] finalHour = new int[1];
+    private final int[] finalMinute = new int[1];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,13 +57,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        myMap = googleMap ;
+        myMap = googleMap;
         myMap.setOnMapLongClickListener(this);
 
         myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(getActivity(),ChatActivity.class);
+                Intent intent = new Intent(getActivity(), ChatActivity.class);
                 startActivity(intent);
 
             }
@@ -78,27 +77,28 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         switch (requestCode) {
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        myMap.setMyLocationEnabled(true);
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myMap.setMyLocationEnabled(true);
+                        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-                    LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
+                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
 
 
-                    LatLng currPoint = new LatLng(latitude, longitude);
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
-                    myMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        LatLng currPoint = new LatLng(latitude, longitude);
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
+                        myMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                    addMarker(currPoint,"Current Position", "Este sitio é muito xiroo");
+                        addMarker(currPoint,"Current Position", "Este sitio é muito xiroo");
 
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    } else {
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
+                    }
                 }
-
                 return;
             }
 
@@ -121,7 +121,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
 
     private void addMarker(LatLng latLng, String title , String snippet){
-        Marker marker =myMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
+        Marker marker = myMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
         mapMarkers.put(latLng,marker);
     }
 
@@ -130,7 +130,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         AlertDialog.Builder createGroup = new AlertDialog.Builder(getActivity());
 
-        createGroup.setMessage("Quer criar um novo grupo");
+        createGroup.setMessage("Criar grupo");
 
         createGroup.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
@@ -141,12 +141,31 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         createGroup.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
+
+
+                final Calendar c = Calendar.getInstance();
+                int mHour = c.get(Calendar.HOUR_OF_DAY);
+                int mMinute = c.get(Calendar.MINUTE);
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                finalHour[0] = hourOfDay;
+                                finalMinute[0] = minute;
+                            }
+                        }, mHour, mMinute, false);
+
+                timePickerDialog.show();
+
                 addMarker(latLng, "nice", "hello");
+
             }
         });
 
         AlertDialog alertDialog = createGroup.create();
-
 
         alertDialog.show();
 
@@ -206,9 +225,4 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         return true;
     }
 
-
-    public void goToChat(){
-        Intent i = new Intent(getActivity(),ChatActivity.class);
-        startActivity(i);
-    }
 }

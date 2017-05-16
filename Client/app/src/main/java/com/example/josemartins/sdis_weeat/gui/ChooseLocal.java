@@ -37,9 +37,4 @@ public class ChooseLocal extends AppCompatActivity {
 
     }
 
-    public void goToChat(View v){
-        Intent i = new Intent(this,ChatActivity.class);
-        startActivity(i);
-    }
-
 }
