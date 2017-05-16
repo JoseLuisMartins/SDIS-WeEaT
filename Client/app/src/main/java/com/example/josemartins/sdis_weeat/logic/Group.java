@@ -4,9 +4,6 @@ import android.graphics.Point;
 
 import java.util.Date;
 
-/**
- * Created by Marcelo Ferreira on 11-05-2017.
- */
 
 public class Group {
 

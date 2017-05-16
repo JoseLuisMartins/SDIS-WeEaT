@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logout).setVisibility(View.INVISIBLE);
                 loginInfo.setText("");
+                Utils.client.setToken(null);
             }
         );
     }

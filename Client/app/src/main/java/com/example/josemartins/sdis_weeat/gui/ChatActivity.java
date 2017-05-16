@@ -2,32 +2,24 @@ package com.example.josemartins.sdis_weeat.gui;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 
-import static com.example.josemartins.sdis_weeat.logic.Utils.client;
-
 public class ChatActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView message;
     private ListView msgList;
-    private ImageView button;
+    private ImageView sendBtn;
     private ChatArrayAdapter chatArrayAdapter;
     private boolean side = true;
 
@@ -39,27 +31,20 @@ public class ChatActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         message = (TextView) findViewById(R.id.message);
         msgList = (ListView) findViewById(R.id.msgList);
-        button = (ImageView) findViewById(R.id.sendButton);
+        sendBtn = (ImageView) findViewById(R.id.sendButton);
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(),R.layout.left_message);
         msgList.setAdapter(chatArrayAdapter);
 
-        message.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+        message.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     return sendMessage();
                 }
                 return false;
             }
-        });
+        );
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                sendMessage();
-
-            }
-        });
+        sendBtn.setOnClickListener((View arg0) -> sendMessage());
 
         msgList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         msgList.setAdapter(chatArrayAdapter);

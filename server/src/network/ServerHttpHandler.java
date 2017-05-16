@@ -18,12 +18,8 @@ import static network.GoogleLoginChecker.googleLoginChecker;
 public class ServerHttpHandler implements HttpHandler {
     Distributor dist;
 
-
-
     public ServerHttpHandler(Server server) {
         dist = new ServerDistributor(server);
-
-
     }
 
     @Override

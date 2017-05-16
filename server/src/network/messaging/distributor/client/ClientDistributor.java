@@ -15,7 +15,6 @@ public class ClientDistributor extends Distributor{
     public ClientDistributor(Client client){
         this.client = client;
         addAction(RESPONSE, (Message m) -> fillChat(m));
-
     }
 
     public void fillChat(Message m){

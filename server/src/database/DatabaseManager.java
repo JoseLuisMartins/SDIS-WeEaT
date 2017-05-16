@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class DatabaseManager {
 
     //Root path for pgsql folder
-    public static String bin_path = "C:\\PostgreSQL\\pg96\\bin";//"/usr/bin";
+    public static String bin_path = "/usr/bin";//"C:\\PostgreSQL\\pg96\\bin";
     public static int interval = 15;
     private static boolean outdated = false;
 

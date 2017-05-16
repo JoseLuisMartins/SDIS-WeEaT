@@ -1,6 +1,7 @@
 package com.example.josemartins.sdis_weeat.gui;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class ChooseLocal extends AppCompatActivity {
         setContentView(R.layout.activity_choose_local);
 
 
+
         time = (Spinner) findViewById(R.id.time);
 
         //Utils.client.makeRequest("AuthUser","POST","Body-> handle location".getBytes());
@@ -28,6 +30,8 @@ public class ChooseLocal extends AppCompatActivity {
         android.app.FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         MapFragment mf =new MapFragment();
+
+
         ft.add(R.id.map,mf);
         ft.commit();
 

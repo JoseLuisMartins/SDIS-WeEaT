@@ -89,7 +89,6 @@ public class ServerDistributor extends Distributor {
 
 
         Utils.db.add_chat_member(chat_id,member);
-
         Utils.db.debug_chatmembers();
 
         try {
