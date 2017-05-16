@@ -13,7 +13,13 @@ public class DatabaseConnection {
 
     public Connection conn = null;
 
-    /*
+    /*  SELECT id
+        FROM table
+        WHERE IF(@above, datecol < @param, datecol > @param)
+        ORDER BY IF (@above. datecol ASC, datecol DESC)
+        LIMIT 1
+
+
     * Commands to change the postgres user password
     * sudo -u postgres psql template1
     * ALTER USER postgres with encrypted password 'sua_senha';
@@ -51,27 +57,63 @@ public class DatabaseConnection {
         }
     }
 
+    private JSONArray get_chatroom_data(ResultSet rs) throws SQLException {
+
+        JSONArray res = new JSONArray();
+
+        while ( rs.next() ) {
+
+            int id = rs.getInt("id");
+            Timestamp date = rs.getTimestamp("date");
+            PGpoint location = (PGpoint)rs.getObject("location");
+
+            res.put(new ChatRoom(id,location,date).toJson());
+        }
+
+        rs.close();
+
+        return res;
+    }
+
+    public JSONObject get_chatrooms_by_location(double x, double y) {
+
+        JSONArray jsonArray = null;
+
+
+        PGpoint user_location = new PGpoint(x,y);
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT *\n" +
+                                            "FROM chatroom\n" +
+                                            "ORDER BY ? <-> location ASC\n" +
+                                            "LIMIT 25;");
+            stmt.setObject(1,user_location);
+
+            ResultSet rs = stmt.executeQuery();
+
+            jsonArray = get_chatroom_data(rs);
+
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject res = new JSONObject();
+        res.put("chats",jsonArray);
+
+        return res;
+    }
+
     public JSONObject get_chatrooms() {
 
-        JSONArray jsonArray = new JSONArray();
-
-
+        JSONArray jsonArray = null;
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT * FROM chatroom;" );
 
-            while ( rs.next() ) {
 
-                int id = rs.getInt("id");
-                Timestamp date = rs.getTimestamp("date");
-                PGpoint location = (PGpoint)rs.getObject("location");
-
-
-                jsonArray.put(new ChatRoom(id,location,date).toJson());
-            }
-
-            rs.close();
+            jsonArray = get_chatroom_data(rs);
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
