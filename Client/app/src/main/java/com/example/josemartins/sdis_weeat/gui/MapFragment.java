@@ -2,8 +2,11 @@ package com.example.josemartins.sdis_weeat.gui;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 import com.example.josemartins.sdis_weeat.R;
@@ -26,11 +31,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.w3c.dom.Text;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static android.app.AlertDialog.*;
 
-public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener , OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
+
+public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener , OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
 
     private View rootView;
     private GoogleMap myMap;
@@ -52,6 +61,14 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap = googleMap ;
         myMap.setOnMapLongClickListener(this);
 
+        myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(getActivity(),ChatActivity.class);
+                startActivity(intent);
+
+            }
+        });
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
 
     }
@@ -110,7 +127,29 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        addMarker(latLng, "nice", "clear");
+
+        AlertDialog.Builder createGroup = new AlertDialog.Builder(getActivity());
+
+        createGroup.setMessage("Quer criar um novo grupo");
+
+        createGroup.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+
+                dialog.cancel();
+            }
+        });
+
+        createGroup.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+                addMarker(latLng, "nice", "hello");
+            }
+        });
+
+        AlertDialog alertDialog = createGroup.create();
+
+
+        alertDialog.show();
+
     }
 
 
@@ -139,7 +178,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
-        super.onSaveInstanceState(outState); mMapView.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
     }
     @Override
     public void onLowMemory()
@@ -157,7 +197,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         super.onDestroyView();
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Intent i = new Intent(getActivity(),ChatActivity.class);
+        startActivity(i);
+
+        return true;
+    }
 
 
-
+    public void goToChat(){
+        Intent i = new Intent(getActivity(),ChatActivity.class);
+        startActivity(i);
+    }
 }
