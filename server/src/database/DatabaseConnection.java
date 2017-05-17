@@ -209,10 +209,12 @@ public class DatabaseConnection {
             stmt.setString(4,title);
 
             ResultSet rs = stmt.executeQuery();
+            rs.next();
             int new_id = rs.getInt("id");
 
             add_chat_member(new_id,user);
 
+            rs.close();
             stmt.close();
             conn.commit();
         } catch (SQLException e) {
@@ -269,8 +271,9 @@ public class DatabaseConnection {
 
         try {
 
-            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM user_weeat WHERE email = ? );");
+            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM chat_member WHERE member = ? AND chat_id = ?);");
             check_stmt.setString(1,poster);
+            check_stmt.setInt(2,chat_id);
 
             if(check_stmt.execute()) {
                 stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?);");
