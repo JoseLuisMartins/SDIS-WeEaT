@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.Utils;
 import network.Client;
+import network.NotificationsWebSocket;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
 
@@ -126,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             jsonUser.put("token",Utils.client.getToken());
 
             Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
+            //test notification handler
+            NotificationsWebSocket.request();
+
 
         } catch (Exception e) {
             e.printStackTrace();

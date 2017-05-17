@@ -60,14 +60,11 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap = googleMap;
         myMap.setOnMapLongClickListener(this);
 
-        myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
+        myMap.setOnInfoWindowClickListener( (Marker marker) -> {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 startActivity(intent);
-
-            }
         });
+
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
 
     }

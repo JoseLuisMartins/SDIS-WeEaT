@@ -17,9 +17,8 @@ import com.example.josemartins.sdis_weeat.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Marcelo Ferreira on 10-05-2017.
- */
+
+
 
 public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
@@ -52,11 +51,12 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         ChatMessage chatMessageObj = getItem(position);
         View row;
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (chatMessageObj.getLeft()) {
+
+        if (chatMessageObj.getLeft())
             row = inflater.inflate(R.layout.right_message, parent, false);
-        }else{
+        else
             row = inflater.inflate(R.layout.left_message, parent, false);
-        }
+
 
         chatText = (TextView) row.findViewById(R.id.msg);
         Glide.with(context).load(Utils.client.getAccount().getPhotoUrl()).into((ImageView) row.findViewById(R.id.picture));

@@ -94,7 +94,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
 
-                chatArrayAdapter.add(new ChatMessage(messageView.getText().toString(), side, null));
+                chatArrayAdapter.add(new ChatMessage(messageView.getText().toString(), side, "Anibal"));
                 messageView.setText("");
 
             } catch (Exception e) {

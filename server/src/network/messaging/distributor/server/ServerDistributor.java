@@ -71,6 +71,7 @@ public class ServerDistributor extends Distributor {
 
         Utils.db.debug_chatrooms();
 
+
         try {
             sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: chat group"));
         } catch (IOException e) {
