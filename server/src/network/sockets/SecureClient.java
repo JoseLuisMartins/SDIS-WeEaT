@@ -13,10 +13,15 @@ import java.security.KeyStore;
 public class SecureClient extends Thread{
 
     private SSLSocket socket;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
+    private PrintWriter writer;
+    private BufferedReader inputStream;
 
-    public SecureClient(String ip, int port, int clientPort) throws Exception {
+    private static String confirmationCode = "Batata";
+    private String location;
+
+    public SecureClient(String ip, int port, int clientPort, String location) throws Exception {
+
+        this.location = location;
 
         SSLSocketFactory factory = getSSLServerSocketFactory("src/keys/client.keys","src/keys/truststore");
 
@@ -25,8 +30,19 @@ public class SecureClient extends Thread{
         //ip/ port of the loadbalancer
         socket.connect(new InetSocketAddress(ip,port));
 
-        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        objectInputStream = new ObjectInputStream(socket.getInputStream());
+        handShake();
+        this.start();
+
+    }
+
+    public void handShake() throws IOException {
+
+        writer = new PrintWriter(socket.getOutputStream(), true);
+        writer.println(confirmationCode + location);
+        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String res = inputStream.readLine();
+
+        System.out.println("MODE" + res);
 
     }
 
@@ -35,19 +51,15 @@ public class SecureClient extends Thread{
         super.run();
 
         while (true){
-            try {
-                Message m = (Message) objectInputStream.readObject();
+            try{
+
+                String msg = inputStream.readLine();
+
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    public void sendData(Message m) throws IOException {
-        objectOutputStream.writeObject(m);
-        objectOutputStream.close();
     }
 
     public static SSLSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{

@@ -8,6 +8,7 @@ import network.ServerWeEat;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.balancer.BalancerDistributor;
+import network.sockets.ConnectionArmy;
 import network.sockets.SecureServer;
 
 import java.io.IOException;
@@ -19,13 +20,14 @@ public class LoadBalancer implements HttpHandler {
     private HashMap<String, ServerPair> servers = new HashMap<>();
     private int port = 8000;
     private HttpsServer server;
-
+    private ConnectionArmy army;
     private Distributor distributor = new BalancerDistributor(this);
 
 
-    public LoadBalancer(int port){
+    public LoadBalancer(int port, int armyPort, int armyNumber){
         try {
-            new SecureServer(27015);
+
+            army = new ConnectionArmy(armyPort, armyNumber);
 
 
         } catch (Exception e) {
@@ -35,7 +37,6 @@ public class LoadBalancer implements HttpHandler {
         try {
             server = ServerWeEat.getHttpsServer(port);
             server.createContext("/", this);
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,19 +48,10 @@ public class LoadBalancer implements HttpHandler {
 
     public static void main(String[] r){
 
-        LoadBalancer lb = new LoadBalancer(8000);
+        LoadBalancer lb = new LoadBalancer(8000, 27015,3);
 
     }
 
-    public int storeServer(String svLocation, String svIP, int svPort){
-
-        if(servers.containsKey(svLocation))
-            return servers.get(svLocation).AddServerConnection(new ServerConnection(svIP,svPort));
-
-        ServerPair pair = new ServerPair();
-        servers.put(svLocation, pair);
-        return pair.AddServerConnection(new ServerConnection(svIP,svPort));
-    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {

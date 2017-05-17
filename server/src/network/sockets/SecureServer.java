@@ -1,5 +1,7 @@
 package network.sockets;
 
+import network.load_balancer.ServerConnection;
+
 import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,24 +19,15 @@ public class SecureServer extends Thread{
 
     SSLServerSocketFactory factory;
     ServerSocket serverSocket;
+    ConnectionArmy army;
 
-
-    public SecureServer(int port) throws Exception {
+    public SecureServer(int port, ConnectionArmy army) throws Exception {
 
         factory = getSSLServerSocketFactory("src/keys/server.keys","src/keys/truststore");
+        this.army=army;
 
         serverSocket = factory.createServerSocket(port);
-        System.out.println("Accepting connections");
-        serverSocket.accept();
-        System.out.println("End;");
-    }
-
-    public void handleSocket(Socket s){
-
-        new Thread( ()->  {
-                   //   new ObjectOutputStream(s.getOutputStream())
-            }
-        ).start();
+        System.out.println( port + " Accepting connections");
 
     }
 
@@ -45,14 +38,19 @@ public class SecureServer extends Thread{
 
         while (true){
             try {
+                System.out.println(serverSocket.getLocalPort() + " Waiting Connections");
                 Socket s = serverSocket.accept();
 
+                ServerConnection svConnection = new ServerConnection(s, army);
 
+                System.out.println(serverSocket.getLocalPort() + " Creating Thread");
 
+                svConnection.start();
 
 
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
 
 

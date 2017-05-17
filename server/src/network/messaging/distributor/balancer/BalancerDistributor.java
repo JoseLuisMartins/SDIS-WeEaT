@@ -40,25 +40,6 @@ public class BalancerDistributor extends Distributor {
     }
 
     public void storeServer(Message m){
-        JSONObject obj = new JSONObject((String)m.getContent());
-        String ip = "";
-        System.out.println(m.getHttpExchange().getRequestHeaders().toString());
-        Headers header = m.getHttpExchange().getRequestHeaders();
-        for(String e : header.keySet()){
-
-            System.out.println(e + " - " + header.get(e));
-
-        }
-
-
-        int res = loadBalancer.storeServer(obj.getString("location"), ip , obj.getInt("port"));
-        try {
-            Distributor.sendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE, res));
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 

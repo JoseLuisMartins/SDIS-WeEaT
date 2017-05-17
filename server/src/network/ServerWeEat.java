@@ -4,6 +4,7 @@ package network;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
 import network.messaging.distributor.server.ServerDistributor;
+import network.sockets.SecureClient;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -24,6 +25,10 @@ public class ServerWeEat {
 
 
         try {
+            //Uncomment if you wish to use the awesome loadBalancer C;
+            //SecureClient client = new SecureClient("localhost", 27015, 200, "Porto");
+
+            Thread.sleep(200000);
 
             Utils.initDB();
             ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8000);
