@@ -18,6 +18,7 @@ import static network.GoogleLoginChecker.googleLoginChecker;
 
 @WebSocket
 public class NotificationWebSocket {
+
     private static HashMap<Integer,ArrayList<Session>> sessions = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
@@ -31,8 +32,8 @@ public class NotificationWebSocket {
 
         //WS
         ServerConnector wsConnector = new ServerConnector(server);
-        wsConnector.setHost("127.0.0.1");
-        wsConnector.setPort(8080);
+        wsConnector.setHost("192.168.1.64");
+        wsConnector.setPort(8887);
         server.addConnector(wsConnector);
 
         //WSS
@@ -92,8 +93,6 @@ public class NotificationWebSocket {
             ArrayList<Session> array = sessions.get(chatId);
             array.add(session);
         }
-
-        sendAll("Atum",1);
 
     }
 

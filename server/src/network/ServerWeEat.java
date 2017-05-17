@@ -28,7 +28,7 @@ public class ServerWeEat {
             //Uncomment if you wish to use the awesome loadBalancer C;
             //SecureClient client = new SecureClient("localhost", 27015, 200, "Porto");
 
-            Thread.sleep(200000);
+
 
             Utils.initDB();
             ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8000);

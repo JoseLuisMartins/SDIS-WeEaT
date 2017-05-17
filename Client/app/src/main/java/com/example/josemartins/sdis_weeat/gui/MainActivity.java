@@ -16,7 +16,6 @@ import network.NotificationsWebSocket;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -24,10 +23,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -119,6 +122,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         );
     }
 
+    private WebSocketClient mWebSocketClient;
+    private void connectWebSocket() {
+        URI uri;
+        try {
+            uri = new URI("ws://192.168.1.64:8887");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        mWebSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.d("Websocket", "Opened");
+                mWebSocketClient.send("Hello from " );
+            }
+
+            @Override
+            public void onMessage(String s) {
+                Log.d("Websocket", "message: " + s);
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.d("Websocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d("Websocket", "Error " + e.getMessage());
+            }
+        };
+
+        mWebSocketClient.connect();
+
+    }
+
     public void request(View v){
 
 
@@ -128,8 +168,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
             Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
             //test notification handler
-            NotificationsWebSocket.request();
-
+            NotificationsWebSocket n = new NotificationsWebSocket();
+            n.execute();
 
         } catch (Exception e) {
             e.printStackTrace();
