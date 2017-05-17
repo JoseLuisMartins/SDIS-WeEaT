@@ -8,17 +8,51 @@
     android:orientation="vertical"
     tools:context="com.example.josemartins.sdis_weeat.gui.ChooseLocal">
 
-
         <TextView
             android:id="@+id/choosePlaceTitle"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="48sp"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:textSize="35dp"
+            android:textSize="35sp"
             android:text="Choose a place to eat"
-            android:layout_weight="0.12" />
+            android:layout_weight="0.05" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center|top">
+
+                <Button
+                    android:id="@+id/normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="normal"
+                    />
+
+                <Button
+                    android:id="@+id/hybrid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hybrid"
+                    />
+
+                <Button
+                    android:id="@+id/satellite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="satellite"
+                    />
+
+                <Button
+                    android:id="@+id/terrain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="terrain"
+                    />
+
+        </LinearLayout>
 
         <include
             layout="@layout/map_fragment"

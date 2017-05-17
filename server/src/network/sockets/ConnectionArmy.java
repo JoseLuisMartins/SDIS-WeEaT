@@ -3,16 +3,10 @@ package network.sockets;
 import network.load_balancer.ServerConnection;
 import network.load_balancer.ServerPair;
 
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by joao on 5/17/17.
- */
+
 public class ConnectionArmy {
 
     int sameIPConnectionsNum = 1;
@@ -23,7 +17,7 @@ public class ConnectionArmy {
     private ConcurrentHashMap<String, ServerPair> servers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String,String> ipToLocation = new ConcurrentHashMap<>();
 
-    private ArrayList<SecureServer> listeners = new ArrayList<>();
+    private ArrayList<SecureServerQuarters> listeners = new ArrayList<>();
 
     public static String getConfirmationCode(){
         return confirmationCode;
@@ -38,7 +32,7 @@ public class ConnectionArmy {
     private void startListenServers() throws Exception {
 
         for(int i = 0; i < sameIPConnectionsNum; i++){
-            SecureServer sv = new SecureServer(basePort + i, this);
+            SecureServerQuarters sv = new SecureServerQuarters(basePort + i, this);
             sv.start();
             listeners.add(sv);
         }

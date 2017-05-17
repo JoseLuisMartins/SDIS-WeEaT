@@ -6,17 +6,17 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TimePicker;
+import android.widget.EditText;
 
 
 import com.example.josemartins.sdis_weeat.R;
@@ -45,8 +45,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     private MapView mMapView;
     private final Map<LatLng, Marker> mapMarkers = new ConcurrentHashMap<>();
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private final int[] finalHour = new int[1];
-    private final int[] finalMinute = new int[1];
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,9 +59,10 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap = googleMap;
         myMap.setOnMapLongClickListener(this);
 
-        myMap.setOnInfoWindowClickListener( (Marker marker) -> {
-                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                startActivity(intent);
+        myMap.setOnInfoWindowClickListener(marker -> {
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
+            startActivity(intent);
+
         });
 
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
@@ -96,7 +96,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
                         // functionality that depends on this permission.
                     }
                 }
-                return;
+
             }
 
 
@@ -127,50 +127,31 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         AlertDialog.Builder createGroup = new AlertDialog.Builder(getActivity());
 
-        createGroup.setMessage("Criar grupo");
+        LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        createGroup.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int id) {
+        View v = inflater.inflate(R.layout.create_group, null);
 
-                dialog.cancel();
-            }
-        });
+        EditText group_name = (EditText) v.findViewById(R.id.group_name);
+        EditText group_date = (EditText) v.findViewById(R.id.group_date);
 
-        createGroup.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int id) {
+        group_date.setInputType(InputType.TYPE_NULL);
+        group_date.setOnClickListener(v1 -> openTimePicker(group_date));
 
+        createGroup.setView(v);
 
-                final Calendar c = Calendar.getInstance();
-                int mHour = c.get(Calendar.HOUR_OF_DAY);
-                int mMinute = c.get(Calendar.MINUTE);
+        createGroup.setTitle("Marcar encontro");
 
+        createGroup.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
-                        new TimePickerDialog.OnTimeSetListener() {
+        createGroup.setPositiveButton("Create", (dialog, id) -> {
 
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                finalHour[0] = hourOfDay;
-                                finalMinute[0] = minute;
-                            }
-                        }, mHour, mMinute, false);
-
-                timePickerDialog.show();
-
-                addMarker(latLng, "nice", "hello");
-
-            }
+            if(!group_name.getText().toString().trim().equals(""))
+                addMarker(latLng, group_name.getText().toString(), group_date.getText().toString());
         });
 
         AlertDialog alertDialog = createGroup.create();
 
         alertDialog.show();
-
-    }
-
-
-    public void addAllMarkers(){
-        //TODO - to add all markers on data base
 
     }
 
@@ -220,6 +201,26 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         startActivity(i);
 
         return true;
+    }
+
+    public void openTimePicker(EditText group_date){
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                (view, hourOfDay, minute) -> {
+                    if(minute < 10)
+                        group_date.setText(hourOfDay + ":0" + minute);
+                    else
+                        group_date.setText(hourOfDay + ":" + minute);
+                }, mHour, mMinute, false);
+
+        timePickerDialog.show();
+    }
+
+    public void changeMapType(int type){
+        myMap.setMapType(type);
     }
 
 }

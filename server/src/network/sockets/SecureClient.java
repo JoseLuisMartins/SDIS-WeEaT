@@ -1,27 +1,18 @@
 package network.sockets;
 
-import network.messaging.Message;
-
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 
-/**
- * Created by joao on 5/10/17.
- */
-public class SecureClient extends Thread{
+public class SecureClient extends Thread {
 
-    private SSLSocket socket;
-    private PrintWriter writer;
-    private BufferedReader inputStream;
+    protected SSLSocket socket;
+    protected PrintWriter writer;
+    protected BufferedReader inputStream;
 
-    private static String confirmationCode = "Batata";
-    private String location;
+    public SecureClient(String ip, int port, int clientPort) throws Exception {
 
-    public SecureClient(String ip, int port, int clientPort, String location) throws Exception {
-
-        this.location = location;
 
         SSLSocketFactory factory = getSSLServerSocketFactory("src/keys/client.keys","src/keys/truststore");
 
@@ -30,36 +21,13 @@ public class SecureClient extends Thread{
         //ip/ port of the loadbalancer
         socket.connect(new InetSocketAddress(ip,port));
 
-        handShake();
-        this.start();
-
-    }
-
-    public void handShake() throws IOException {
-
-        writer = new PrintWriter(socket.getOutputStream(), true);
-        writer.println(confirmationCode + location);
-        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        String res = inputStream.readLine();
-
-        System.out.println("MODE" + res);
+        //this.start();
 
     }
 
     @Override
     public void run() {
-        super.run();
 
-        while (true){
-            try{
-
-                String msg = inputStream.readLine();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static SSLSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{

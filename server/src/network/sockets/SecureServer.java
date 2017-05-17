@@ -1,30 +1,22 @@
 package network.sockets;
 
-import network.load_balancer.ServerConnection;
-
 import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
-/**
- * Created by joao on 5/10/17.
- */
+
 public class SecureServer extends Thread{
 
     SSLServerSocketFactory factory;
     ServerSocket serverSocket;
-    ConnectionArmy army;
 
-    public SecureServer(int port, ConnectionArmy army) throws Exception {
+    public SecureServer(int port) throws Exception {
 
         factory = getSSLServerSocketFactory("src/keys/server.keys","src/keys/truststore");
-        this.army=army;
 
         serverSocket = factory.createServerSocket(port);
         System.out.println( port + " Accepting connections");
@@ -33,29 +25,18 @@ public class SecureServer extends Thread{
 
     @Override
     public void run() {
-        super.run();
-
 
         while (true){
             try {
+
                 System.out.println(serverSocket.getLocalPort() + " Waiting Connections");
                 Socket s = serverSocket.accept();
-
-                ServerConnection svConnection = new ServerConnection(s, army);
-
-                System.out.println(serverSocket.getLocalPort() + " Creating Thread");
-
-                svConnection.start();
-
 
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-
-
         }
-
     }
 
     public static SSLServerSocketFactory getSSLServerSocketFactory(String keyPath, String trustPath) throws Exception{
@@ -88,5 +69,4 @@ public class SecureServer extends Thread{
         return sslContext.getServerSocketFactory();
 
     }
-
 }

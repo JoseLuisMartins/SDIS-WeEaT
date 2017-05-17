@@ -4,7 +4,7 @@ package network;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
 import network.messaging.distributor.server.ServerDistributor;
-import network.sockets.SecureClient;
+import network.sockets.SecureClientQuarters;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -26,7 +26,7 @@ public class ServerWeEat {
 
         try {
             //Uncomment if you wish to use the awesome loadBalancer C;
-            //SecureClient client = new SecureClient("localhost", 27015, 200, "Porto");
+            SecureClientQuarters client = new SecureClientQuarters("localhost", 27015, 200, "Porto");
 
 
 
@@ -46,7 +46,7 @@ public class ServerWeEat {
 
     public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
       /*  request = loadBalancerIP;
-        SecureClient balancerClient =  new SecureClient("192.168.1.64",27015,8001);
+        SecureClientQuarters balancerClient =  new SecureClientQuarters("192.168.1.64",27015,8001);
 
         JSONObject object = new JSONObject();
         object.put("location", "Porto");
