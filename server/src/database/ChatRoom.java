@@ -12,11 +12,13 @@ public class ChatRoom {
     public int id;
     public PGpoint location;
     public Timestamp date;
+    public String title;
 
-    public ChatRoom(int _id, PGpoint _location, Timestamp _date){
+    public ChatRoom(int _id, PGpoint _location, Timestamp _date,String _title){
         id = _id;
         location = _location;
         date = _date;
+        title = _title;
     }
 
     public JSONObject toJson(){
@@ -25,6 +27,7 @@ public class ChatRoom {
         res.put("lat",location.x);
         res.put("long",location.y);
         res.put("date",date.getTime());
+        res.put("title",title);
 
         return res;
     }
@@ -35,6 +38,7 @@ public class ChatRoom {
                 "id=" + id +
                 ", location=" + location +
                 ", date=" + date +
+                ", title=" + title +
                 '}';
     }
 }

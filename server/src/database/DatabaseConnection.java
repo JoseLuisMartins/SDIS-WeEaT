@@ -70,8 +70,9 @@ public class DatabaseConnection {
             int id = rs.getInt("id");
             Timestamp date = rs.getTimestamp("date");
             PGpoint location = (PGpoint)rs.getObject("location");
+            String title = rs.getString("title");
 
-            res.put(new ChatRoom(id,location,date).toJson());
+            res.put(new ChatRoom(id,location,date,title).toJson());
         }
 
         rs.close();
@@ -197,17 +198,18 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(PGpoint location, Timestamp date,String user) {
+    public void add_chatroom(PGpoint location, Timestamp date,String user,String title) {
 
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date) VALUES (point(?,?), ?) RETURNING id;");
+            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date, title) VALUES (point(?,?), ?, ?) RETURNING id;");
             stmt.setDouble(1,location.x);
             stmt.setDouble(2,location.y);
             stmt.setObject(3,date);
+            stmt.setString(4,title);
 
-            stmt.execute();
-            int new_id = stmt.getResultSet().getInt("id");
+            ResultSet rs = stmt.executeQuery();
+            int new_id = rs.getInt("id");
 
             add_chat_member(new_id,user);
 
@@ -332,8 +334,9 @@ public class DatabaseConnection {
                 int id = rs.getInt("id");
                 Timestamp date = rs.getTimestamp("date");
                 PGpoint location = (PGpoint)rs.getObject("location");
+                String title = rs.getString("title");
 
-                ChatRoom cr = new ChatRoom(id,location,date);
+                ChatRoom cr = new ChatRoom(id,location,date,title);
                 System.out.println(cr.toString());
             }
 

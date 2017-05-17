@@ -11,7 +11,8 @@ DROP TABLE IF EXISTS chatroom CASCADE;
 CREATE TABLE chatroom (
     id SERIAL,
     location point NOT NULL,
-    date timestamp with time zone NOT NULL
+    date timestamp with time zone NOT NULL,
+    title text NOT NULL
 );
 
 ALTER TABLE chatroom OWNER TO postgres;

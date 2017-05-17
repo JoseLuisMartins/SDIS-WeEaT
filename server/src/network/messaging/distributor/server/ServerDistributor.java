@@ -64,9 +64,9 @@ public class ServerDistributor extends Distributor {
 
         PGpoint point = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
+        String title = obj.getString("title");
 
-
-        Utils.db.add_chatroom(point,ts, (String) userInfo.get("email"));
+        Utils.db.add_chatroom(point,ts, (String) userInfo.get("email"),title);
 
         Utils.db.debug_chatrooms();
 
