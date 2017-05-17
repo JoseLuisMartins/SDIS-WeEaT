@@ -14,87 +14,56 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebSocketServer {
-    private Server server;
-    private String host;
-    private int port;
-    private Resource keyStoreResource;
-    private String keyStorePassword;
-    private String keyManagerPassword;
-    private List<Handler> webSocketHandlerList = new ArrayList<>();
+public class WebSocketServer extends WebSocketHandler {
+
 
     public static void main(String[] args) throws Exception {
-        WebSocketServer webSocketServer = new WebSocketServer();
-        webSocketServer.setHost("localhost");
-        webSocketServer.setPort(8443);
 
-        /*
-        webSocketServer.setKeyStoreResource(new FileResource(WebSocketServer.class.getResource("/keystore.jks")));
-        webSocketServer.setKeyStorePassword("password");
-        webSocketServer.setKeyManagerPassword("password");*/
 
-        webSocketServer.addWebSocket(MyWebSocket.class, "/");
-
-        webSocketServer.initialize();
-        webSocketServer.start();
-    }
-
-    public void initialize() {
-        server = new Server();
-        // connector configuration
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustAll(true);
-       /* sslContextFactory.setKeyStoreResource(keyStoreResource);
-        sslContextFactory.setKeyStorePassword(keyStorePassword);
-        sslContextFactory.setKeyManagerPassword(keyManagerPassword);*/
-        SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString());
-        HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(new HttpConfiguration());
-        ServerConnector sslConnector = new ServerConnector(server, sslConnectionFactory, httpConnectionFactory);
-        sslConnector.setHost(host);
-        sslConnector.setPort(port);
-        server.addConnector(sslConnector);
-        // handler configuration
-        HandlerCollection handlerCollection = new HandlerCollection();
-        handlerCollection.setHandlers(webSocketHandlerList.toArray(new Handler[0]));
-        server.setHandler(handlerCollection);
-    }
+        //sslContextFactory.setKeyStorePath("keystore.jks");
+        //sslContextFactory.setKeyStorePassword("OBF:1l1a1s3g1yf41xtv20731xtn1yf21s3m1kxs");
 
-    public void addWebSocket(final Class<?> webSocket, String pathSpec) {
-        WebSocketHandler wsHandler = new WebSocketHandler() {
-            @Override
-            public void configure(WebSocketServletFactory webSocketServletFactory) {
-                webSocketServletFactory.register(webSocket);
-            }
-        };
-        ContextHandler wsContextHandler = new ContextHandler();
-        wsContextHandler.setHandler(wsHandler);
-        wsContextHandler.setContextPath(pathSpec);  // this context path doesn't work ftm
-        webSocketHandlerList.add(wsHandler);
-    }
+        Server server = new Server();
+        server.setHandler(new WebSocketServer());
 
-    public void start() throws Exception {
+        //WS
+        ServerConnector wsConnector = new ServerConnector(server);
+        wsConnector.setHost("127.0.0.1");
+        wsConnector.setPort(8080);
+        server.addConnector(wsConnector);
+
+
+
+        //WSS
+
+        HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setSecureScheme("https");
+        http_config.setSecurePort(8443);
+        http_config.setOutputBufferSize(32768);
+        http_config.setRequestHeaderSize(8192);
+        http_config.setResponseHeaderSize(8192);
+        http_config.setSendServerVersion(true);
+        http_config.setSendDateHeader(false);
+
+        HttpConfiguration https_config = new HttpConfiguration(http_config);
+        https_config.addCustomizer(new SecureRequestCustomizer());
+
+        ServerConnector wssConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),new HttpConnectionFactory(https_config));
+        wssConnector.setHost("127.0.0.1");
+        wssConnector.setPort(8443);
+        server.addConnector(wssConnector);
+
         server.start();
         server.join();
-    }
-    public void stop() throws Exception {
-        server.stop();
-        server.join();
+
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-    public void setPort(int port) {
-        this.port = port;
-    }
-    public void setKeyStoreResource(Resource keyStoreResource) {
-        this.keyStoreResource = keyStoreResource;
-    }
-    public void setKeyStorePassword(String keyStorePassword) {
-        this.keyStorePassword = keyStorePassword;
-    }
-    public void setKeyManagerPassword(String keyManagerPassword) {
-        this.keyManagerPassword = keyManagerPassword;
+
+    @Override
+    public void configure(WebSocketServletFactory webSocketServletFactory) {
+        webSocketServletFactory.register(MyWebSocket.class);
     }
 
 }
