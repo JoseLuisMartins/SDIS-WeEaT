@@ -70,6 +70,8 @@ public class ChatActivity extends AppCompatActivity {
             jsonAddChat.put("lat",554.1545);
             jsonAddChat.put("long",2.454);
             jsonAddChat.put("timestamp",2546);
+            jsonAddChat.put("title","Amizade");
+
 
             Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_GROUP, jsonAddChat.toString()));
         } catch (Exception e) {
@@ -84,7 +86,6 @@ public class ChatActivity extends AppCompatActivity {
         if(!(messageView.getText().length() == 0)){
 
             //send  messageView
-
             try {
 
                 JSONObject jsonAddMessage = new JSONObject();

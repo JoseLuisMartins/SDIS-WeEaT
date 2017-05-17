@@ -3,6 +3,7 @@ package network;
 
 
 import database.DatabaseConnection;
+import network.notification.NotificationWebSocket;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -27,6 +28,19 @@ public class Utils {
             google = new GoogleLoginChecker();
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(new FileInputStream("src/keys/truststore"), "123456".toCharArray());
+
+
+            //Init Notification WebSocket thread
+            new Thread() {
+                public void run() {
+                    System.out.println("blah");
+                    try {
+                        NotificationWebSocket.initWebSocket();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
 
             // Create a TrustManager that trusts the CAs in our KeyStore
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();

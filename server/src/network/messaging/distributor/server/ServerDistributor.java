@@ -6,6 +6,7 @@ import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
 
+import network.notification.NotificationWebSocket;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
@@ -111,8 +112,9 @@ public class ServerDistributor extends Distributor {
         JSONObject userInfo = m.getUserInfo();
 
 
-        if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email")) {
+        if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email","name","picture")) {
             try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
                 sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -136,6 +138,14 @@ public class ServerDistributor extends Distributor {
         Utils.db.debug_chatmessages();
 
         try {
+            JSONObject notification = new JSONObject();
+            notification.put("imageUrl",userInfo.get("picture"));
+            notification.put("name",userInfo.get("name"));
+            notification.put("content",content);
+
+            NotificationWebSocket.sendAll(notification.toString(),chat_id);
+
+
             sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Ah Gay:messages"));
         } catch (IOException e) {
             e.printStackTrace();

@@ -31,7 +31,7 @@ public class DatabaseConnection {
     public DatabaseConnection() {
         DatabaseManager.database_create();
         DatabaseManager.database_init();
-        DatabaseManager.database_restore();
+        //DatabaseManager.database_restore();
         connect();
 
     }
@@ -269,11 +269,11 @@ public class DatabaseConnection {
 
         try {
 
-            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM user_weeat WHERE email = ? ;");
+            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM user_weeat WHERE email = ? );");
             check_stmt.setString(1,poster);
 
             if(check_stmt.execute()) {
-                stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?)");
+                stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?);");
                 stmt.setString(1, content);
                 stmt.setInt(2, chat_id);
                 stmt.setString(3, poster);

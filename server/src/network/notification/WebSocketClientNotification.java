@@ -1,7 +1,6 @@
-package network;
+package network.notification;
 
 
-import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -10,6 +9,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,6 +28,8 @@ public class WebSocketClientNotification {
 
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustAll(true);
+        sslContextFactory.setValidateCerts(false);
+
         /*Resource keyStoreResource = Resource.newResource(this.getClass().getResource("/truststore.jks"));
         sslContextFactory.setKeyStoreResource(keyStoreResource);
         sslContextFactory.setKeyStorePassword("password");
@@ -38,10 +41,11 @@ public class WebSocketClientNotification {
 
         try {
             client.start();
+
             ClientUpgradeRequest request = new ClientUpgradeRequest();
             System.out.println("Connecting to : " + destinationUri);
             client.connect(socket, destinationUri, request);
-            socket.awaitClose(5, TimeUnit.SECONDS);
+            socket.await();
         } catch (Throwable t) {
             t.printStackTrace();
         } finally {
@@ -59,10 +63,14 @@ public class WebSocketClientNotification {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
+            JSONObject obj = new JSONObject();
+            obj.put("token","test");
+            obj.put("chatId",1);
+
             System.out.println("WebSocket Opened in client side");
             try {
                 System.out.println("Sending message: Hi server");
-                session.getRemote().sendString("Hi Server");
+                session.getRemote().sendString(obj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,8 +86,9 @@ public class WebSocketClientNotification {
             System.out.println("WebSocket Closed. Code:" + statusCode);
         }
 
-        public boolean awaitClose(int duration, TimeUnit unit) throws InterruptedException {
-            return this.closeLatch.await(duration, unit);
+        public void await() throws InterruptedException {
+            this.closeLatch.await();
         }
+
     }
 }
