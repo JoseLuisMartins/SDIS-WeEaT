@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.josemartins.sdis_weeat.R;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
@@ -33,7 +35,7 @@ public class Client {
 
     private SSLContext sslContext;
     private Distributor distributor;
-    private String token;
+    private GoogleSignInAccount account;
 
 
 
@@ -42,12 +44,21 @@ public class Client {
         distributor = new ClientDistributor();
     }
 
-    public void setToken(String token) {
-        this.token = token;
+
+    public Client setAccount(GoogleSignInAccount account) {
+        this.account = account;
+        return this;
     }
 
-    public String getToken() {
-        return token;
+    public String getToken(){
+        if(account != null)
+            return account.getIdToken();
+        else
+            return null;
+    }
+
+    public GoogleSignInAccount getAccount() {
+        return account;
     }
 
     static {
@@ -96,8 +107,9 @@ public class Client {
 
                 HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
                 //put login token in the attributes
-                Log.d("debug","o token mais xiroo: " + token);
-                con.setRequestProperty("token",token);
+
+
+                con.setRequestProperty("token",getToken());
 
                 try {
                     con.setSSLSocketFactory(sslContext.getSocketFactory());

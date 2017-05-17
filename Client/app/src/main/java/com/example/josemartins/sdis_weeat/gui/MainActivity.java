@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             String email = account.getEmail();
             String token = account.getIdToken();
             loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
-            Utils.client.setToken(token);
+            Utils.client.setAccount(account);
 
 
             findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logout).setVisibility(View.INVISIBLE);
                 loginInfo.setText("");
-                Utils.client.setToken(null);
+                Utils.client.setAccount(null);
             }
         );
     }

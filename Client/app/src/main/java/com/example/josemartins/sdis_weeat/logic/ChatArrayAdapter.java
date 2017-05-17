@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.josemartins.sdis_weeat.R;
 
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         }
 
         chatText = (TextView) row.findViewById(R.id.msg);
+        Glide.with(context).load(Utils.client.getAccount().getPhotoUrl()).into((ImageView) row.findViewById(R.id.picture));
         chatText.setText(chatMessageObj.getMessage());
 
         return row;
