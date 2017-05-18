@@ -220,8 +220,11 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(PGpoint location, Timestamp date,String user,String title) {
+    public void add_chatroom(ChatRoom cr,String user) {
 
+        PGpoint location = cr.location;
+        Timestamp date = cr.date;
+        String title = cr.title;
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("INSERT INTO chatroom (location, date, title) VALUES (point(?,?), ?, ?) RETURNING id;");
@@ -234,7 +237,7 @@ public class DatabaseConnection {
             rs.next();
             int new_id = rs.getInt("id");
 
-            add_chat_member(new_id,user);
+            add_chat_member(new ChatMember(new_id,user));
 
             rs.close();
             stmt.close();
@@ -247,8 +250,10 @@ public class DatabaseConnection {
 
     }
 
-    public void add_chat_member(int id_chat,String member) {
+    public void add_chat_member(ChatMember cm) {
 
+        int id_chat = cm.chat_id;
+        String member = cm.member;
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("INSERT INTO chat_member (chat_id, member) VALUES (?, ?)");
@@ -266,8 +271,11 @@ public class DatabaseConnection {
         DatabaseManager.setOutdated(true);
     }
 
-    public void add_user(String username,String email,String image_url) {
+    public void add_user(UserWeeat uw) {
 
+        String username = uw.username;
+        String email = uw.email;
+        String image_url = uw.image_url;
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email,image_url) VALUES (?,?,?)");
@@ -286,8 +294,11 @@ public class DatabaseConnection {
         DatabaseManager.setOutdated(true);
     }
 
-    public void add_message(String content,int chat_id, String poster) {
+    public void add_message(MessageDB mdb) {
 
+        String content = mdb.content;
+        int chat_id = mdb.chat_id;
+        String poster = mdb.poster;
         PreparedStatement stmt = null;
         PreparedStatement check_stmt = null;
 

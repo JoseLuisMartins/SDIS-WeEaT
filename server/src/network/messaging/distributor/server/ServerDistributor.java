@@ -1,6 +1,9 @@
 package network.messaging.distributor.server;
 
+import database.ChatMember;
+import database.ChatRoom;
 import database.MessageDB;
+import database.UserWeeat;
 import network.ServerWeEat;
 import network.Utils;
 import network.messaging.Message;
@@ -49,7 +52,7 @@ public class ServerDistributor extends Distributor {
     public void addUser(Message m){
         JSONObject userInfo = m.getUserInfo();
 
-        Utils.db.add_user((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture"));
+        Utils.db.add_user(new UserWeeat((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture")));
         Utils.db.debug_users();
 
         try {
@@ -68,7 +71,7 @@ public class ServerDistributor extends Distributor {
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
         String title = obj.getString("title");
 
-        Utils.db.add_chatroom(point,ts, (String) userInfo.get("email"),title);
+        Utils.db.add_chatroom(new ChatRoom(-1,point,ts, title), (String) userInfo.get("email"));
 
         Utils.db.debug_chatrooms();
 
@@ -88,7 +91,7 @@ public class ServerDistributor extends Distributor {
         String member = obj.getString("member");
 
 
-        Utils.db.add_chat_member(chat_id,member);
+        Utils.db.add_chat_member(new ChatMember(chat_id,member));
         Utils.db.debug_chatmembers();
 
         try {
@@ -110,9 +113,9 @@ public class ServerDistributor extends Distributor {
     }
 
     private void addChatMessage(Message m) {
+
         JSONObject obj = new JSONObject((String)m.getContent());
         JSONObject userInfo = m.getUserInfo();
-
 
         if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email","name","picture")) {
             try {
@@ -125,8 +128,6 @@ public class ServerDistributor extends Distributor {
             return;
         }
 
-
-
         //create chat message
         String content = obj.getString("content");
         int chat_id = obj.getInt("chat_id");
@@ -134,12 +135,8 @@ public class ServerDistributor extends Distributor {
 
         MessageDB chatMessage = new MessageDB(null,content,chat_id,poster);
 
-
-
-        Utils.db.add_message(content, chat_id, poster);
+        Utils.db.add_message(chatMessage);
         Utils.db.debug_chatmessages();
-
-
 
         try {
             //message notification
@@ -149,17 +146,12 @@ public class ServerDistributor extends Distributor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
 
-
     public void getChatGroups(Message m){
-
-
-       JSONObject result = Utils.db.get_chatrooms();
-
+        
+        JSONObject result = Utils.db.get_chatrooms();
 
         System.out.println(result.toString());
 
@@ -170,8 +162,6 @@ public class ServerDistributor extends Distributor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void getChatMembers(Message m){
@@ -202,9 +192,5 @@ public class ServerDistributor extends Distributor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 }
