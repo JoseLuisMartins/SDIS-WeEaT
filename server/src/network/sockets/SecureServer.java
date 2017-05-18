@@ -11,8 +11,8 @@ import java.security.SecureRandom;
 
 public class SecureServer extends Thread{
 
-    SSLServerSocketFactory factory;
-    ServerSocket serverSocket;
+    protected SSLServerSocketFactory factory;
+    protected ServerSocket serverSocket;
 
     public SecureServer(int port) throws Exception {
 

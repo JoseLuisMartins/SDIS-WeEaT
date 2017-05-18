@@ -45,14 +45,15 @@ public class ServerWeEat {
     }
 
     public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
-      /*  request = loadBalancerIP;
+        /*
+        request = loadBalancerIP;
         SecureClientQuarters balancerClient =  new SecureClientQuarters("192.168.1.64",27015,8001);
 
         JSONObject object = new JSONObject();
         object.put("location", "Porto");
         object.put("port", port);
         balancerClient.sendData(new Message(BalancerDistributor.STORE_SERVER, object.toString()));
-*/
+        */
 
         HttpsServer server = getHttpsServer(port);
         server.createContext("/",new ServerHttpHandler(this));
