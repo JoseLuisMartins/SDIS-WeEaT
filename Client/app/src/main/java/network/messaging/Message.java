@@ -13,6 +13,7 @@ public class Message implements Serializable{
     private Object content;
 
 
+
     public Message(int actionID, Object content){
         this.actionID = actionID;
         this.content = content;

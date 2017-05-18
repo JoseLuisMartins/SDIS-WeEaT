@@ -34,4 +34,6 @@ public class ChooseLocal extends AppCompatActivity {
         ft.add(R.id.map,mf);
         ft.commit();
     }
+
+
 }

@@ -63,6 +63,7 @@ public class ServerDistributor extends Distributor {
     }
 
     public void addChatGroup(Message m){
+
         JSONObject obj = new JSONObject((String)m.getContent());
         JSONObject userInfo = m.getUserInfo();
 
@@ -77,6 +78,9 @@ public class ServerDistributor extends Distributor {
 
 
         try {
+            JSONObject res = new JSONObject();
+            res.put("chat_id",1);//Todo: get the real chat_id
+
             sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: chat group"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -155,10 +159,10 @@ public class ServerDistributor extends Distributor {
 
         System.out.println(result.toString());
 
-        Utils.db.debug_chatmessages();
+        Utils.db.debug_chatrooms();
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,result.toString()));
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.FILL_MAP_MARKERS,result.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }

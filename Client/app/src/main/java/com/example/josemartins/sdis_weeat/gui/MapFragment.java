@@ -21,6 +21,7 @@ import android.widget.EditText;
 
 
 import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,9 +33,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+import org.json.JSONObject;
+
+
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import network.messaging.Message;
+import network.messaging.distributor.server.ServerDistributor;
+
+import static java.lang.System.currentTimeMillis;
 
 
 public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
@@ -49,6 +60,15 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //reconstruct markers
+        try {
+            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_GROUPS, new String()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -132,7 +152,23 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         createGroup.setPositiveButton("Criar", (dialog, id) -> {
 
             if (!group_name.getText().toString().trim().equals("")) {
-                addMarker(latLng, group_name.getText().toString(), group_date.getText().toString());
+                String groupNameValue = group_name.getText().toString();
+                String groupDateValue = group_date.getText().toString();
+
+                addMarker(latLng, groupNameValue,groupDateValue);
+
+                //Add chat room to the database
+                try {
+                    JSONObject jsonChatRoom = new JSONObject();
+                    jsonChatRoom.put("lat",latLng.latitude);
+                    jsonChatRoom.put("long",latLng.longitude);
+                    jsonChatRoom.put("timestamp",456456465);//Todo -> Hard - Coded
+                    jsonChatRoom.put("title",groupNameValue);
+
+                    Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_CHAT_GROUP, jsonChatRoom.toString()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 AlertDialog.Builder toChat = new AlertDialog.Builder(getActivity());
 
@@ -146,7 +182,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         });
 
         AlertDialog alertDialog = createGroup.create();
-
         alertDialog.show();
 
     }

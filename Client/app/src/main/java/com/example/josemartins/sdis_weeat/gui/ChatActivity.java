@@ -66,18 +66,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-        try {
-            JSONObject jsonAddChat = new JSONObject();
-            jsonAddChat.put("lat",554.1545);
-            jsonAddChat.put("long",2.454);
-            jsonAddChat.put("timestamp",2546);
-            jsonAddChat.put("title","Amizade");
 
-
-            Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_GROUP, jsonAddChat.toString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
 
         //receive chat notifications
@@ -97,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
                 jsonAddMessage.put("content", messageView.getText().toString());
                 jsonAddMessage.put("chat_id",1);
 
-                Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
+                Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
 
 
                 //chatArrayAdapter.add(new ChatMessage(messageView.getText().toString(), side, "Anibal"));

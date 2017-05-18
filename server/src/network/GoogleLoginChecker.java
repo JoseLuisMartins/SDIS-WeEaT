@@ -36,7 +36,7 @@ public class GoogleLoginChecker {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), Charset.forName("UTF-8")));
                 JSONObject obj = new JSONObject(readAll(rd));
 
-                System.out.println(obj.toString());
+                //System.out.println(obj.toString());
 
 
                 if (obj.has("error_description"))

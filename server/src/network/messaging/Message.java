@@ -94,4 +94,13 @@ public class Message implements Serializable{
         outputStream.close();
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "actionID=" + actionID +
+                ", content=" + content +
+                ", httpExchange=" + httpExchange +
+                ", userInfo=" + userInfo +
+                '}';
+    }
 }

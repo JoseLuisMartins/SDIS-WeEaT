@@ -38,7 +38,7 @@ public class ServerHttpHandler implements HttpHandler {
             }
 
             Message m = (Message)in.readObject();
-            System.out.println(m.getContent().toString());
+            System.out.println(m);
             in.close();
             m.setUserInfo(userInfo);
             m.setHttpExchange(httpExchange);

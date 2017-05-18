@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.example.josemartins.sdis_weeat.gui.ChooseLocal;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;

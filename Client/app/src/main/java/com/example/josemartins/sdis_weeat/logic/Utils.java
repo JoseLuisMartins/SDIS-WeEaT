@@ -6,4 +6,5 @@ import network.Client;
 public class Utils {
 
     public static Client client;
+    public static String serverUrl = "https://192.168.1.64:8000";
 }
