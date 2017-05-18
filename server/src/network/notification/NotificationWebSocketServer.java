@@ -120,8 +120,8 @@ public class NotificationWebSocketServer {
                         session.getRemote().sendString(msg);
                 }
 
-                closedSessions.removeAll(closedSessions);
-                System.out.println("Sending "+msg+" to "+usersToNotify.size()+" clients on chat " + chatId);
+                usersToNotify.removeAll(closedSessions);
+                System.out.println("Sending "+msg+" to "+usersToNotify.size() + " clients on chat " + chatId);
 
             } catch (Throwable e) {
                 e.printStackTrace();

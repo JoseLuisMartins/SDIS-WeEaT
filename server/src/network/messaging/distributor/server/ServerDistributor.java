@@ -138,6 +138,7 @@ public class ServerDistributor extends Distributor {
             JSONObject notification = new JSONObject();
             notification.put("imageUrl",userInfo.get("picture"));
             notification.put("name",userInfo.get("name"));
+            notification.put("email",userInfo.get("email"));
             notification.put("content",content);
 
             NotificationWebSocketServer.sendAll(notification.toString(),chat_id);

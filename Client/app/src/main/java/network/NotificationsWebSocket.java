@@ -1,11 +1,10 @@
 package network;
 
 
+import android.app.Activity;
 import android.util.Log;
-import android.widget.TextView;
 
 
-import com.bumptech.glide.util.Util;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
@@ -21,6 +20,7 @@ import okhttp3.WebSocketListener;
 
 
 public class NotificationsWebSocket extends WebSocketListener {
+    private Activity activity;
     private ChatArrayAdapter chatArrayAdapter;
     private int chatId;
 
@@ -43,39 +43,52 @@ public class NotificationsWebSocket extends WebSocketListener {
     public void onMessage(WebSocket webSocket, String text) {
         Log.d("Debug","message: " + text);
 
-        try {
-            JSONObject message= new JSONObject(text);
-            chatArrayAdapter.add(new ChatMessage(message));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject message= new JSONObject(text);
+                    chatArrayAdapter.add(new ChatMessage(message));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
 
     }
 
 
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
-        //webSocket.close(1000,"ADIOS");
         Log.d("Debug","close: " + code + " " + " reason: " + reason);
+        //webSocket.close(1000,"ADIOS");
     }
 
     @Override
     public void onClosed(WebSocket webSocket, int code, String reason) {
+        Log.d("Debug","close: " + code + " " + " reason: " + reason);
         //super.onClosed(webSocket, code, reason);
     }
 
 
-    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter, int chatId) {
+    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter,Activity activity ,int chatId) {
         this.chatArrayAdapter = chatArrayAdapter;
+        this.activity = activity;
         this.chatId = chatId;
     }
 
-    public static  void request(ChatArrayAdapter chatArrayAdapter , int chatId){
+    public static  void request(ChatArrayAdapter chatArrayAdapter , Activity activity ,int chatId){
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder().url("ws://192.168.1.64:8887").build();
-        NotificationsWebSocket listener = new NotificationsWebSocket(chatArrayAdapter,chatId);
+        NotificationsWebSocket listener = new NotificationsWebSocket(chatArrayAdapter,activity, chatId);
         WebSocket ws = client.newWebSocket(request,listener);
+
         Log.d("debug","------Starting WebSocket-------");
     }
 }

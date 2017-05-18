@@ -14,19 +14,17 @@ public class ChatMessage {
     private MessageType messageType;
     private String name;
     private String image_url;
+    private String email;
     private long date;
 
-    public ChatMessage(String message, MessageType messageType, String name, String image_url){
-
+    public ChatMessage(String message, MessageType messageType, String name, String image_url, String email, long date) {
         this.message = message;
         this.messageType = messageType;
-        this.date = new Date().getTime();
-        this.image_url = image_url;
         this.name = name;
-
+        this.image_url = image_url;
+        this.email = email;
+        this.date = date;
     }
-
-
 
     public ChatMessage(JSONObject m){
 
@@ -36,11 +34,15 @@ public class ChatMessage {
             this.message = m.getString("content");
             this.image_url = m.getString("imageUrl");
             this.name = m.getString("name");
+            this.email = m.getString("email");
             this.date = new Date().getTime();
 
             //check if im the user who sent
-            this.messageType = MessageType.SENT;
 
+            if(email.equals(Utils.client.getAccount().getEmail()))
+                this.messageType = MessageType.SENT;
+            else
+                this.messageType = MessageType.RECEIVED;
 
 
         } catch (JSONException e) {
@@ -65,6 +67,10 @@ public class ChatMessage {
 
     public long getDate() {
         return date;
+    }
+
+    public String getImage_url() {
+        return image_url;
     }
 
     @Override

@@ -82,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //receive chat notifications
 
-        NotificationsWebSocket.request(chatArrayAdapter,1);
+        NotificationsWebSocket.request(chatArrayAdapter, this,1);
 
     }
 

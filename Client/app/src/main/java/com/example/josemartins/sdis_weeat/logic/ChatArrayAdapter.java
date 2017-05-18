@@ -59,7 +59,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
 
         chatText = (TextView) row.findViewById(R.id.msg);
-        Glide.with(context).load(Utils.client.getAccount().getPhotoUrl()).into((ImageView) row.findViewById(R.id.picture));
+        Glide.with(context).load(chatMessageObj.getImage_url()).into((ImageView) row.findViewById(R.id.picture));
         chatText.setText(chatMessageObj.getMessage());
 
         return row;
