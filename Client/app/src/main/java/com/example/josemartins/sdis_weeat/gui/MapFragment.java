@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -34,8 +35,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-
 
 
 public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
@@ -65,41 +64,28 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         });
 
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            myMap.setMyLocationEnabled(true);
+            goToLocation();
+        }
 
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         myMap.setMyLocationEnabled(true);
-
-                        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-
-
-                        LatLng currPoint = new LatLng(latitude, longitude);
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
-                        myMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                        addMarker(currPoint,"Current Position", "Este sitio é muito xiroo");
-
-                    } else {
-                        // permission denied, boo! Disable the
-                        // functionality that depends on this permission.
+                        goToLocation();
                     }
                 }
-
             }
-
-
         }
     }
 
@@ -117,9 +103,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     }
 
 
-    private void addMarker(LatLng latLng, String title , String snippet){
+    private void addMarker(LatLng latLng, String title, String snippet) {
         Marker marker = myMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
-        mapMarkers.put(latLng,marker);
+        mapMarkers.put(latLng, marker);
     }
 
     @Override
@@ -141,12 +127,22 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
         createGroup.setTitle("Marcar encontro");
 
-        createGroup.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+        createGroup.setNegativeButton("Cancelar", (dialog, id) -> dialog.cancel());
 
-        createGroup.setPositiveButton("Create", (dialog, id) -> {
+        createGroup.setPositiveButton("Criar", (dialog, id) -> {
 
-            if(!group_name.getText().toString().trim().equals(""))
+            if (!group_name.getText().toString().trim().equals("")) {
                 addMarker(latLng, group_name.getText().toString(), group_date.getText().toString());
+
+                AlertDialog.Builder toChat = new AlertDialog.Builder(getActivity());
+
+                toChat.setMessage("Deseja ir para o chat?");
+                toChat.setNegativeButton("Não", (dialog1, which) -> dialog1.cancel());
+                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat());
+
+                AlertDialog chatView = toChat.create();
+                chatView.show();
+            }
         });
 
         AlertDialog alertDialog = createGroup.create();
@@ -166,6 +162,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         super.onPause();
         mMapView.onPause();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -173,22 +170,23 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
+
     @Override
-    public void onLowMemory()
-    {
+    public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         mMapView.onResume();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -197,20 +195,24 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        Intent i = new Intent(getActivity(),ChatActivity.class);
-        startActivity(i);
+        goToChat();
 
         return true;
     }
 
-    public void openTimePicker(EditText group_date){
+    public void goToChat() {
+        Intent i = new Intent(getActivity(), ChatActivity.class);
+        startActivity(i);
+    }
+
+    public void openTimePicker(EditText group_date) {
         final Calendar c = Calendar.getInstance();
         int mHour = c.get(Calendar.HOUR_OF_DAY);
         int mMinute = c.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
                 (view, hourOfDay, minute) -> {
-                    if(minute < 10)
+                    if (minute < 10 && minute > 0)
                         group_date.setText(hourOfDay + ":0" + minute);
                     else
                         group_date.setText(hourOfDay + ":" + minute);
@@ -219,8 +221,25 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         timePickerDialog.show();
     }
 
-    public void changeMapType(int type){
+    public void changeMapType(int type) {
         myMap.setMapType(type);
     }
 
+    public void goToLocation() {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+
+
+            LatLng currPoint = new LatLng(latitude, longitude);
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
+            myMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        }
+    }
 }
