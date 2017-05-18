@@ -37,7 +37,9 @@ public class ConnectionArmy {
             listeners.add(sv);
         }
     }
-
+    //Se conseguir adicionar o socket, fica recrutado, e envia-se confirmacao,
+    // em caso contrario, retorna falso (vai fechar a ligacao)
+    //
     public boolean recruit(ServerConnection connection){
         ServerPair pair;
         if(servers.containsKey(connection.getLocation())){

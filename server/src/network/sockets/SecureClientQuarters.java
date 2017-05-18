@@ -7,6 +7,15 @@ public class SecureClientQuarters extends SecureClient{
     private static String confirmationCode = "Batata";
     private String location;
 
+    /**
+     * Conecta-se ao loadBalancer dado por ip,port, e faz o handshake (envia confirmationCode + localization,
+     * espera por uma localizacao ou entao por falha de conexao
+     * @param ip
+     * @param port
+     * @param clientPort
+     * @param location
+     * @throws Exception
+     */
     public SecureClientQuarters(String ip, int port, int clientPort, String location) throws Exception {
 
         super(ip,port,clientPort);

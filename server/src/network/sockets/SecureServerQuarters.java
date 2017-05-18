@@ -20,6 +20,7 @@ public class SecureServerQuarters extends SecureServer {
 
         while (true){
             try {
+                //Espera por um servidor que se regista numa dada localizacao
                 System.out.println(serverSocket.getLocalPort() + " Waiting Connections");
                 Socket s = serverSocket.accept();
 

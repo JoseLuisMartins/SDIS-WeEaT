@@ -17,6 +17,13 @@ public class ServerConnection extends  Thread{
     private BufferedReader inputStream;
     private ServerPair pair;
 
+    /**
+     * Trata de uma ligacao, com um servidor (operador ou backup)
+     * Espera pelo handshake (confirmSocket()!)
+     * @param s
+     * @param army
+     * @throws IOException
+     */
     public ServerConnection(Socket s, ConnectionArmy army) throws IOException {
         this.socket = s;
         this.army = army;
