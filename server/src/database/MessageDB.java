@@ -1,5 +1,6 @@
 package database;
 
+import network.Utils;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
@@ -21,13 +22,25 @@ public class MessageDB {
         this.poster = poster;
     }
 
+    public MessageDB( Timestamp date, String content, int chat_id, String poster) {
+        this.date = date;
+        this.content = content;
+        this.chat_id = chat_id;
+        this.poster = poster;
+    }
+
+
+
     public JSONObject toJson(){
         JSONObject res= new JSONObject();
-        res.put("id",id);
-        res.put("date",date.getTime());
+        UserWeeat user = Utils.db.get_user(poster);
+
+        res.put("date","Pass data string");
         res.put("content",content);
         res.put("chat_id",chat_id);
         res.put("poster",poster);
+        res.put("name",user.getUsername());
+        res.put("imageUrl",user.getImage_url());
 
         return res;
     }

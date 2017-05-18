@@ -23,4 +23,17 @@ public class UserWeeat {
                 "image_url='" + image_url + '\'' +
                 '}';
     }
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
 }

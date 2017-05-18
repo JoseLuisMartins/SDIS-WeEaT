@@ -109,7 +109,7 @@ public class DatabaseConnection {
         return res;
     }
 
-    public UserWeeat get_user(String email) {
+    public  UserWeeat get_user(String email) {
 
         UserWeeat user = null;
         PreparedStatement stmt = null;
@@ -315,7 +315,7 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Utils.UserIsNotMemberException e) {
-            System.out.println("User " + poster + " is not memeber of chat with id " + chat_id);
+            System.out.println("User " + poster + " is not member of chat with id " + chat_id);
         }
 
         DatabaseManager.setOutdated(true);

@@ -1,5 +1,6 @@
 package network.messaging.distributor.server;
 
+import database.MessageDB;
 import network.ServerWeEat;
 import network.Utils;
 import network.messaging.Message;
@@ -46,7 +47,7 @@ public class ServerDistributor extends Distributor {
     }
 
     public void addUser(Message m){
-       JSONObject userInfo = m.getUserInfo();
+        JSONObject userInfo = m.getUserInfo();
 
         Utils.db.add_user((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture"));
         Utils.db.debug_users();
@@ -125,25 +126,25 @@ public class ServerDistributor extends Distributor {
         }
 
 
+
+        //create chat message
         String content = obj.getString("content");
         int chat_id = obj.getInt("chat_id");
-
-
         String poster = (String) userInfo.get("email");
+
+        MessageDB chatMessage = new MessageDB(null,content,chat_id,poster);
+
+
 
         Utils.db.add_message(content, chat_id, poster);
         Utils.db.debug_chatmessages();
 
+
+
         try {
-            JSONObject notification = new JSONObject();
-            notification.put("imageUrl",userInfo.get("picture"));
-            notification.put("name",userInfo.get("name"));
-            notification.put("email",userInfo.get("email"));
-            notification.put("content",content);
-
-            NotificationWebSocketServer.sendAll(notification.toString(),chat_id);
-
-
+            //message notification
+            NotificationWebSocketServer.sendAll(chatMessage.toJson().toString(),chat_id);
+            //response
             sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Ah Gay:messages"));
         } catch (IOException e) {
             e.printStackTrace();

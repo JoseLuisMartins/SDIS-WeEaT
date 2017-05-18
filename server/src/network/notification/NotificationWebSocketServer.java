@@ -103,6 +103,7 @@ public class NotificationWebSocketServer {
 
 
     public static void sendAll(String msg, Integer chatId) {
+
             try {
                 ArrayList<Session> usersToNotify = sessions.get(chatId);
 

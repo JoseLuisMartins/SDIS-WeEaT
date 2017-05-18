@@ -34,10 +34,10 @@ public class ChatMessage {
             this.message = m.getString("content");
             this.image_url = m.getString("imageUrl");
             this.name = m.getString("name");
-            this.email = m.getString("email");
+            this.email = m.getString("poster");
             this.date = new Date().getTime();
 
-            //check if im the user who sent
+            //check if i am the user who sent the message
 
             if(email.equals(Utils.client.getAccount().getEmail()))
                 this.messageType = MessageType.SENT;
