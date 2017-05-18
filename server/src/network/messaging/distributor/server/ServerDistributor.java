@@ -6,7 +6,7 @@ import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
 
-import network.notification.NotificationWebSocket;
+import network.notification.NotificationWebSocketServer;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
@@ -144,7 +144,7 @@ public class ServerDistributor extends Distributor {
             notification.put("name",userInfo.get("name"));
             notification.put("content",content);
 
-            NotificationWebSocket.sendAll(notification.toString(),chat_id);
+            NotificationWebSocketServer.sendAll(notification.toString(),chat_id);
 
 
             sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Ah Gay:messages"));

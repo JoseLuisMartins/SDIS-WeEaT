@@ -3,7 +3,7 @@ package network;
 
 
 import database.DatabaseConnection;
-import network.notification.NotificationWebSocket;
+import network.notification.NotificationWebSocketServer;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -35,7 +35,7 @@ public class Utils {
                 public void run() {
                     System.out.println("blah");
                     try {
-                        NotificationWebSocket.initWebSocket();
+                        NotificationWebSocketServer.initWebSocket();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -17,10 +17,10 @@ import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 
 
-public class WebSocketClientNotification {
+public class NotificationWebSocketClient {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        new WebSocketClientNotification().run(new URI("ws://127.0.0.1:8080"));
+        new NotificationWebSocketClient().run(new URI("ws://127.0.0.1:8080"));
     }
 
     public void run(URI destinationUri) throws IOException {

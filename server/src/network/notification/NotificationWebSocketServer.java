@@ -17,7 +17,7 @@ import static network.GoogleLoginChecker.googleLoginChecker;
 
 
 @WebSocket
-public class NotificationWebSocket {
+public class NotificationWebSocketServer {
 
     private static HashMap<Integer,ArrayList<Session>> sessions = new HashMap<>();
 

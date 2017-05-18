@@ -25,8 +25,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
+//import org.java_websocket.client.WebSocketClient;
+//import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         );
     }
-
+/*
     private WebSocketClient mWebSocketClient;
     private void connectWebSocket() {
         URI uri;
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             e.printStackTrace();
             return;
         }
+
 
         mWebSocketClient = new WebSocketClient(uri) {
             @Override
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mWebSocketClient.connect();
 
     }
+*/
 
     public void request(View v){
 
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             Utils.client.makeRequest("https://192.168.1.64:8000","POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
             //test notification handler
             NotificationsWebSocket n = new NotificationsWebSocket();
-            n.execute();
+            n.request();
 
         } catch (Exception e) {
             e.printStackTrace();

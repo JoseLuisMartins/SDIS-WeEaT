@@ -8,7 +8,7 @@ public class WebSocketHandler extends org.eclipse.jetty.websocket.server.WebSock
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        webSocketServletFactory.register(NotificationWebSocket.class);
+        webSocketServletFactory.register(NotificationWebSocketServer.class);
     }
 
 }
