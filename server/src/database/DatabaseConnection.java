@@ -109,6 +109,28 @@ public class DatabaseConnection {
         return res;
     }
 
+    public UserWeeat get_user(String email) {
+
+        UserWeeat user = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT * FROM user_weeat WHERE email = ?;");
+            stmt.setObject(1,email);
+
+            ResultSet rs = stmt.executeQuery();
+
+            rs.next();
+            user = new UserWeeat(rs.getString("username"),rs.getString("email"),rs.getString("image_url"));
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
     public JSONObject get_chatrooms() {
 
         JSONArray jsonArray = null;
@@ -307,7 +329,7 @@ public class DatabaseConnection {
             stmt = conn.createStatement();
 
             System.out.println("*** USER_WEEAT ***");
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM user_weeat;" );
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user_weeat;");
             while ( rs.next() ) {
                 String username = rs.getString("username");
                 System.out.println( "Username = " + username );
