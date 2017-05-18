@@ -52,7 +52,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         View row;
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (chatMessageObj.getLeft())
+        if (chatMessageObj.getMessageType() == MessageType.SENT)
             row = inflater.inflate(R.layout.right_message, parent, false);
         else
             row = inflater.inflate(R.layout.left_message, parent, false);

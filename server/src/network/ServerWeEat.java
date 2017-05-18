@@ -26,7 +26,7 @@ public class ServerWeEat {
 
         try {
             //Uncomment if you wish to use the awesome loadBalancer C;
-            SecureClientQuarters client = new SecureClientQuarters("localhost", 27015, 200, "Porto");
+            //SecureClientQuarters client = new SecureClientQuarters("localhost", 27015, 200, "Porto");
 
 
 

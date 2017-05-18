@@ -76,7 +76,7 @@ public class NotificationWebSocketServer {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) {
-        System.out.println("Message from Client: " + message + session);
+        System.out.println("Message from Client: " + message);
 
         JSONObject obj = new JSONObject(message);
 

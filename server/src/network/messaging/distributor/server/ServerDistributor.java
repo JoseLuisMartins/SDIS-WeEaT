@@ -129,13 +129,9 @@ public class ServerDistributor extends Distributor {
         int chat_id = obj.getInt("chat_id");
 
 
-        System.out.println(obj.toString());
-        System.out.println(userInfo.toString());
-
         String poster = (String) userInfo.get("email");
 
         Utils.db.add_message(content, chat_id, poster);
-
         Utils.db.debug_chatmessages();
 
         try {

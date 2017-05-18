@@ -157,7 +157,7 @@ public class Client {
 
         @Override
         protected void onPostExecute(byte[] result) {
-            Log.d("debug","Handle Response -> " + result);
+
         }
 
     }
