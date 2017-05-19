@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         try {
             JSONObject jsonUser = new JSONObject();
             jsonUser.put("token",Utils.client.getToken());
-
             Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
 
 

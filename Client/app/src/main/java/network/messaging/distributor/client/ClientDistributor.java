@@ -34,7 +34,7 @@ public class ClientDistributor extends Distributor {
     public void fillMapMarkers(Message m) {
         //add the markers to the map
 
-        Log.d("debug", "Map marker:\n " + m.getContent());
+        Log.d("debug", "Map markers:\n " + m.getContent());
 
 
     }

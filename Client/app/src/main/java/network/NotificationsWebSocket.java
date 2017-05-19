@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.bumptech.glide.util.Util;
 import com.example.josemartins.sdis_weeat.gui.ChooseLocal;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,14 +25,15 @@ import okhttp3.WebSocketListener;
 public class NotificationsWebSocket extends WebSocketListener {
     private Activity activity;
     private ChatArrayAdapter chatArrayAdapter;
-    private int chatId;
+    private LatLng chatId;
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
 
         try {
             JSONObject obj = new JSONObject();
-            obj.put("chatId",chatId);
+            obj.put("lat",chatId.latitude);
+            obj.put("long",chatId.longitude);
             obj.put("token", Utils.client.getToken());
             webSocket.send(obj.toString());
 
@@ -76,16 +79,16 @@ public class NotificationsWebSocket extends WebSocketListener {
     }
 
 
-    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter,Activity activity ,int chatId) {
+    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter,Activity activity ,LatLng chatId) {
         this.chatArrayAdapter = chatArrayAdapter;
         this.activity = activity;
         this.chatId = chatId;
     }
 
-    public static  void request(ChatArrayAdapter chatArrayAdapter , Activity activity ,int chatId){
+    public static  void request(ChatArrayAdapter chatArrayAdapter , Activity activity ,LatLng chatId){
         OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder().url("ws://192.168.1.64:8887").build();
+        Request request = new Request.Builder().url(Utils.webSocketUrl).build();
         NotificationsWebSocket listener = new NotificationsWebSocket(chatArrayAdapter,activity, chatId);
         WebSocket ws = client.newWebSocket(request,listener);
 

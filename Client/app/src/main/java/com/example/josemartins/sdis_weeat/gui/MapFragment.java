@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,8 +80,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap.setOnMapLongClickListener(this);
 
         myMap.setOnInfoWindowClickListener(marker -> {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            startActivity(intent);
+           goToChat(marker.getPosition());
 
         });
 
@@ -174,7 +174,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
                 toChat.setMessage("Deseja ir para o chat?");
                 toChat.setNegativeButton("Não", (dialog1, which) -> dialog1.cancel());
-                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat());
+                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat(latLng));
 
                 AlertDialog chatView = toChat.create();
                 chatView.show();
@@ -229,14 +229,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Log.d("debug", "lat " + marker.getPosition().latitude + " long " + marker.getPosition().longitude);
 
-        goToChat();
-
+        goToChat(marker.getPosition());
         return true;
     }
 
-    public void goToChat() {
+    public void goToChat(LatLng pos) {
+        Log.d("debug", "lat " + pos.latitude + " long " + pos.longitude);
+
         Intent i = new Intent(getActivity(), ChatActivity.class);
+        i.putExtra("lat",pos.latitude);
+        i.putExtra("long",pos.longitude);
         startActivity(i);
     }
 

@@ -275,15 +275,26 @@ public class DatabaseConnection {
         String email = uw.email;
         String image_url = uw.image_url;
         PreparedStatement stmt = null;
+        PreparedStatement check_stmt = null;
+
         try {
-            stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email,image_url) VALUES (?,?,?)");
-            stmt.setString(1,username);
-            stmt.setString(2,email);
-            stmt.setString(3,image_url);
 
-            Boolean rs = stmt.execute();
+            check_stmt = conn.prepareStatement("SELECT * FROM user_weeat WHERE  email = ? ;");
+            check_stmt.setString(1,email);
 
-            stmt.close();
+            System.out.println("add_user size: "  + check_stmt.executeQuery().getFetchSize() );
+            if(!check_stmt.executeQuery().next()) {
+                stmt = conn.prepareStatement("INSERT INTO user_weeat (username,email,image_url) VALUES (?,?,?)");
+                stmt.setString(1, username);
+                stmt.setString(2, email);
+                stmt.setString(3, image_url);
+
+                Boolean rs = stmt.execute();
+
+                stmt.close();
+            }
+
+            check_stmt.close();
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -302,7 +313,7 @@ public class DatabaseConnection {
 
         try {
 
-            check_stmt = conn.prepareStatement("SELECT 1 FROM chat_member WHERE member = ? AND chat_location = ?;");
+            check_stmt = conn.prepareStatement("SELECT 1 FROM chat_member WHERE member = ? AND chat_location ~= ?;");
             check_stmt.setString(1,poster);
             check_stmt.setObject(2,chat_location);
 

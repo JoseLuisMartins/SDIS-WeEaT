@@ -14,6 +14,7 @@ import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
@@ -28,6 +29,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView msgList;
     private ImageView sendBtn;
     private ChatArrayAdapter chatArrayAdapter;
+    private LatLng chatId;
     private boolean side = true;
 
     @Override
@@ -70,8 +72,10 @@ public class ChatActivity extends AppCompatActivity {
 
 
         //receive chat notifications
+        Bundle res = getIntent().getExtras();
+        chatId = new LatLng(res.getDouble("lat"),res.getDouble("long"));
 
-        NotificationsWebSocket.request(chatArrayAdapter, this,1);
+        NotificationsWebSocket.request(chatArrayAdapter, this,chatId);
 
     }
 
@@ -84,12 +88,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 JSONObject jsonAddMessage = new JSONObject();
                 jsonAddMessage.put("content", messageView.getText().toString());
-                jsonAddMessage.put("chat_id",1);
+                jsonAddMessage.put("lat",chatId.latitude);
+                jsonAddMessage.put("long",chatId.longitude);
 
                 Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
 
-
-                //chatArrayAdapter.add(new ChatMessage(messageView.getText().toString(), side, "Anibal"));
                 messageView.setText("");
 
             } catch (Exception e) {

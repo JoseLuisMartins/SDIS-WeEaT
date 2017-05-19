@@ -33,12 +33,13 @@ public class NotificationWebSocketServer {
 
         //WS
         ServerConnector wsConnector = new ServerConnector(server);
-        wsConnector.setHost("192.168.1.64");
+        //wsConnector.setHost("192.168.1.64");
+        wsConnector.setHost("172.30.26.247");
         wsConnector.setPort(8887);
         server.addConnector(wsConnector);
 
         //WSS
-
+/*
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustAll(true);
         sslContextFactory.setValidateCerts(false);
@@ -61,7 +62,7 @@ public class NotificationWebSocketServer {
         wssConnector.setHost("127.0.0.1");
         wssConnector.setPort(8443);
         server.addConnector(wssConnector);
-
+*/
         server.start();
         server.join();
 
@@ -103,7 +104,10 @@ public class NotificationWebSocketServer {
     }
 
 
+
     public static void sendAll(String msg, PGpoint chatLocation) {
+
+        System.out.println("Sending notifications");
 
             try {
                 ArrayList<Session> usersToNotify = sessions.get(chatLocation);
