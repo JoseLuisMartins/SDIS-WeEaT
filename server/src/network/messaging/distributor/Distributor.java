@@ -7,9 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-/**
- * Created by joao on 5/9/17.
- */
 public class Distributor {
 
     public  interface Action{

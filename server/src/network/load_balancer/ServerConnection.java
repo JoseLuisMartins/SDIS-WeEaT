@@ -54,7 +54,9 @@ public class ServerConnection extends  Thread{
 
             location = response.substring(confirmation.length(), response.length());
 
-            army.recruit(this);
+            if(!army.recruit(this))
+                return false;
+
             System.out.println(army.toString());
 
 

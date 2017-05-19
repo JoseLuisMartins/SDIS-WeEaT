@@ -1,6 +1,7 @@
 package network.protocol;
 
 import database.DatabaseManager;
+import network.Utils;
 import network.sockets.SecureServer;
 
 import java.io.*;
@@ -15,12 +16,18 @@ public class SecureServerBermuda extends SecureServer {
 
     private static String backup_file = "." + File.separator + "db.backup";
     private static int interval = 20;
+    private String ip_confirmation = null;
     public SecureServerBermuda(int port) throws Exception {
         super(port);
     }
 
-    public void start_sending_backups() {
+    public void setIp_confirmation(String ip_confirmation){
+        this.ip_confirmation = ip_confirmation;
+    }
 
+    public void start_sending_backups(String ip_confirmation) {
+
+        this.ip_confirmation = ip_confirmation;
         System.out.println("Starting to send backup file to backup server");
 
         Timer timer = new Timer();
@@ -29,7 +36,7 @@ public class SecureServerBermuda extends SecureServer {
             @Override
             public void run() {
                 System.out.println("Sending backup file!");
-                //send_database_backup();
+                send_database_backup();
             }
 
         }, 0, interval * 1000);
@@ -46,6 +53,14 @@ public class SecureServerBermuda extends SecureServer {
             System.out.println("Waiting...");
             try {
                 socket = serverSocket.accept();
+
+                if(!socket.getInetAddress().toString().equals(ip_confirmation)){
+                    System.out.println("Connection unsecure from " + socket.getInetAddress().toString());
+                    System.out.println("Expected " + ip_confirmation);
+                    socket.close();
+                    return;
+                }
+
                 System.out.println("Accepted connection : " + socket);
                 // send file
                 File myFile = new File(backup_file);

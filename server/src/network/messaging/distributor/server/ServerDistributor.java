@@ -46,7 +46,7 @@ public class ServerDistributor extends Distributor {
 
 
     public void setMode(Message m){
-        serverWeEat.setMode((int)m.getContent());
+        //serverWeEat.setMode((int)m.getContent());
     }
 
     public void addUser(Message m){
@@ -154,7 +154,9 @@ public class ServerDistributor extends Distributor {
 
 
     public void getChatGroups(Message m){
+
         System.out.println("Getting Chat Groups");
+
         JSONObject result = Utils.db.get_chatrooms();
 
         System.out.println(result.toString());

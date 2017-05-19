@@ -3,18 +3,15 @@ package network.protocol;
 import network.sockets.SecureClient;
 
 import java.io.*;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class SecureClientBermuda extends SecureClient {
 
     public static int file_chunk_size = 640000000;
-    public static int server_port = 65464;
-    public static String server_ip = "localhost";
     public static String file_path = "." + File.separator + "received.backup";
 
-    public SecureClientBermuda(String ip, int port, int clientPort) throws Exception {
-        super(ip, port, clientPort);
+    public SecureClientBermuda(String ip, int port) throws Exception {
+        super(ip, port);
     }
 
     @Override
@@ -30,9 +27,9 @@ public class SecureClientBermuda extends SecureClient {
         int current = 0;
         FileOutputStream fos = null;
         BufferedOutputStream bos = null;
-        Socket socket = null;
+
         try {
-            socket = new Socket(server_ip, server_port);
+
             System.out.println("Connecting...");
 
             // receive file

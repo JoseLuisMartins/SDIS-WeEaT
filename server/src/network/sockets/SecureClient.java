@@ -11,7 +11,7 @@ public class SecureClient extends Thread {
     protected PrintWriter writer;
     protected BufferedReader inputStream;
 
-    public SecureClient(String ip, int port, int clientPort) throws Exception {
+    public SecureClient(String ip, int port) throws Exception {
 
 
         SSLSocketFactory factory = getSSLServerSocketFactory("src/keys/client.keys","src/keys/truststore");
@@ -20,9 +20,6 @@ public class SecureClient extends Thread {
 
         //ip/ port of the loadbalancer
         socket.connect(new InetSocketAddress(ip,port));
-
-        //this.start();
-
     }
 
     @Override

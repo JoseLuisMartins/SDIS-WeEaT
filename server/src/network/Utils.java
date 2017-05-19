@@ -13,6 +13,8 @@ import java.security.KeyStore;
 
 public class Utils {
 
+    public static final int SERVER_OPERATING = 0;
+    public static final int SERVER_BACKUP = 1;
     public static GoogleLoginChecker google;
     public static SSLContext sslContext;
     public static DatabaseConnection db;
@@ -33,7 +35,7 @@ public class Utils {
             //Init Notification WebSocket thread
             new Thread() {
                 public void run() {
-                    System.out.println("blah");
+                    System.out.println("Running Static Utils");
                     try {
                         NotificationWebSocketServer.initWebSocket();
                     } catch (Exception e) {
