@@ -182,15 +182,17 @@ public class ServerDistributor extends Distributor {
     }
 
     public void getChatMessages(Message m){
-
+        System.out.println("get chat messages");
         JSONObject obj = new JSONObject((String)m.getContent());
 
-        int chat_id = obj.getInt("chat_id");
+        PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
 
-        JSONObject res = Utils.db.get_chat_messages(chat_id);
+        JSONObject res = Utils.db.get_chat_messages(chat_location);
+
+        System.out.println(res.toString());
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,res.toString()));
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.FILL_MESSAGES,res.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }

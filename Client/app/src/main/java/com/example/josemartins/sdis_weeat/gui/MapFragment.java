@@ -22,6 +22,7 @@ import android.widget.EditText;
 
 
 import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.logic.ActionObject;
 import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +39,7 @@ import org.json.JSONObject;
 
 
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,7 +47,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
 
-import static java.lang.System.currentTimeMillis;
 
 
 public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
@@ -54,23 +54,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     private View rootView;
     private GoogleMap myMap;
     private MapView mMapView;
-    private final Map<LatLng, Marker> mapMarkers = new ConcurrentHashMap<>();
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        //reconstruct markers
-        try {
-            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_GROUPS, new String()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     @Override
@@ -80,8 +69,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap.setOnMapLongClickListener(this);
 
         myMap.setOnInfoWindowClickListener(marker -> {
-           goToChat(marker.getPosition());
-
+           goToChat(marker);
         });
 
 
@@ -123,10 +111,11 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     }
 
 
-    private void addMarker(LatLng latLng, String title, String snippet) {
-        Marker marker = myMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
-        mapMarkers.put(latLng, marker);
+    public Marker addMarker(LatLng latLng, String title, String snippet) {
+        return myMap.addMarker(new MarkerOptions().position(latLng).title(title).snippet(snippet));
     }
+
+
 
     @Override
     public void onMapLongClick(LatLng latLng) {
@@ -155,7 +144,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
                 String groupNameValue = group_name.getText().toString();
                 String groupDateValue = group_date.getText().toString();
 
-                addMarker(latLng, groupNameValue,groupDateValue);
+                Marker marker = addMarker(latLng, groupNameValue,groupDateValue);
 
                 //Add chat room to the database
                 try {
@@ -174,7 +163,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
                 toChat.setMessage("Deseja ir para o chat?");
                 toChat.setNegativeButton("Não", (dialog1, which) -> dialog1.cancel());
-                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat(latLng));
+                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat(marker));
 
                 AlertDialog chatView = toChat.create();
                 chatView.show();
@@ -220,6 +209,20 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+
+        //reconstruct markers
+        try {
+            ArrayList<Object> actionObject = new ArrayList<>();
+            actionObject.add(ActionObject.MAP_FRAGMENT,this);
+            actionObject.add(ActionObject.MAP_ACTIVITY,getActivity());
+
+            Utils.client.setActionObjects(actionObject);
+            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_GROUPS, new String()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -231,16 +234,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     public boolean onMarkerClick(Marker marker) {
         Log.d("debug", "lat " + marker.getPosition().latitude + " long " + marker.getPosition().longitude);
 
-        goToChat(marker.getPosition());
+        goToChat(marker);
         return true;
     }
 
-    public void goToChat(LatLng pos) {
-        Log.d("debug", "lat " + pos.latitude + " long " + pos.longitude);
+    public void goToChat(Marker marker) {
+        LatLng pos = marker.getPosition();
 
         Intent i = new Intent(getActivity(), ChatActivity.class);
         i.putExtra("lat",pos.latitude);
         i.putExtra("long",pos.longitude);
+        i.putExtra("title",marker.getTitle());
+        i.putExtra("date",marker.getSnippet());
         startActivity(i);
     }
 
