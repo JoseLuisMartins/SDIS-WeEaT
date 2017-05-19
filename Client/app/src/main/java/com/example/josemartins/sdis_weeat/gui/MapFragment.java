@@ -47,6 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
 
+import static android.content.Context.LOCATION_SERVICE;
 
 
 public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener {
@@ -72,30 +73,35 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
            goToChat(marker);
         });
 
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
+        if ( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             myMap.setMyLocationEnabled(true);
-            goToLocation();
-        }
 
-    }
+            LocationManager lm = (LocationManager)getActivity().getSystemService(LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        myMap.setMyLocationEnabled(true);
-                        goToLocation();
-                    }
-                }
+            double latitude, longitude;
+            if (location == null){//No previous location, use PORTO
+                latitude = 41.1496100;
+                longitude = -8.6109900;
+            }else {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
             }
+
+
+
+            LatLng currPoint = new LatLng(latitude, longitude);
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        } else {
+            Log.d("debug","no permissions");
         }
     }
+
+
 
 
     @Override
@@ -269,21 +275,4 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         myMap.setMapType(type);
     }
 
-    public void goToLocation() {
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-
-
-            LatLng currPoint = new LatLng(latitude, longitude);
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
-            myMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        }
-    }
 }
