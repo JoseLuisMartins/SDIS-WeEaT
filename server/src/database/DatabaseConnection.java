@@ -28,10 +28,11 @@ public class DatabaseConnection {
     * ALTER USER postgres with encrypted password 'sua_senha';
     * sudo systemctl restart postgresql.service
     */
-    public DatabaseConnection() {
+    public DatabaseConnection(boolean restore) {
         DatabaseManager.database_create();
         DatabaseManager.database_init();
-        //DatabaseManager.database_restore();
+        if(restore)
+            DatabaseManager.database_restore();
         connect();
 
     }
@@ -437,7 +438,7 @@ public class DatabaseConnection {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        DatabaseConnection db = new DatabaseConnection();
+        DatabaseConnection db = new DatabaseConnection(false);
 
         db.close();
         DatabaseManager.database_delete();

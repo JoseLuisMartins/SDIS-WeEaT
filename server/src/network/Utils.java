@@ -17,8 +17,8 @@ public class Utils {
     public static SSLContext sslContext;
     public static DatabaseConnection db;
 
-    public static void initDB(){
-        db = new DatabaseConnection();
+    public static void initDB(boolean restore){
+        db = new DatabaseConnection(restore);
     }
 
 

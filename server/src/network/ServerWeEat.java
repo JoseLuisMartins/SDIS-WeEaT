@@ -28,9 +28,8 @@ public class ServerWeEat {
             //Uncomment if you wish to use the awesome loadBalancer C;
             //SecureClientQuarters client = new SecureClientQuarters("localhost", 27015, 200, "Porto");
 
-
-
-            Utils.initDB();
+            //Set true for restore
+            Utils.initDB(false);
             ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8000);
 
         } catch (Exception e) {

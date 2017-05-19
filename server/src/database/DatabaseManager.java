@@ -146,7 +146,7 @@ public class DatabaseManager {
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
         commands.add("-v");
-        commands.add("." + File.separator + "received.backup"); // local do file output após backup
+        commands.add("." + File.separator + "db.backup"); //received.backup local do file output após backup
 
         launch_process(commands);
 
