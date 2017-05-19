@@ -247,6 +247,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     public void goToChat(Marker marker) {
         LatLng pos = marker.getPosition();
 
+
         Intent i = new Intent(getActivity(), ChatActivity.class);
         i.putExtra("lat",pos.latitude);
         i.putExtra("long",pos.longitude);

@@ -4,6 +4,7 @@ package network;
 
 import database.DatabaseConnection;
 import network.notification.NotificationWebSocketServer;
+import org.json.JSONObject;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -67,6 +68,15 @@ public class Utils {
         return sb.toString();
     }
 
+    public static boolean isJsonValid(JSONObject obj, String... param){
+
+        for (String s :param){
+            if(!obj.has(s))
+                return false;
+        }
+
+        return true;
+    }
 
     public static class UserIsNotMemberException extends Throwable {
     }

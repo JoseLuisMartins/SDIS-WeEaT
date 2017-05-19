@@ -222,7 +222,7 @@ public class DatabaseConnection {
         return res;
     }
 
-    public void add_chatroom(ChatRoom cr,String user) {
+    public void add_chatroom(ChatRoom cr) {
 
         PGpoint location = cr.location;
         Timestamp date = cr.date;
@@ -235,8 +235,6 @@ public class DatabaseConnection {
             stmt.setObject(3,date);
             stmt.setString(4,title);
             stmt.execute();
-
-            add_chat_member(new ChatMember(location,user));
 
             stmt.close();
             conn.commit();

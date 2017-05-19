@@ -17,6 +17,8 @@ import org.postgresql.geometric.PGpoint;
 import java.io.IOException;
 import java.sql.Timestamp;
 
+import static network.Utils.isJsonValid;
+
 
 public class ServerDistributor extends Distributor {
 
@@ -52,6 +54,17 @@ public class ServerDistributor extends Distributor {
     public void addUser(Message m){
         JSONObject userInfo = m.getUserInfo();
 
+        if( !isJsonValid(userInfo,"email","name","picture")) {
+            try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
         Utils.db.add_user(new UserWeeat((String) userInfo.get("name"), (String) userInfo.get("email") , (String) userInfo.get("picture")));
         Utils.db.debug_users();
 
@@ -65,23 +78,29 @@ public class ServerDistributor extends Distributor {
     public void addChatGroup(Message m){
 
         JSONObject obj = new JSONObject((String)m.getContent());
-        JSONObject userInfo = m.getUserInfo();
 
+        if( !isJsonValid(obj,"lat","long","timestamp","title")) {
+            try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
 
         PGpoint point = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
         String title = obj.getString("title");
 
-        Utils.db.add_chatroom(new ChatRoom(-1,point,ts, title), (String) userInfo.get("email"));
+        Utils.db.add_chatroom(new ChatRoom(-1,point,ts, title));
 
         Utils.db.debug_chatrooms();
 
 
         try {
-            JSONObject res = new JSONObject();
-            res.put("chat_id",1);//Todo: get the real chat_id
-
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: chat group"));
+           sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,"Ah Gay: chat group"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,6 +109,17 @@ public class ServerDistributor extends Distributor {
 
     public void addChatMember(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
+
+        if( !isJsonValid(obj,"lat","long","member")) {
+            try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
 
         PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         String member = obj.getString("member");
@@ -106,22 +136,14 @@ public class ServerDistributor extends Distributor {
 
     }
 
-    private boolean checkJson(JSONObject obj,String ... param){
 
-        for (String s :param){
-            if(!obj.has(s))
-                return false;
-        }
-
-        return true;
-    }
 
     private void addChatMessage(Message m) {
 
         JSONObject obj = new JSONObject((String)m.getContent());
         JSONObject userInfo = m.getUserInfo();
 
-        if(!checkJson(obj,"content","lat","long") && checkJson(userInfo,"email","name","picture")) {
+        if(!(isJsonValid(obj,"content","lat","long") && isJsonValid(userInfo,"email","name","picture"))) {
             try {
                 System.out.println("Bad Request: Json does not contain all the necessary information");
                 sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
@@ -174,6 +196,18 @@ public class ServerDistributor extends Distributor {
 
         JSONObject obj = new JSONObject((String)m.getContent());
 
+
+        if(!isJsonValid(obj,"lat","long")) {
+            try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
         JSONObject res = Utils.db.get_chat_members(obj.getDouble("lat"),obj.getDouble("long"));
 
         try {
@@ -185,12 +219,34 @@ public class ServerDistributor extends Distributor {
 
     public void getChatMessages(Message m){
         System.out.println("get chat messages");
+        //ADD USER TO CHAT
         JSONObject obj = new JSONObject((String)m.getContent());
+        JSONObject userInfo =  m.getUserInfo();
 
-        PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
+        if(!isJsonValid(obj,"lat","long") && isJsonValid(userInfo,"email")) {
+            try {
+                System.out.println("Bad Request: Json does not contain all the necessary information");
+                sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            return;
+        }
+
+        double latitude = obj.getDouble("lat");
+        double longitude = obj.getDouble("long");
+
+        PGpoint chat_location = new PGpoint(latitude ,longitude);
+        String member =  (String) userInfo.get("email");
+
+
+        //Add chat menber to the chat if it isnt already there
+        Utils.db.add_chat_member(new ChatMember(chat_location,member));
+        Utils.db.debug_chatmembers();
+
+        //Return the messages to the user
         JSONObject res = Utils.db.get_chat_messages(chat_location);
-
         System.out.println(res.toString());
 
         try {

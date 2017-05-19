@@ -75,9 +75,8 @@ public class ClientDistributor extends Distributor {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
+
 
     public void fillMessages(Message m) {
         //fill the chat with the last messages

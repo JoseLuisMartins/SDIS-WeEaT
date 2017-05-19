@@ -33,8 +33,7 @@ public class NotificationWebSocketServer {
 
         //WS
         ServerConnector wsConnector = new ServerConnector(server);
-        wsConnector.setHost("192.168.56.1");
-        //wsConnector.setHost("172.30.26.247");
+        wsConnector.setHost("192.168.1.64");        //wsConnector.setHost("172.30.26.247");
         wsConnector.setPort(8887);
         server.addConnector(wsConnector);
 
