@@ -11,12 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.logic.ActionObject;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import network.NotificationsWebSocket;
 import network.messaging.Message;
@@ -68,15 +72,32 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-
-
-
         //receive chat notifications
         Bundle res = getIntent().getExtras();
         chatId = new LatLng(res.getDouble("lat"),res.getDouble("long"));
+        title.setText(res.getString("title") + "  " + res.getString("date"));
 
         NotificationsWebSocket.request(chatArrayAdapter, this,chatId);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            ArrayList<Object> actionObject = new ArrayList<>();
+            actionObject.add(ActionObject.CHAT_ADAPTER,chatArrayAdapter);
+            actionObject.add(ActionObject.CHAT_ACTIVITY,this);
+            Utils.client.setActionObjects(actionObject);
+
+            JSONObject jsonGetChatMessages = new JSONObject();
+            jsonGetChatMessages.put("lat",chatId.latitude);
+            jsonGetChatMessages.put("long",chatId.longitude);
+
+            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_MESSAGES , jsonGetChatMessages.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

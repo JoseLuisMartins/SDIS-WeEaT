@@ -153,15 +153,15 @@ public class DatabaseConnection {
         return res;
     }
 
-    public JSONObject get_chat_messages(int chat_id) {
+    public JSONObject get_chat_messages(PGpoint chat_location) {
 
         JSONArray jsonArray = new JSONArray();
 
         PreparedStatement stmt = null;
         try {
 
-            stmt = conn.prepareStatement("SELECT * FROM message WHERE chat_id = ?;");
-            stmt.setInt(1,chat_id);
+            stmt = conn.prepareStatement("SELECT * FROM message WHERE chat_location ~= ?;");
+            stmt.setObject(1,chat_location);
             ResultSet rs = stmt.executeQuery();
 
             while ( rs.next() ) {

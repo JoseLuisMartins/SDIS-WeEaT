@@ -1,6 +1,7 @@
 package network;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -36,12 +38,14 @@ public class Client {
     private SSLContext sslContext;
     private Distributor distributor;
     private GoogleSignInAccount account;
+    private ArrayList<Object> actionObjects;
 
 
 
     public Client(Context context) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException, UnrecoverableKeyException {
         initSSLContext(context);
         distributor = new ClientDistributor();
+        actionObjects=null;
     }
 
 
@@ -91,6 +95,9 @@ public class Client {
         sslContext.init(null, tmf.getTrustManagers(), null);
     }
 
+    public void setActionObjects( ArrayList<Object> actionObject) {
+        this.actionObjects = actionObject;
+    }
 
     class Request extends AsyncTask<byte[], Void, byte[]> {
 
@@ -134,6 +141,7 @@ public class Client {
                 Message messageReceived = null;
                 try {
                     messageReceived = (Message)inputStream.readObject();
+                    messageReceived.setActionObjects(actionObjects);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

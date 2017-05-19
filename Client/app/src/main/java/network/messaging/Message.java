@@ -2,8 +2,12 @@ package network.messaging;
 
 
 
-import java.io.*;
+import android.app.Activity;
 
+import com.example.josemartins.sdis_weeat.gui.MapFragment;
+
+import java.io.*;
+import java.util.ArrayList;
 
 
 public class Message implements Serializable{
@@ -11,12 +15,13 @@ public class Message implements Serializable{
 
     private int actionID;
     private Object content;
-
+    private transient ArrayList<Object> actionObjects;
 
 
     public Message(int actionID, Object content){
         this.actionID = actionID;
         this.content = content;
+
     }
 
 
@@ -27,6 +32,11 @@ public class Message implements Serializable{
         return content;
     }
 
+    public ArrayList<Object> getActionObjects() {
+        return actionObjects;
+    }
 
-
+    public void setActionObjects( ArrayList<Object> actionObject) {
+        this.actionObjects = actionObject;
+    }
 }
