@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_image"
+        android:scaleType="center"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="WeEat"
-        android:textColor="@color/white"
+        android:textColor="#C0C0C0"
         android:id="@+id/title"
-        android:textSize="80dp"
+        android:textSize="90dp"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,12 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/signInButton"
-        android:layout_marginTop="115dp"
-        android:layout_below="@+id/title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
-    <Button
+    <!-- Button
         android:id="@+id/request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,28 +47,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
         android:onClick="request"
-        android:text="Request" />
-
-    <TextView
-        android:id="@+id/loginInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/request"
-        android:layout_alignStart="@+id/request"
-        android:layout_below="@+id/signInButton"
-        android:layout_marginTop="78dp"
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:text="Login info" />
+        android:text="Request" / -->
 
     <Button
         android:id="@+id/logout"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/request"
-        android:layout_alignRight="@+id/request"
         android:layout_below="@+id/signInButton"
         android:layout_marginTop="23dp"
         android:onClick="logout"

@@ -2,6 +2,7 @@ package com.example.josemartins.sdis_weeat.gui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 import org.json.JSONObject;
-
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private SignInButton signIn;
     private GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE = 9001;
-    private TextView loginInfo;
     private static final String TAG = "SignInActivity";
 
     @Override
@@ -51,12 +51,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             e.printStackTrace();
         }
 
-
-
-        loginInfo= (TextView) findViewById(R.id.loginInfo);
-
         signIn = (SignInButton) findViewById(R.id.signInButton);
         signIn.setOnClickListener(signInListener);
+
+        customizeSignInButton();
 
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken("1077664049472-kcih82jenig0b27oge2ubekqqk5414qp.apps.googleusercontent.com").build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
@@ -95,16 +93,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         if(result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
-            String name = account.getDisplayName();
-            String email = account.getEmail();
-            String token = account.getIdToken();
-            loginInfo.setText("Name: " + name + "\nEmail: " + email + "\nToken: " + token);
+
             Utils.client.setAccount(account);
 
-
             findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
-            findViewById(R.id.logout).setVisibility(View.VISIBLE);
+            //findViewById(R.id.logout).setVisibility(View.VISIBLE);
 
+            request();
         }
     }
 
@@ -113,14 +108,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
                 findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logout).setVisibility(View.INVISIBLE);
-                loginInfo.setText("");
                 Utils.client.setAccount(null);
             }
         );
     }
 
-    public void request(View v){
-
+    public void request(){
 
         try {
             JSONObject jsonUser = new JSONObject();
@@ -138,7 +131,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
+    private void customizeSignInButton(){
+        for(int i = 0; i < signIn.getChildCount(); i++){
+            View v = signIn.getChildAt(i);
 
-
-
+            if(v instanceof TextView){
+                TextView tv = (TextView)v;
+                tv.setAllCaps(true);
+            }
+        }
+    }
 }
