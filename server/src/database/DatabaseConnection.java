@@ -1,12 +1,12 @@
 package database;
 
-import jdk.nashorn.api.scripting.JSObject;
 import network.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 import org.postgresql.util.PSQLException;
 
+import javax.xml.crypto.dsig.keyinfo.PGPData;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -166,13 +166,13 @@ public class DatabaseConnection {
             while ( rs.next() ) {
 
                 int id = rs.getInt("id");
-                int r_chat_id = rs.getInt("chat_id");
+                PGpoint r_chat_location = (PGpoint)rs.getObject("chat_location");
                 String poster = rs.getString("poster");
                 String content = rs.getString("content");
                 Timestamp date = rs.getTimestamp("date");
 
 
-                jsonArray.put(new MessageDB(id,date,content,r_chat_id,poster).toJson());
+                jsonArray.put(new MessageDB(id,date,content,r_chat_location,poster).toJson());
 
             }
 
@@ -188,23 +188,24 @@ public class DatabaseConnection {
         return res;
     }
 
-    public JSONObject get_chat_members(int chat_id) {
+    public JSONObject get_chat_members(double x,double y) {
 
+        PGpoint location = new PGpoint(x,y);
         JSONArray jsonArray = new JSONArray();
 
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("SELECT * FROM chat_member WHERE chat_id = ?;");
-            stmt.setInt(1,chat_id);
+            stmt = conn.prepareStatement("SELECT * FROM chat_member WHERE chat_location = ?;");
+            stmt.setObject(1,location);
             ResultSet rs = stmt.executeQuery();
 
             while ( rs.next() ) {
 
-                int r_chat_id = rs.getInt("chat_id");
+                PGpoint r_chat_location = (PGpoint)rs.getObject("chat_location");
                 String member = rs.getString("member");
 
-                jsonArray.put(new ChatMember(r_chat_id,member).toJson());
+                jsonArray.put(new ChatMember(r_chat_location,member).toJson());
             }
 
             rs.close();
@@ -227,19 +228,15 @@ public class DatabaseConnection {
         String title = cr.title;
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date, title) VALUES (point(?,?), ?, ?) RETURNING id;");
+            stmt = conn.prepareStatement("INSERT INTO chatroom (location, date, title) VALUES (point(?,?), ?, ?);");
             stmt.setDouble(1,location.x);
             stmt.setDouble(2,location.y);
             stmt.setObject(3,date);
             stmt.setString(4,title);
+            stmt.execute();
 
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            int new_id = rs.getInt("id");
+            add_chat_member(new ChatMember(location,user));
 
-            add_chat_member(new ChatMember(new_id,user));
-
-            rs.close();
             stmt.close();
             conn.commit();
         } catch (SQLException e) {
@@ -252,12 +249,12 @@ public class DatabaseConnection {
 
     public void add_chat_member(ChatMember cm) {
 
-        int id_chat = cm.chat_id;
+        PGpoint location_chat = cm.chat_location;
         String member = cm.member;
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement("INSERT INTO chat_member (chat_id, member) VALUES (?, ?)");
-            stmt.setInt(1,id_chat);
+            stmt = conn.prepareStatement("INSERT INTO chat_member (chat_location, member) VALUES (?, ?)");
+            stmt.setObject(1,location_chat);
             stmt.setString(2,member);
 
             Boolean rs = stmt.execute();
@@ -297,21 +294,23 @@ public class DatabaseConnection {
     public void add_message(MessageDB mdb) {
 
         String content = mdb.content;
-        int chat_id = mdb.chat_id;
+        PGpoint chat_location = mdb.chat_location;
         String poster = mdb.poster;
         PreparedStatement stmt = null;
         PreparedStatement check_stmt = null;
 
         try {
 
-            check_stmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM chat_member WHERE member = ? AND chat_id = ?);");
+            check_stmt = conn.prepareStatement("SELECT 1 FROM chat_member WHERE member = ? AND chat_location = ?;");
             check_stmt.setString(1,poster);
-            check_stmt.setInt(2,chat_id);
+            check_stmt.setObject(2,chat_location);
 
-            if(check_stmt.execute()) {
-                stmt = conn.prepareStatement("INSERT INTO message (content,chat_id,poster) VALUES (?,?,?);");
+            ResultSet rs1 = check_stmt.executeQuery();
+
+            if(rs1.next()) {
+                stmt = conn.prepareStatement("INSERT INTO message (content,chat_location,poster) VALUES (?,?,?);");
                 stmt.setString(1, content);
-                stmt.setInt(2, chat_id);
+                stmt.setObject(2, chat_location);
                 stmt.setString(3, poster);
 
                 Boolean rs = stmt.execute();
@@ -321,12 +320,13 @@ public class DatabaseConnection {
                 throw new Utils.UserIsNotMemberException();
             }
 
+            rs1.close();
             check_stmt.close();
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Utils.UserIsNotMemberException e) {
-            System.out.println("User " + poster + " is not member of chat with id " + chat_id);
+            System.out.println("User " + poster + " is not member of chat with location " + chat_location.toString());
         }
 
         DatabaseManager.setOutdated(true);
@@ -393,9 +393,9 @@ public class DatabaseConnection {
             System.out.println("*** CHAT_MEMBERS ***");
             while ( rs.next() ) {
 
-                int r_chat_id = rs.getInt("chat_id");
+                PGpoint r_chat_location = (PGpoint)rs.getObject("chat_location");
                 String member = rs.getString("member");
-                ChatMember cm = new ChatMember(r_chat_id,member);
+                ChatMember cm = new ChatMember(r_chat_location,member);
                 System.out.println(cm.toString());
             }
 
@@ -417,12 +417,12 @@ public class DatabaseConnection {
             while ( rs.next() ) {
 
                 int id = rs.getInt("id");
-                int r_chat_id = rs.getInt("chat_id");
+                PGpoint r_chat_location = (PGpoint)rs.getObject("chat_location");
                 String poster = rs.getString("poster");
                 String content = rs.getString("content");
                 Timestamp date = rs.getTimestamp("date");
 
-                MessageDB mdb = new MessageDB(id,date,content,r_chat_id,poster);
+                MessageDB mdb = new MessageDB(id,date,content,r_chat_location,poster);
                 System.out.println(mdb.toString());
             }
 
@@ -444,13 +444,6 @@ public class DatabaseConnection {
         DatabaseManager.database_create();
         DatabaseManager.database_init();
         db.connect();
-        db.debug_users();
-
-        System.out.println(db.get_chatrooms().toString());
-        System.out.println(db.get_chat_members(1).toString());
-        System.out.println(db.get_chat_members(2).toString());
-        System.out.println(db.get_chat_messages(1).toString());
-        System.out.println(db.get_chat_messages(2).toString());
 
         System.out.println("Closing...");
         db.close();

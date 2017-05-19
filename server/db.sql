@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS chat_member CASCADE;
 
 CREATE TABLE chat_member (
-    chat_id integer NOT NULL,
+    chat_location point NOT NULL,
     member text NOT NULL
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE message (
     id SERIAL,
     date timestamp with time zone DEFAULT now(),
     content text NOT NULL,
-    chat_id integer NOT NULL,
+    chat_location point NOT NULL,
     poster text NOT NULL
 );
 
@@ -42,18 +42,18 @@ CREATE INDEX index_message_date ON message USING btree (date);
 ALTER TABLE message CLUSTER ON index_message_date;
 
 ALTER TABLE ONLY chat_member
-    ADD CONSTRAINT chat_member_pkey PRIMARY KEY (chat_id, member);
+    ADD CONSTRAINT chat_member_pkey PRIMARY KEY (chat_location, member);
 ALTER TABLE ONLY chatroom
-    ADD CONSTRAINT chatroom_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT chatroom_pkey PRIMARY KEY (location);
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY user_weeat
     ADD CONSTRAINT user_weeat_pkey PRIMARY KEY (email);
 ALTER TABLE ONLY chat_member
-    ADD CONSTRAINT chat_member_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
+    ADD CONSTRAINT chat_member_chat_location_fkey FOREIGN KEY (chat_location) REFERENCES chatroom(location) ON DELETE CASCADE;
 ALTER TABLE ONLY chat_member
     ADD CONSTRAINT chat_member_member_fkey FOREIGN KEY (member) REFERENCES user_weeat(email) ON DELETE CASCADE;
 ALTER TABLE ONLY message
-    ADD CONSTRAINT message_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES chatroom(id) ON DELETE CASCADE;
+    ADD CONSTRAINT message_chat_location_fkey FOREIGN KEY (chat_location) REFERENCES chatroom(location) ON DELETE CASCADE;
 ALTER TABLE ONLY message
     ADD CONSTRAINT message_poster_fkey FOREIGN KEY (poster) REFERENCES user_weeat(email) ON DELETE CASCADE;

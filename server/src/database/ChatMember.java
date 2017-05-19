@@ -1,33 +1,32 @@
 package database;
 
 import org.json.JSONObject;
+import org.postgresql.geometric.PGpoint;
 
-/**
- * Created by PeaceOff on 09-05-2017.
- */
 public class ChatMember {
 
-    public int chat_id;
+    public PGpoint chat_location;
     public String member;
 
-    public ChatMember(int chat_id, String member) {
-        this.chat_id = chat_id;
+    public ChatMember(PGpoint chat_location, String member) {
+        this.chat_location = chat_location;
         this.member = member;
     }
 
     public JSONObject toJson(){
         JSONObject res= new JSONObject();
-        res.put("chat_id",chat_id);
+        res.put("chat_lat",chat_location.x);
+        res.put("chat_long",chat_location.y);
         res.put("member",member);
 
         return res;
     }
 
-
     @Override
     public String toString() {
         return "ChatMember{" +
-                "chat_id=" + chat_id +
+                "chat_lat=" + chat_location.x +
+                "chat_long=" + chat_location.y +
                 ", member='" + member + '\'' +
                 '}';
     }

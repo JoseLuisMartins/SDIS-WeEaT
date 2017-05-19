@@ -91,11 +91,11 @@ public class ServerDistributor extends Distributor {
     public void addChatMember(Message m){
         JSONObject obj = new JSONObject((String)m.getContent());
 
-        int chat_id = obj.getInt("chat_id");
+        PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         String member = obj.getString("member");
 
 
-        Utils.db.add_chat_member(new ChatMember(chat_id,member));
+        Utils.db.add_chat_member(new ChatMember(chat_location,member));
         Utils.db.debug_chatmembers();
 
         try {
@@ -121,7 +121,7 @@ public class ServerDistributor extends Distributor {
         JSONObject obj = new JSONObject((String)m.getContent());
         JSONObject userInfo = m.getUserInfo();
 
-        if(!checkJson(obj,"content","chat_id") && checkJson(userInfo,"email","name","picture")) {
+        if(!checkJson(obj,"content","lat","long") && checkJson(userInfo,"email","name","picture")) {
             try {
                 System.out.println("Bad Request: Json does not contain all the necessary information");
                 sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Bad request"));
@@ -134,17 +134,17 @@ public class ServerDistributor extends Distributor {
 
         //create chat message
         String content = obj.getString("content");
-        int chat_id = obj.getInt("chat_id");
+        PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         String poster = (String) userInfo.get("email");
 
-        MessageDB chatMessage = new MessageDB(null,content,chat_id,poster);
+        MessageDB chatMessage = new MessageDB(null,content,chat_location,poster);
 
         Utils.db.add_message(chatMessage);
         Utils.db.debug_chatmessages();
 
         try {
             //message notification
-            NotificationWebSocketServer.sendAll(chatMessage.toJson().toString(),chat_id);
+            NotificationWebSocketServer.sendAll(chatMessage.toJson().toString(),chat_location);
             //response
             sendMessage(m.getHttpExchange().getResponseBody(), new Message(ClientDistributor.RESPONSE, "Ah Gay:messages"));
         } catch (IOException e) {
@@ -172,9 +172,7 @@ public class ServerDistributor extends Distributor {
 
         JSONObject obj = new JSONObject((String)m.getContent());
 
-        int chat_id = obj.getInt("chat_id");
-
-        JSONObject res = Utils.db.get_chat_members(chat_id);
+        JSONObject res = Utils.db.get_chat_members(obj.getDouble("lat"),obj.getDouble("long"));
 
         try {
             sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,res.toString()));

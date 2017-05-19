@@ -2,6 +2,7 @@ package database;
 
 import network.Utils;
 import org.json.JSONObject;
+import org.postgresql.geometric.PGpoint;
 
 import java.sql.Timestamp;
 
@@ -10,22 +11,22 @@ public class MessageDB {
     public int id;
     public Timestamp date;
     public String content;
-    public int chat_id;
+    public PGpoint chat_location;
     public String poster;
 
 
-    public MessageDB(int id, Timestamp date, String content, int chat_id, String poster) {
+    public MessageDB(int id, Timestamp date, String content, PGpoint chat_location, String poster) {
         this.id = id;
         this.date = date;
         this.content = content;
-        this.chat_id = chat_id;
+        this.chat_location = chat_location;
         this.poster = poster;
     }
 
-    public MessageDB( Timestamp date, String content, int chat_id, String poster) {
+    public MessageDB( Timestamp date, String content, PGpoint chat_location, String poster) {
         this.date = date;
         this.content = content;
-        this.chat_id = chat_id;
+        this.chat_location = chat_location;
         this.poster = poster;
     }
 
@@ -37,7 +38,8 @@ public class MessageDB {
 
         res.put("date","Pass data string");
         res.put("content",content);
-        res.put("chat_id",chat_id);
+        res.put("chat_lat",chat_location.x);
+        res.put("chat_long",chat_location.y);
         res.put("poster",poster);
         res.put("name",user.getUsername());
         res.put("imageUrl",user.getImage_url());
@@ -51,7 +53,8 @@ public class MessageDB {
                 "id=" + id +
                 ", date=" + date +
                 ", content='" + content + '\'' +
-                ", chat_id=" + chat_id +
+                ", chat_lat=" + chat_location.x +
+                ", chat_long=" + chat_location.y +
                 ", poster='" + poster + '\'' +
                 '}';
     }

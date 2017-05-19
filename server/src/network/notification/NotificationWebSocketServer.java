@@ -10,6 +10,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.JSONObject;
+import org.postgresql.geometric.PGpoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import static network.GoogleLoginChecker.googleLoginChecker;
 @WebSocket
 public class NotificationWebSocketServer {
 
-    private static HashMap<Integer,ArrayList<Session>> sessions = new HashMap<>();
+    private static HashMap<PGpoint,ArrayList<Session>> sessions = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         initWebSocket();
@@ -80,17 +81,17 @@ public class NotificationWebSocketServer {
 
         JSONObject obj = new JSONObject(message);
 
-        Integer chatId = obj.getInt("chatId");
+        PGpoint chatLocation = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         String token = obj.getString("token");
 
         JSONObject userInfo = googleLoginChecker(token);
 
-        if(sessions.get(chatId) == null){
+        if(sessions.get(chatLocation) == null){
             ArrayList<Session> nArray = new ArrayList<>();
             nArray.add(session);
-            sessions.put(chatId,nArray);
+            sessions.put(chatLocation,nArray);
         }else {
-            ArrayList<Session> array = sessions.get(chatId);
+            ArrayList<Session> array = sessions.get(chatLocation);
             array.add(session);
         }
 
@@ -102,10 +103,10 @@ public class NotificationWebSocketServer {
     }
 
 
-    public static void sendAll(String msg, Integer chatId) {
+    public static void sendAll(String msg, PGpoint chatLocation) {
 
             try {
-                ArrayList<Session> usersToNotify = sessions.get(chatId);
+                ArrayList<Session> usersToNotify = sessions.get(chatLocation);
 
                 if (usersToNotify == null)
                     return;
@@ -122,7 +123,7 @@ public class NotificationWebSocketServer {
                 }
 
                 usersToNotify.removeAll(closedSessions);
-                System.out.println("Sending "+msg+" to "+usersToNotify.size() + " clients on chat " + chatId);
+                System.out.println("Sending "+msg+" to "+usersToNotify.size() + " clients on chat with location " + chatLocation);
 
             } catch (Throwable e) {
                 e.printStackTrace();
