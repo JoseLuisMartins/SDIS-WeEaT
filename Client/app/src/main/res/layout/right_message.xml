@@ -10,7 +10,7 @@
         android:id="@+id/msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="7dp"
         android:layout_weight="19"
         android:background="@drawable/rounded_corner1"
@@ -23,15 +23,16 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginLeft="-12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/arrow_bg1" />
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/picture"
-        android:layout_width="65dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="8dp"/>
 
 
 </LinearLayout>

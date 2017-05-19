@@ -34,7 +34,7 @@
         <activity
             android:name=".gui.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>

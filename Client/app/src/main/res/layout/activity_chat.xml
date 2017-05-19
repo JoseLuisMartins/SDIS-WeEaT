@@ -8,9 +8,11 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
+        android:background="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:textSize="40dp"
         android:gravity="top|center"
         android:text="Lunch @cantinaFeup_14:00" />
 
