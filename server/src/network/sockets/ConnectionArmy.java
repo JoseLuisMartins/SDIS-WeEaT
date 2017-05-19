@@ -50,7 +50,7 @@ public class ConnectionArmy {
         }
 
 
-        int mode = pair.AddServerConnection(connection);
+        int mode = pair.addServerConnection(connection);
         if(mode == -1)
             return false;
 

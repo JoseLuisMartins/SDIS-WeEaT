@@ -67,8 +67,17 @@ public class ServerConnection extends  Thread{
 
     }
 
+    public void removeServerData(String cmd){
+        outputStream.println(cmd);
+    }
+
+    public void setServerData(String cmd, String ip, int port){
+        ip = ip.replace("/","");
+        outputStream.println(cmd + ip);
+    }
+
     public void setMode(int mode){
-        outputStream.println((mode == ServerPair.SERVER_BACKUP)? "BACKUP" : "OPERATOR");
+        outputStream.println("MODE" + ((mode == ServerPair.SERVER_BACKUP)? "BACKUP" : "OPERATOR"));
     }
 
     @Override

@@ -10,19 +10,21 @@ public class ServerPair {
 
     public void removeServer(ServerConnection connection){
 
-        System.out.println("REMOVING!! I'm Stupid");
+        System.out.println("REMOVING!! Connection");
 
         if(operatingServer.equals(connection)){
 
+            backupServer.removeServerData("ROPE");
             operatingServer = backupServer;
+            operatingServer.setMode(SERVER_OPERATING);
             backupServer = null;
 
         }else if(backupServer.equals(connection)){
             backupServer = null;
+            if(operatingServer != null){
+                operatingServer.removeServerData("RBAK");
+            }
         }
-
-
-
     }
 
     @Override
@@ -50,15 +52,24 @@ public class ServerPair {
         return sb.toString();
     }
 
-    public int AddServerConnection(ServerConnection con){
+    private void updateServerConnections(){
+        operatingServer.setServerData("BACK", backupServer.getIP(), backupServer.getPort());
+        backupServer.setServerData("OPER", operatingServer.getIP(), operatingServer.getPort());
+    }
+
+    public int addServerConnection(ServerConnection con){
         System.out.println("TET" + this.toString());
         if(operatingServer == null) {
             operatingServer = con;
             operatingServer.setServerPair(this);
+            if(backupServer!=null)
+                updateServerConnections();
+            
             return SERVER_OPERATING;
         }else if(backupServer == null){
             backupServer = con;
             backupServer.setServerPair(this);
+            updateServerConnections();
             return SERVER_BACKUP;
         }
 
