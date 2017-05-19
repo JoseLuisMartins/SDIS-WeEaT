@@ -3,33 +3,27 @@
     android:id="@+id/layout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="7dp"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/msg"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="7dp"
         android:layout_weight="19"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner1"
         android:padding="16dp"
         android:text=""
         android:textColor="#000" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginLeft="-15dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/arrow_bg1" />
-
-    <ImageView
         android:id="@+id/picture"
-        android:layout_width="40dp"
+        android:layout_width="61dp"
         android:layout_height="40dp"
+        android:layout_gravity="center"
         android:layout_marginTop="0dp"
-        android:layout_weight="1.77"
-        android:src="@drawable/user_pacific" />
+        android:src="@drawable/user_pratikshya" />
+
+
 </LinearLayout>
