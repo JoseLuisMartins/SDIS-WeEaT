@@ -22,19 +22,16 @@ public class NotificationWebSocketServer {
 
     private static HashMap<PGpoint,ArrayList<Session>> sessions = new HashMap<>();
 
-    public static void main(String[] args) throws Exception {
-        initWebSocket();
-    }
 
-    public static void initWebSocket() throws Exception {
+    public static void initWebSocket(String webSocketIP,int webSocketPort) throws Exception {
         Server server = new Server();
         server.setHandler(new WebSocketHandler());
 
 
         //WS
         ServerConnector wsConnector = new ServerConnector(server);
-        wsConnector.setHost("192.168.1.64");        //wsConnector.setHost("172.30.26.247");
-        wsConnector.setPort(8887);
+        wsConnector.setHost(webSocketIP);        //wsConnector.setHost("172.30.26.247");
+        wsConnector.setPort(webSocketPort);
         server.addConnector(wsConnector);
 
         //WSS

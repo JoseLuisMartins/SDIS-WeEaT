@@ -165,22 +165,37 @@ public class ClientDistributor extends Distributor {
     }
 
 
-    public void startServerConnection(Message m){
-
-        Log.d("debug", "Server Info:\n " + m.getContent());
-        ArrayList<Object> actionObjects =  m.getActionObjects();
-        Activity serverActivity= (Activity) actionObjects.get(ActionObject.SERVER_ACTIVITY);
-
-        //Get the Server Url
-        Utils.serverUrl="";
-
-        //Add user
+    public void startServerConnection(Message m)  {
         try {
+            Log.d("debug", "Server Info:\n " + m.getContent());
+            ArrayList<Object> actionObjects =  m.getActionObjects();
+            Activity serverActivity= (Activity) actionObjects.get(ActionObject.SERVER_ACTIVITY);
+
+            //Get the Server Url
+            JSONObject serverInf = new JSONObject((String) m.getContent());
+
+            StringBuilder sbHttps = new StringBuilder();
+            sbHttps.append("https://");
+            sbHttps.append(serverInf.getString("ip"));
+            sbHttps.append(":");
+            sbHttps.append(serverInf.getString("httpsPort"));
+
+            Utils.serverUrl=sbHttps.toString();
+
+            StringBuilder sbWs = new StringBuilder();
+            sbHttps.append("ws://");
+            sbHttps.append(serverInf.getString("ip"));
+            sbHttps.append(":");
+            sbHttps.append(serverInf.getString("webPort"));
+
+            Utils.webSocketUrl = sbWs.toString();
+
+            //Add user
             JSONObject jsonUser = new JSONObject();
             jsonUser.put("token", Utils.client.getToken());
             Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
 
-            //go to choose local activity
+            //Go to choose local activity
             Intent i = new Intent(serverActivity, ChooseLocal.class);
             serverActivity.startActivity(i);
 

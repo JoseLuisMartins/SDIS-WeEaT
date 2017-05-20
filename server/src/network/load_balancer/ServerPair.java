@@ -56,23 +56,13 @@ public class ServerPair {
     }
 
     private void updateServerConnections(){
-        operatingServer.setServerData("BACK", backupServer.getIP(), backupServer.getPort());
-        backupServer.setServerData("OPER", operatingServer.getIP(), operatingServer.getPort());
+        operatingServer.setServerData("BACK", backupServer.getIP(), backupServer.getBackupPort());
+        backupServer.setServerData("OPER", operatingServer.getIP(), operatingServer.getBackupPort());
     }
 
-    public String getIP(){
-        if(operatingServer == null)
-            return null;
 
-        return operatingServer.getIP().replace("/","");
-
-    }
-
-    public int getPort(){
-        if(operatingServer == null)
-            return -1;
-
-        return operatingServer.getPort();
+    public ServerConnection getOperatingServer() {
+        return operatingServer;
     }
 
     public int addServerConnection(ServerConnection con){

@@ -10,8 +10,13 @@ public class SecureClientQuarters extends SecureClient{
 
     private static String confirmationCode = "Batata";
     private String location;
+    private int webSocketPort;
+    private String webSocketIP;
     private ServerWeEat server = null;
     private int httpsPort = 0;
+    private int backupPort = 0;
+
+
     private interface Action{
         void action(String msg);
     }
@@ -28,12 +33,16 @@ public class SecureClientQuarters extends SecureClient{
      * @throws Exception
      */
 
-    public SecureClientQuarters(String ip, int port, int httpsPort, String location, ServerWeEat server) throws Exception {
+    public SecureClientQuarters(String ip, int port, int httpsPort, String location, ServerWeEat server, String webSocketIP ,int webSocketPort, int backupPort) throws Exception {
         super(ip,port);
         init();
         this.location = location;
         this.server = server;
         this.httpsPort = httpsPort;
+        this.webSocketIP = webSocketIP;
+        this.webSocketPort = webSocketPort;
+        this.backupPort = backupPort;
+
         handShake();
 
     }
@@ -51,7 +60,10 @@ public class SecureClientQuarters extends SecureClient{
         System.out.println("Starting Handshake!");
         writer = new PrintWriter(socket.getOutputStream(), true);
         writer.println(confirmationCode + location);
-        writer.println(httpsPort);
+        writer.print(this.httpsPort);
+        writer.print(" " + this.webSocketIP);
+        writer.print(" " + this.webSocketPort);
+        writer.println(" " + this.backupPort);
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String res = inputStream.readLine();
         if(res == null)
@@ -104,8 +116,11 @@ public class SecureClientQuarters extends SecureClient{
             return;
         System.out.println("OperatorServer data [" + ip.toString() + " " + port );
 
+        server.set_backup_port_to_connect(port);
         server.setIp_to_connect(ip.toString());
     }
+
+
 
     private void setBackupServer(String ipPort){
         StringBuilder ip = new StringBuilder();

@@ -7,7 +7,6 @@ import network.messaging.distributor.server.ServerDistributor;
 import network.protocol.SecureClientBermuda;
 import network.protocol.SecureServerBermuda;
 import network.sockets.SecureClientQuarters;
-import sun.nio.ch.ThreadPool;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class ServerWeEat {
@@ -29,25 +27,54 @@ public class ServerWeEat {
     private SecureClientBermuda client_bermuda = null;
     private SecureServerBermuda server_bermuda = null;
     private String ip_to_connect = null;
-    private static final int port_to_connect = 27000;
+    private int backupPort;
+    private int backupToConnectPort;
     private HttpsServer server = null;
+    private int webSocketPort;
+    private String webSocketIP;
 
     public static void main(String args[]){
 
+        if(args.length != 7){
+            System.out.print("USAGE: \n \t <locationString> <serverIp> <serverPort> <balancerIp> <balancerPort> <WebSocketPort> <backupPort> \n");
+            return;
+        }
+
+        String locationString= args[0];
+        String serverIp= args[1];
+        int serverPort= Integer.parseInt(args[2]);
+        String balancerIp= args[3];
+        int balancerPort= Integer.parseInt(args[4]);
+        int webSocketPort= Integer.parseInt(args[5]);
+        int backup_to_connect= Integer.parseInt(args[6]);
 
         try {
 
-            /* Uncommented for stand alone server
-            Utils.init();
-            //Set true for restore
-            Utils.initDB(false);
-            */
-            ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8001);
+            ServerWeEat s = new ServerWeEat(balancerIp, balancerPort,serverIp,serverPort,locationString,webSocketPort,backup_to_connect);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+
+    public ServerWeEat(String loadBalancerIP, int loadBalancerPort, String serverIP, int port, String locationString,int webSocketPort, int backupPort) throws Exception {
+
+        //Uncomment if you wish to use the awesome loadBalancer C;
+        this.port = port;
+        this.request = loadBalancerIP;
+        this.webSocketPort = webSocketPort;
+        this.webSocketIP = serverIP;
+        this.backupPort = backupPort;
+
+        SecureClientQuarters balancerClient =  new SecureClientQuarters(loadBalancerIP,loadBalancerPort, port, locationString, this, serverIP, webSocketPort, backupPort);
+        balancerClient.start();
+
+    }
+
+    public void set_backup_port_to_connect(int backup_port_to_connect){
+        this.backupToConnectPort = backup_port_to_connect;
     }
 
     public void setMode(int mode) {
@@ -67,7 +94,7 @@ public class ServerWeEat {
                 }
                 if(ip_to_connect != null && client_bermuda == null) {
                     try {//Ligar o client para receber o backup da base de dados
-                        client_bermuda = new SecureClientBermuda(ip_to_connect, port_to_connect);
+                        client_bermuda = new SecureClientBermuda(ip_to_connect, backupToConnectPort);
                         client_bermuda.start();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -99,8 +126,8 @@ public class ServerWeEat {
     private void start_operation(boolean restore) {
 
         try {
-            server_bermuda = new SecureServerBermuda(port_to_connect);
-            Utils.init();
+            server_bermuda = new SecureServerBermuda(backupPort);
+            Utils.init(this.webSocketIP, this.webSocketPort);
             Utils.initDB(restore);
 
             if(server == null) {
@@ -123,16 +150,7 @@ public class ServerWeEat {
         System.exit(-1);
     }
 
-    public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
 
-        //Uncomment if you wish to use the awesome loadBalancer C;
-        this.port = port;
-        request = loadBalancerIP;
-        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015, port, "PORTO",this);
-        balancerClient.start();
-
-        //Thread.sleep(200000);
-    }
 
     public static HttpsServer getHttpsServer(int port) throws IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
 

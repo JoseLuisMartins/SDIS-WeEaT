@@ -25,7 +25,7 @@ public class Utils {
     }
 
 
-    public static void init() {
+    public static void init(String webSocketIP, int webSocketPort) {
 
         try {
             google = new GoogleLoginChecker();
@@ -38,7 +38,7 @@ public class Utils {
                 public void run() {
                     System.out.println("Running Static Utils");
                     try {
-                        NotificationWebSocketServer.initWebSocket();
+                        NotificationWebSocketServer.initWebSocket(webSocketIP ,webSocketPort);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

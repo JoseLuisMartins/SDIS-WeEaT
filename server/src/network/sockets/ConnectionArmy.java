@@ -66,6 +66,9 @@ public class ConnectionArmy {
         return servers.keySet();
     }
 
+    public ConcurrentHashMap<String, ServerPair> getServers() {
+        return servers;
+    }
 
     @Override
     public String toString() {

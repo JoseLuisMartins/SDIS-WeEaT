@@ -18,6 +18,9 @@ public class ServerConnection extends  Thread{
     private BufferedReader inputStream;
     private ServerPair pair;
     private int httpsPort = -1;
+    private int webSocketPort = -1;
+    private String webSocketIP  = "127.0.0.1";
+    private int backupPort = -1;
 
 
     /**
@@ -59,6 +62,10 @@ public class ServerConnection extends  Thread{
 
             String[] ports = inputStream.readLine().trim().split(" ");
             httpsPort = Integer.parseInt(ports[0]);
+            webSocketIP = ports[1];
+            webSocketPort = Integer.parseInt(ports[2]);
+            backupPort = Integer.parseInt(ports[3]);
+
 
             System.out.println("Server Port: " + httpsPort);
 
@@ -137,9 +144,21 @@ public class ServerConnection extends  Thread{
         }
     }
 
-    public String getIP(){
-        return ((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().toString();
+    public int getBackupPort() {
+        return backupPort;
+    }
 
+    public String getIP(){
+        return webSocketIP;
+    }
+
+    public int getHttpsPort(){
+        return httpsPort;
+    }
+
+
+    public int getWebSocketPort(){
+        return webSocketPort;
     }
 
     public int getPort(){

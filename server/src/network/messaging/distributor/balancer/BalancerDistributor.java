@@ -2,6 +2,7 @@ package network.messaging.distributor.balancer;
 
 import com.sun.net.httpserver.Headers;
 import network.load_balancer.LoadBalancer;
+import network.load_balancer.ServerConnection;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
@@ -35,8 +36,12 @@ public class BalancerDistributor extends Distributor {
 
         JSONObject obj = new JSONObject();
 
-        obj.put("ip", loadBalancer.getIPByLocation(location));
-        obj.put("port", loadBalancer.getPortByLocation(location));
+        ServerConnection connection = loadBalancer.getServerConnectionByLocation(location);
+
+
+        obj.put("ip", connection.getIP());
+        obj.put("httpsPort",connection.getHttpsPort());
+        obj.put("webPort", connection.getWebSocketPort());
 
 
         try {

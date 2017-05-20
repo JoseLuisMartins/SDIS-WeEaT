@@ -13,10 +13,11 @@ import network.sockets.ConnectionArmy;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LoadBalancer implements HttpHandler {
 
-    private HashMap<String, ServerPair> servers = new HashMap<>();
+
     private int port = 8000;
     private HttpsServer server;
     private ConnectionArmy army;
@@ -55,19 +56,15 @@ public class LoadBalancer implements HttpHandler {
         return army;
     }
 
-    public String getIPByLocation(String location){
+    public ServerConnection getServerConnectionByLocation(String location){
+        ConcurrentHashMap<String, ServerPair> servers = army.getServers();
+
         if(!servers.containsKey(location))
             return null;
 
-        return  servers.get(location).getIP();
+        return  servers.get(location).getOperatingServer();
     }
 
-    public int getPortByLocation(String location){
-        if(!servers.containsKey(location))
-            return -1;
-
-        return servers.get(location).getPort();
-    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
