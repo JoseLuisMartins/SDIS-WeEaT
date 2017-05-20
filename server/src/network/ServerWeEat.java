@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ServerWeEat {
 
     private int mode = -1;
-    private int port = 8888;
+    private int port;
     private String ip = "";
     private ServerDistributor distributor = new ServerDistributor(this);
     private String request = "";
@@ -103,7 +103,7 @@ public class ServerWeEat {
             Utils.init();
             Utils.initDB(restore);
 
-            if(server != null) {
+            if(server == null) {
 
                 server = getHttpsServer(port);
                 server.createContext("/", new ServerHttpHandler(this));
@@ -126,9 +126,9 @@ public class ServerWeEat {
     public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
 
         //Uncomment if you wish to use the awesome loadBalancer C;
-
+        this.port = port;
         request = loadBalancerIP;
-        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015,port, "PORTO",this);
+        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015, port, "PORTO",this);
         balancerClient.start();
 
         //Thread.sleep(200000);

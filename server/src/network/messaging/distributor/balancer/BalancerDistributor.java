@@ -4,6 +4,7 @@ import com.sun.net.httpserver.Headers;
 import network.load_balancer.LoadBalancer;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.client.ClientDistributor;
 import network.messaging.distributor.server.ServerDistributor;
 import network.sockets.ConnectionArmy;
 import org.json.JSONObject;
@@ -40,7 +41,7 @@ public class BalancerDistributor extends Distributor {
 
         try {
            Distributor.sendMessage(m.getHttpExchange().getResponseBody(),
-                   new Message(ServerDistributor.SET_MODE, obj.toString()));
+                   new Message(ClientDistributor.START_SERVER_CONNECTION, obj.toString()));
 
            System.out.println("Sent IP/Port" + obj.toString());
         } catch (IOException e) {
@@ -51,6 +52,8 @@ public class BalancerDistributor extends Distributor {
 
     public void requestLocations(Message m){
 
+
+
         Collection<String> list = loadBalancer.getConnectionArmy().getLocations();
 
         JSONObject obj = new JSONObject();
@@ -58,7 +61,7 @@ public class BalancerDistributor extends Distributor {
 
         try{
             Distributor.sendMessage(m.getHttpExchange().getResponseBody(),
-                    new Message((ServerDistributor.SET_MODE),obj.toString()));
+                    new Message((ClientDistributor.ADD_SERVER_LOCATIONS),obj.toString()));
             System.out.println("Sent ServerLocations");
         }catch(Exception e){
             e.printStackTrace();

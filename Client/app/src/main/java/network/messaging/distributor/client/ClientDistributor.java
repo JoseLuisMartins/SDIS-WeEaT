@@ -1,14 +1,20 @@
 package network.messaging.distributor.client;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.SubMenu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.gui.ChooseLocal;
 import com.example.josemartins.sdis_weeat.gui.MapFragment;
 import com.example.josemartins.sdis_weeat.logic.ActionObject;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
+import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
+import network.messaging.distributor.server.ServerDistributor;
 
 
 public class ClientDistributor extends Distributor {
@@ -27,6 +34,8 @@ public class ClientDistributor extends Distributor {
     public static final int UNLOGGED = 1;
     public static final int FILL_MAP_MARKERS = 2;
     public static final int UPDATE_CHAT = 3;
+    public static final int ADD_SERVER_LOCATIONS = 4;
+    public static final int START_SERVER_CONNECTION = 5;
 
     public ClientDistributor(){
 
@@ -34,6 +43,8 @@ public class ClientDistributor extends Distributor {
         addAction(UNLOGGED, (Message m) -> unLogged(m));
         addAction(FILL_MAP_MARKERS, (Message m) -> fillMapMarkers(m));
         addAction(UPDATE_CHAT, (Message m) -> updateChat(m));
+        addAction(ADD_SERVER_LOCATIONS, (Message m) -> addServerLocations(m));
+        addAction(START_SERVER_CONNECTION, (Message m) -> startServerConnection(m));
 
     }
 
@@ -120,7 +131,64 @@ public class ClientDistributor extends Distributor {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addServerLocations(Message m){
+        //update listview
+        Log.d("debug", "Server Locations:\n " + m.getContent());
+        ArrayList<Object> actionObjects =  m.getActionObjects();
+        ListView serverListView= (ListView) actionObjects.get(ActionObject.SERVER_LIST_VIEW);
+        Activity serverActivity= (Activity) actionObjects.get(ActionObject.SERVER_ACTIVITY);
+
+        try {
+            JSONObject locations = new JSONObject((String) m.getContent());
+
+            Log.d("debug",m.getContent().toString());
+            JSONArray locationsJson =locations.getJSONArray("locations");
+
+            String[] serverLocations = new String[locationsJson.length()];
+
+            for(int i=0; i < locationsJson.length(); i++)
+                serverLocations[i] = locationsJson.getString(i);
+
+            Log.d("debug",serverLocations.toString());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(serverActivity, R.layout.server_list_element,serverLocations);
+
+            serverActivity.runOnUiThread(() -> {
+                serverListView.setAdapter(adapter);
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
+
+
+    public void startServerConnection(Message m){
+
+        Log.d("debug", "Server Info:\n " + m.getContent());
+        ArrayList<Object> actionObjects =  m.getActionObjects();
+        Activity serverActivity= (Activity) actionObjects.get(ActionObject.SERVER_ACTIVITY);
+
+        //Get the Server Url
+        Utils.serverUrl="";
+
+        //Add user
+        try {
+            JSONObject jsonUser = new JSONObject();
+            jsonUser.put("token", Utils.client.getToken());
+            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
+
+            //go to choose local activity
+            Intent i = new Intent(serverActivity, ChooseLocal.class);
+            serverActivity.startActivity(i);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }

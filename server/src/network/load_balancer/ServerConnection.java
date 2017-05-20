@@ -60,6 +60,7 @@ public class ServerConnection extends  Thread{
             String[] ports = inputStream.readLine().trim().split(" ");
             httpsPort = Integer.parseInt(ports[0]);
 
+            System.out.println("Server Port: " + httpsPort);
 
             if(!army.recruit(this))
                 return false;

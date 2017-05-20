@@ -92,28 +92,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             GoogleSignInAccount account = result.getSignInAccount();
 
             Utils.client.setAccount(account);
-            request();
+
+            Intent i = new Intent(this,ChooseServer.class);
+            startActivity(i);
         }
     }
 
 
-
-    public void request(){
-
-        try {
-            JSONObject jsonUser = new JSONObject();
-            jsonUser.put("token",Utils.client.getToken());
-            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_USER, jsonUser.toString()));
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Log.d("debug","activity-----");
-        Intent i = new Intent(this,ChooseLocal.class);
-        startActivity(i);
-    }
 
 
     private void customizeSignInButton(){

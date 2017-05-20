@@ -64,7 +64,6 @@ public class Client {
     }
 
 
-
     public Client setAccount(GoogleSignInAccount account) {
         this.account = account;
         return this;
@@ -131,7 +130,6 @@ public class Client {
 
                 HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
                 //put login token in the attributes
-
 
                 con.setRequestProperty("token",getToken());
 

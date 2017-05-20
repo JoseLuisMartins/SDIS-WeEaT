@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -15,28 +15,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCDmvfkFQgLAmlMENLAt4Z8OqGHUDY3ZRs"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCDmvfkFQgLAmlMENLAt4Z8OqGHUDY3ZRs" />
 
         <activity
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name=".gui.LoginActivity"
             android:label="@string/title_activity_main"
-            >
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".gui.ChooseLocal"
-            android:label="@string/title_activity_choose_local"
-             />
+            android:label="@string/title_activity_choose_local" />
         <activity
             android:name=".gui.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:windowSoftInputMode="adjustResize"
-          ></activity>
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".gui.ChooseServer"
+            android:label="@string/title_activity_choose_server"
+            android:theme="@style/NoActionBar"></activity>
     </application>
 
 </manifest>

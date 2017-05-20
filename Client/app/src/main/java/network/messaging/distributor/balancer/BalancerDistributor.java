@@ -8,6 +8,6 @@ package network.messaging.distributor.balancer;
 public class BalancerDistributor {
 
     public final static int REQUEST_SERVER = 0;
-    public final static int STORE_SERVER = 1;
+    public final static int REQUEST_LOCATIONS = 1;
 
 }
