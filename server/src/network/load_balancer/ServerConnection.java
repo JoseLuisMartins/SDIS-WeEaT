@@ -3,6 +3,7 @@ package network.load_balancer;
 import network.sockets.ConnectionArmy;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -16,6 +17,8 @@ public class ServerConnection extends  Thread{
     private PrintWriter outputStream;
     private BufferedReader inputStream;
     private ServerPair pair;
+    private int httpsPort = -1;
+
 
     /**
      * Trata de uma ligacao, com um servidor (operador ou backup)
@@ -54,6 +57,10 @@ public class ServerConnection extends  Thread{
 
             location = response.substring(confirmation.length(), response.length());
 
+            String[] ports = inputStream.readLine().trim().split(" ");
+            httpsPort = Integer.parseInt(ports[0]);
+
+
             if(!army.recruit(this))
                 return false;
 
@@ -75,7 +82,7 @@ public class ServerConnection extends  Thread{
 
     public void setServerData(String cmd, String ip, int port){
         ip = ip.replace("/","");
-        outputStream.println(cmd + ip);
+        outputStream.println(cmd + ip + ":" + port);
     }
 
     public void setMode(int mode){
@@ -117,7 +124,6 @@ public class ServerConnection extends  Thread{
 
             } catch (IOException e) {
                 System.out.println("ERROR Removing: " + getIP() + ":" + getPort());
-                e.printStackTrace();
                 pair.removeServer(this);
                 System.out.println(army);
                 return;
@@ -127,7 +133,8 @@ public class ServerConnection extends  Thread{
     }
 
     public String getIP(){
-        return socket.getRemoteSocketAddress().toString();
+        return ((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().toString();
+
     }
 
     public int getPort(){

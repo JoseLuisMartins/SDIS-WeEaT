@@ -11,12 +11,13 @@ public class SecureClientQuarters extends SecureClient{
     private static String confirmationCode = "Batata";
     private String location;
     private ServerWeEat server = null;
-
+    private int httpsPort = 0;
     private interface Action{
         void action(String msg);
     }
 
     private HashMap<String, Action> actions = new HashMap<>();
+
 
     /**
      * Conecta-se ao loadBalancer dado por ip,port, e faz o handshake (envia confirmationCode + localization,
@@ -27,12 +28,12 @@ public class SecureClientQuarters extends SecureClient{
      * @throws Exception
      */
 
-    public SecureClientQuarters(String ip, int port, String location, ServerWeEat server) throws Exception {
+    public SecureClientQuarters(String ip, int port, int httpsPort, String location, ServerWeEat server) throws Exception {
         super(ip,port);
         init();
         this.location = location;
         this.server = server;
-
+        this.httpsPort = httpsPort;
         handShake();
         this.start();
 
@@ -50,8 +51,11 @@ public class SecureClientQuarters extends SecureClient{
 
         writer = new PrintWriter(socket.getOutputStream(), true);
         writer.println(confirmationCode + location);
+        writer.println(httpsPort);
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String res = inputStream.readLine();
+        dispatch(res);
+        res = inputStream.readLine();
         dispatch(res);
     }
 

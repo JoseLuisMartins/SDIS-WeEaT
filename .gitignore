@@ -12,3 +12,4 @@ server/out
 Client/build
 Client/local.properties
 out/*
+server/received.backup

@@ -85,7 +85,7 @@ public class ServerWeEat {
 
 /*
         request = loadBalancerIP;
-        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015, "PORTO",this);
+        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015,port, "PORTO",this);
 
         if(this.mode == -1) {
             System.out.println("Capacity for this location is full! Shuting Down!");
@@ -93,7 +93,7 @@ public class ServerWeEat {
         }
 
         Thread.sleep(200000);
-*/
+/**/
         HttpsServer server = getHttpsServer(port);
         server.createContext("/",new ServerHttpHandler(this));
 

@@ -4,6 +4,7 @@ import network.load_balancer.ServerConnection;
 import network.load_balancer.ServerPair;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -15,7 +16,6 @@ public class ConnectionArmy {
     private static String confirmationCode = "Batata";
 
     private ConcurrentHashMap<String, ServerPair> servers = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String,String> ipToLocation = new ConcurrentHashMap<>();
 
     private ArrayList<SecureServerQuarters> listeners = new ArrayList<>();
 
@@ -54,11 +54,16 @@ public class ConnectionArmy {
         if(mode == -1)
             return false;
 
-        ipToLocation.put(connection.getIP()+":"+connection.getPort(), connection.getLocation());
         connection.setMode(mode);
         return  true;
 
     }
+
+    public Collection<String> getLocations(){
+
+        return servers.keySet();
+    }
+
 
     @Override
     public String toString() {

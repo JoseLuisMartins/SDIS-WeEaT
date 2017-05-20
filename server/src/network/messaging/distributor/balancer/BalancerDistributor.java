@@ -5,9 +5,11 @@ import network.load_balancer.LoadBalancer;
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
 import network.messaging.distributor.server.ServerDistributor;
+import network.sockets.ConnectionArmy;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by joao on 5/9/17.
@@ -15,7 +17,7 @@ import java.io.IOException;
 public class BalancerDistributor extends Distributor {
 
     public final static int REQUEST_SERVER = 0;
-    public final static int STORE_SERVER = 1;
+    public final static int REQUEST_LOCATIONS = 1;
 
 
     private LoadBalancer loadBalancer;
@@ -23,23 +25,44 @@ public class BalancerDistributor extends Distributor {
     public BalancerDistributor(LoadBalancer balancer){
         loadBalancer = balancer;
         addAction(REQUEST_SERVER, (Message m) -> requestServer(m));
-        addAction(STORE_SERVER  , (Message m) -> storeServer(m));
+        addAction(REQUEST_LOCATIONS , (Message m) -> requestLocations(m));
     }
 
     public void requestServer(Message m){
 
-        System.out.println((String)m.getContent());
+        String location = (String)m.getContent();
+
+        JSONObject obj = new JSONObject();
+
+        obj.put("ip", loadBalancer.getIPByLocation(location));
+        obj.put("port", loadBalancer.getPortByLocation(location));
+
 
         try {
-           Distributor.sendMessage(m.getHttpExchange().getResponseBody(), new Message(ServerDistributor.SET_MODE,"HelloMan", null));
-           System.out.println("Message Sent");
+           Distributor.sendMessage(m.getHttpExchange().getResponseBody(),
+                   new Message(ServerDistributor.SET_MODE, obj.toString()));
+
+           System.out.println("Sent IP/Port" + obj.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void storeServer(Message m){
+    public void requestLocations(Message m){
+
+        Collection<String> list = loadBalancer.getConnectionArmy().getLocations();
+
+        JSONObject obj = new JSONObject();
+        obj.put("locations", list);
+
+        try{
+            Distributor.sendMessage(m.getHttpExchange().getResponseBody(),
+                    new Message((ServerDistributor.SET_MODE),obj.toString()));
+            System.out.println("Sent ServerLocations");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 

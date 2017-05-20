@@ -51,6 +51,23 @@ public class LoadBalancer implements HttpHandler {
 
     }
 
+    public ConnectionArmy getConnectionArmy(){
+        return army;
+    }
+
+    public String getIPByLocation(String location){
+        if(!servers.containsKey(location))
+            return null;
+
+        return  servers.get(location).getIP();
+    }
+
+    public int getPortByLocation(String location){
+        if(!servers.containsKey(location))
+            return -1;
+
+        return servers.get(location).getPort();
+    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {

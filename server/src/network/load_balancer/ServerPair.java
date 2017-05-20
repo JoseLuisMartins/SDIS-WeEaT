@@ -57,6 +57,21 @@ public class ServerPair {
         backupServer.setServerData("OPER", operatingServer.getIP(), operatingServer.getPort());
     }
 
+    public String getIP(){
+        if(operatingServer == null)
+            return null;
+
+        return operatingServer.getIP().replace("/","");
+
+    }
+
+    public int getPort(){
+        if(operatingServer == null)
+            return -1;
+
+        return operatingServer.getPort();
+    }
+
     public int addServerConnection(ServerConnection con){
         System.out.println("TET" + this.toString());
         if(operatingServer == null) {
