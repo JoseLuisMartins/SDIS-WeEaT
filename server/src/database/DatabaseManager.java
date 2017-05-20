@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class DatabaseManager {
 
     //Root path for pgsql folder
-    public static String bin_path = "/usr/bin";//"C:\\PostgreSQL\\pg96\\bin";
+    public static String bin_path = "C:\\PostgreSQL\\pg96\\bin";//"/usr/bin";
     public static int interval = 15;
     private static boolean outdated = false;
     private static boolean backup_started = false;
@@ -146,7 +146,7 @@ public class DatabaseManager {
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
         commands.add("-v");
-        commands.add("." + File.separator + "db.backup"); //received.backup local do file output após backup
+        commands.add("." + File.separator + "received.backup"); //received.backup local do file output após backup
 
         launch_process(commands);
 
@@ -161,7 +161,7 @@ public class DatabaseManager {
 
         try {
             Process p = pb.start();
-/*
+
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = buf.readLine();
@@ -171,7 +171,7 @@ public class DatabaseManager {
                 line = buf.readLine();
             }
             buf.close();
-*/
+
             p.waitFor();
             p.destroy();
         } catch (IOException e) {

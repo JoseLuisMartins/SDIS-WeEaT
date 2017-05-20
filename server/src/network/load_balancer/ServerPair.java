@@ -25,7 +25,7 @@ public class ServerPair {
         }else if(backupServer.equals(connection)){
             backupServer = null;
             if(operatingServer != null){
-                operatingServer.removeServerData("RBAK");
+                operatingServer.removeServerData("RBAC");
             }
         }
     }

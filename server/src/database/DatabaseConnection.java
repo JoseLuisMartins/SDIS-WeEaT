@@ -7,6 +7,9 @@ import org.postgresql.geometric.PGpoint;
 import org.postgresql.util.PSQLException;
 
 import javax.xml.crypto.dsig.keyinfo.PGPData;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -29,10 +32,15 @@ public class DatabaseConnection {
     * sudo systemctl restart postgresql.service
     */
     public DatabaseConnection(boolean restore) {
+
         DatabaseManager.database_create();
         DatabaseManager.database_init();
-        if(restore)
+
+
+        if(restore && Files.exists(Paths.get(System.getProperty("user.dir") + File.separator + "received.backup"))) {
+            System.out.println("Restoring Database in DatabaseConnection Constructor!");
             DatabaseManager.database_restore();
+        }
         connect();
 
     }

@@ -35,7 +35,6 @@ public class SecureClientQuarters extends SecureClient{
         this.server = server;
         this.httpsPort = httpsPort;
         handShake();
-        this.start();
 
     }
 
@@ -49,13 +48,14 @@ public class SecureClientQuarters extends SecureClient{
 
     public void handShake() throws IOException {
 
+        System.out.println("Starting Handshake!");
         writer = new PrintWriter(socket.getOutputStream(), true);
         writer.println(confirmationCode + location);
         writer.println(httpsPort);
         inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String res = inputStream.readLine();
-        dispatch(res);
-        res = inputStream.readLine();
+        if(res == null)
+            res = "MODEFULL";
         dispatch(res);
     }
 
@@ -74,7 +74,7 @@ public class SecureClientQuarters extends SecureClient{
 
         while (true){
             try{
-                System.out.println("SecureClientQuarters: Waiting For MSG!");
+                System.out.println("SecureClientQuarters: Waiting For MSG!\n");
                 String msg = inputStream.readLine();
                 if(msg == null)
                     throw new Exception();
@@ -124,6 +124,8 @@ public class SecureClientQuarters extends SecureClient{
             server.setMode(Utils.SERVER_BACKUP);
         } else if(mode.equals("OPERATOR")){
             server.setMode(Utils.SERVER_OPERATING);
+        } else if(mode.equals("FULL")){
+            server.shutdown();
         } else {
             System.out.println("Unrecognized Mode!");
         }

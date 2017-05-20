@@ -51,8 +51,10 @@ public class ConnectionArmy {
 
 
         int mode = pair.addServerConnection(connection);
-        if(mode == -1)
+        if(mode == -1) {
+            connection.setMode(-1);
             return false;
+        }
 
         connection.setMode(mode);
         return  true;

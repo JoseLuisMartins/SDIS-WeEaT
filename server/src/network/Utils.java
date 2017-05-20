@@ -25,7 +25,7 @@ public class Utils {
     }
 
 
-    static {
+    public static void init() {
 
         try {
             google = new GoogleLoginChecker();
@@ -53,11 +53,10 @@ public class Utils {
             sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public static String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();

@@ -86,6 +86,10 @@ public class ServerConnection extends  Thread{
     }
 
     public void setMode(int mode){
+        if(mode == -1){
+            outputStream.println("MODE" + "FULL");
+            return;
+        }
         outputStream.println("MODE" + ((mode == ServerPair.SERVER_BACKUP)? "BACKUP" : "OPERATOR"));
     }
 

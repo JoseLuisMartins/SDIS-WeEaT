@@ -7,6 +7,7 @@ import network.messaging.distributor.server.ServerDistributor;
 import network.protocol.SecureClientBermuda;
 import network.protocol.SecureServerBermuda;
 import network.sockets.SecureClientQuarters;
+import sun.nio.ch.ThreadPool;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class ServerWeEat {
 
@@ -27,16 +30,19 @@ public class ServerWeEat {
     private SecureServerBermuda server_bermuda = null;
     private String ip_to_connect = null;
     private static final int port_to_connect = 27000;
+    private HttpsServer server = null;
 
     public static void main(String args[]){
 
 
         try {
-            //Uncomment if you wish to use the awesome loadBalancer C;
 
+            /* Uncommented for stand alone server
+            Utils.init();
             //Set true for restore
             Utils.initDB(false);
-            ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8000);
+            */
+            ServerWeEat s = new ServerWeEat("127.0.0.1", 8888,8001);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,7 +50,7 @@ public class ServerWeEat {
 
     }
 
-    public void setMode(int mode){
+    public void setMode(int mode) {
 
         System.out.println("Changed ServerWeEat mode to:" + mode);
 
@@ -53,53 +59,79 @@ public class ServerWeEat {
 
         if(this.mode == -1){//First boot
             if(mode == Utils.SERVER_BACKUP){
+                if(server != null){
+                    server.stop(1);
+                    if(server.getExecutor() != null)
+                        ((ThreadPoolExecutor)server.getExecutor()).shutdown();
+                    server = null;
+                }
                 if(ip_to_connect != null && client_bermuda == null) {
                     try {//Ligar o client para receber o backup da base de dados
                         client_bermuda = new SecureClientBermuda(ip_to_connect, port_to_connect);
-                        client_bermuda.run();
+                        client_bermuda.start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             } else {//SERVER OPERATOR
                 if(server_bermuda == null){
-                    try {
-                        server_bermuda = new SecureServerBermuda(port_to_connect);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    start_operation(false);
                 }
             }
         } else {
             if(mode == Utils.SERVER_OPERATING){
-
-            } else {
-
+                ip_to_connect = null;
+                if(client_bermuda != null)
+                    client_bermuda.close();
+                client_bermuda = null;
+                start_operation(true);
+            } else {//Switching to backup (never happens, just in case)
+                if(server_bermuda != null)
+                    server_bermuda.close();
+                server_bermuda = null;
+                setIp_confirmation(null);
             }
         }
 
         this.mode = mode;
     }
 
-    public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
+    private void start_operation(boolean restore) {
 
-/*
-        request = loadBalancerIP;
-        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015,port, "PORTO",this);
+        try {
+            server_bermuda = new SecureServerBermuda(port_to_connect);
+            Utils.init();
+            Utils.initDB(restore);
 
-        if(this.mode == -1) {
-            System.out.println("Capacity for this location is full! Shuting Down!");
-            System.exit(-1);
+            if(server != null) {
+
+                server = getHttpsServer(port);
+                server.createContext("/", new ServerHttpHandler(this));
+
+                server.setExecutor(null);
+                server.start();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        Thread.sleep(200000);
-/**/
-        HttpsServer server = getHttpsServer(port);
-        server.createContext("/",new ServerHttpHandler(this));
+    }
 
-        server.setExecutor(null);
-        server.start();
+    public void shutdown(){
+        System.out.println("Capacity for this location is full! Shuting Down!");
+        System.exit(-1);
+    }
 
+    public ServerWeEat(String loadBalancerIP, int loadBalancerPort, int port) throws Exception {
+
+        //Uncomment if you wish to use the awesome loadBalancer C;
+
+        request = loadBalancerIP;
+        SecureClientQuarters balancerClient =  new SecureClientQuarters("127.0.0.1",27015,port, "PORTO",this);
+        balancerClient.start();
+
+        //Thread.sleep(200000);
     }
 
     public static HttpsServer getHttpsServer(int port) throws IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
@@ -142,11 +174,7 @@ public class ServerWeEat {
 
     public void setIp_confirmation(String ip_confirmation) {
 
-        if(server_bermuda != null){
+        if (server_bermuda != null)
             server_bermuda.start_sending_backups(ip_confirmation);
-        } else {
-            server_bermuda.setIp_confirmation(ip_confirmation);
-        }
-
     }
 }

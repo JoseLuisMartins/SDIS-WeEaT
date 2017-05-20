@@ -3,12 +3,12 @@ package network.protocol;
 import network.sockets.SecureClient;
 
 import java.io.*;
-import java.net.UnknownHostException;
+import java.net.Socket;
 
 public class SecureClientBermuda extends SecureClient {
 
-    public static int file_chunk_size = 640000000;
     public static String file_path = "." + File.separator + "received.backup";
+    private boolean run = true;
 
     public SecureClientBermuda(String ip, int port) throws Exception {
         super(ip, port);
@@ -19,46 +19,69 @@ public class SecureClientBermuda extends SecureClient {
         receive_database_backup();
     }
 
-    public void receive_database_backup(){
-
-        System.out.println("Receiving backup data!");
-
-        int bytesRead;
-        int current = 0;
-        FileOutputStream fos = null;
-        BufferedOutputStream bos = null;
-
+    public void close() {
         try {
-
-            System.out.println("Connecting...");
-
-            // receive file
-            byte [] mybytearray  = new byte [file_chunk_size];
-            InputStream is = socket.getInputStream();
-            fos = new FileOutputStream(file_path);
-            bos = new BufferedOutputStream(fos);
-            bytesRead = is.read(mybytearray,0,mybytearray.length);
-            current = bytesRead;
-
-            do {
-                bytesRead =
-                        is.read(mybytearray, current, (mybytearray.length-current));
-                if(bytesRead >= 0) current += bytesRead;
-            } while(bytesRead > -1);
-
-            bos.write(mybytearray, 0 , current);
-            bos.flush();
-            System.out.println("File " + file_path
-                    + " downloaded (" + current + " bytes read)");
-            fos.close();
-            bos.close();
             socket.close();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+            run = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        receive_database_backup();
+    public void receive_database_backup(){
+
+        while(run) {
+            System.out.println("Receiving backup data!");
+
+            int bytesRead;
+            int current = 0;
+            FileOutputStream fos = null;
+
+            try {
+
+                System.out.println("Connecting...");
+
+                // receive file
+                InputStream in = socket.getInputStream();
+                byte[] file_size_array = new byte[4];
+
+                int file_size = 0;
+                while(file_size < 4) {
+                    System.out.println("Reading : " + file_size);
+                    System.out.println(file_size_array.toString());
+                    file_size += in.read(file_size_array, file_size, 4 - file_size);
+                }
+
+                //Reading file size
+                System.out.println("Bytes Read : " + file_size);
+                file_size = 0;
+                file_size |= file_size_array[0] << 8 * 3;
+                file_size |= file_size_array[1] << 8 * 2;
+                file_size |= file_size_array[2] << 8;
+                file_size |= file_size_array[3];
+                System.out.println("File Size is : " + file_size);
+
+                System.out.println("Connected!");
+
+                byte[] byte_array = new byte[file_size];
+                // Writing the file to disk
+                // Instantiating a new output stream object
+                OutputStream output = new FileOutputStream(file_path);
+
+                int count = 0;
+                do {
+                    bytesRead = in.read(byte_array);
+                    System.out.println("Count : " + count + " | Bytes Read : " + bytesRead);
+                    output.write(byte_array, count, bytesRead);
+                    count += bytesRead;
+                } while (count < file_size);
+
+                output.close();
+                //socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
     }
 }
