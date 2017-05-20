@@ -3,11 +3,16 @@ package network;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.gui.LoginActivity;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.security.ProviderInstaller;
 
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
@@ -34,19 +39,30 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class Client {
 
-
+    private Context context;
     private SSLContext sslContext;
     private Distributor distributor;
     private GoogleSignInAccount account;
     private ArrayList<Object> actionObjects;
+    private GoogleApiClient googleApiClient;
 
 
 
-    public Client(Context context) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException, UnrecoverableKeyException {
-        initSSLContext(context);
-        distributor = new ClientDistributor();
-        actionObjects=null;
+    public Client(Context context,GoogleApiClient googleApiClient) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException, UnrecoverableKeyException {
+        this.context = context;
+        this.googleApiClient = googleApiClient;
+        this.distributor = new ClientDistributor();
+        this.actionObjects = null;
+        initSSLContext();
     }
+
+    public void logout(){
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
+            Intent i = new Intent(context,LoginActivity.class);
+            context.startActivity(i);
+        });
+    }
+
 
 
     public Client setAccount(GoogleSignInAccount account) {
@@ -81,10 +97,10 @@ public class Client {
     }
 
 
-    public void initSSLContext(Context context) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException {
+    public void initSSLContext() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException {
 
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(context.getResources().openRawResource(R.raw.truststore), "123456".toCharArray());
+        keyStore.load(this.context.getResources().openRawResource(R.raw.truststore), "123456".toCharArray());
 
         // Create a TrustManager that trusts the CAs in our KeyStore
         String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();

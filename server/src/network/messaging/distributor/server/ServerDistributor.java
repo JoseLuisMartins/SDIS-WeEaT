@@ -11,6 +11,7 @@ import network.messaging.distributor.Distributor;
 import network.messaging.distributor.client.ClientDistributor;
 
 import network.notification.NotificationWebSocketServer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
@@ -30,7 +31,7 @@ public class ServerDistributor extends Distributor {
     public static final int ADD_CHAT_MESSAGE = 5;
     public static final int GET_CHAT_GROUPS = 6;
     public static final int GET_CHAT_MEMBERS = 7;
-    public static final int GET_CHAT_MESSAGES = 8;
+    public static final int GET_CHAT_DATA = 8;
 
     private ServerWeEat serverWeEat;
 
@@ -43,7 +44,7 @@ public class ServerDistributor extends Distributor {
         addAction(ADD_CHAT_MESSAGE, (Message m) -> addChatMessage(m));
         addAction(GET_CHAT_GROUPS, (Message m) -> getChatGroups(m));
         addAction(GET_CHAT_MEMBERS, (Message m) -> getChatMembers(m));
-        addAction(GET_CHAT_MESSAGES, (Message m) -> getChatMessages(m));
+        addAction(GET_CHAT_DATA, (Message m) -> getChatData(m));
     }
 
 
@@ -208,8 +209,9 @@ public class ServerDistributor extends Distributor {
             return;
         }
 
-        JSONObject res = Utils.db.get_chat_members(obj.getDouble("lat"),obj.getDouble("long"));
-
+        JSONObject res= new JSONObject();
+        JSONArray chatMembers = Utils.db.get_chat_members(obj.getDouble("lat"),obj.getDouble("long"));
+        res.put("chatMembers",chatMembers);
         try {
             sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.RESPONSE,res.toString()));
         } catch (IOException e) {
@@ -217,7 +219,7 @@ public class ServerDistributor extends Distributor {
         }
     }
 
-    public void getChatMessages(Message m){
+    public void getChatData(Message m){
         System.out.println("get chat messages");
         //ADD USER TO CHAT
         JSONObject obj = new JSONObject((String)m.getContent());
@@ -245,12 +247,19 @@ public class ServerDistributor extends Distributor {
         Utils.db.add_chat_member(new ChatMember(chat_location,member));
         Utils.db.debug_chatmembers();
 
+        JSONObject res= new JSONObject();
         //Return the messages to the user
-        JSONObject res = Utils.db.get_chat_messages(chat_location);
-        System.out.println(res.toString());
+        JSONArray messages = Utils.db.get_chat_messages(chat_location);
+        res.put("messages",messages);
+        System.out.println(messages.toString());
+
+        //Return chat members to the user
+        JSONArray chatMembers = Utils.db.get_chat_members(latitude,longitude);
+        res.put("chatMembers",chatMembers);
+
 
         try {
-            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.FILL_MESSAGES,res.toString()));
+            sendMessage(m.getHttpExchange().getResponseBody(),new Message(ClientDistributor.UPDATE_CHAT,res.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -35,11 +35,14 @@ public class MessageDB {
     public JSONObject toJson(){
         JSONObject res= new JSONObject();
         UserWeeat user = Utils.db.get_user(poster);
+        ChatRoom chat = Utils.db.get_chat(chat_location);
 
         res.put("date","Pass data string");
         res.put("content",content);
         res.put("chat_lat",chat_location.x);
         res.put("chat_long",chat_location.y);
+        res.put("title",chat.getTitle());
+        res.put("chatDate",chat.getDate().getTime());
         res.put("poster",poster);
         res.put("name",user.getUsername());
         res.put("imageUrl",user.getImage_url());

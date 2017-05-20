@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-import network.messaging.Message;
 
 public class ChatMessage {
 
@@ -15,14 +14,21 @@ public class ChatMessage {
     private String name;
     private String image_url;
     private String email;
+    private String chatTitle;
+    private Double latitude;
+    private Double longitude;
+    private long chatDate;
     private long date;
 
-    public ChatMessage(String message, MessageType messageType, String name, String image_url, String email, long date) {
+
+    public ChatMessage(String message, MessageType messageType, String name, String image_url, String email, String chatTitle, long chatdate, long date) {
         this.message = message;
         this.messageType = messageType;
         this.name = name;
         this.image_url = image_url;
         this.email = email;
+        this.chatTitle = chatTitle;
+        this.chatDate = chatdate;
         this.date = date;
     }
 
@@ -35,7 +41,12 @@ public class ChatMessage {
             this.image_url = m.getString("imageUrl");
             this.name = m.getString("name");
             this.email = m.getString("poster");
+            this.chatTitle = m.getString("title");
+            this.chatDate = m.getLong("chatDate");
             this.date = new Date().getTime();
+            this.latitude = m.getDouble("chat_lat");
+            this.longitude = m.getDouble("chat_long");
+
 
             //check if i am the user who sent the message
 
@@ -50,8 +61,21 @@ public class ChatMessage {
         }
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
 
+    public Double getLongitude() {
+        return longitude;
+    }
 
+    public String getChatTitle() {
+        return chatTitle;
+    }
+
+    public long getChatDate() {
+        return chatDate;
+    }
 
     public String getMessage(){
         return message;

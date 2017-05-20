@@ -9,16 +9,6 @@
     android:orientation="vertical"
     tools:context="com.example.josemartins.sdis_weeat.gui.ChooseLocal">
 
-        <TextView
-            android:id="@+id/choosePlaceTitle"
-            android:layout_width="match_parent"
-            android:layout_height="48sp"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:textSize="35sp"
-            android:text="Choose a place to eat"
-            android:layout_weight="0.05" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

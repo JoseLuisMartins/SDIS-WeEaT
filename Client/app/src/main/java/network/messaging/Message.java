@@ -2,9 +2,7 @@ package network.messaging;
 
 
 
-import android.app.Activity;
 
-import com.example.josemartins.sdis_weeat.gui.MapFragment;
 
 import java.io.*;
 import java.util.ArrayList;

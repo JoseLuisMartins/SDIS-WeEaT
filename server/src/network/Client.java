@@ -64,7 +64,7 @@ public class Client {
             Message.sendURLMessage(url, new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()), d);
             Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_GROUPS, jsonAddMessage.toString()), d);
             Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MEMBERS, jsonChatMembers.toString()), d);
-            Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_MESSAGES, jsonChatMessages.toString()), d);
+            Message.sendURLMessage(url, new Message(ServerDistributor.GET_CHAT_DATA, jsonChatMessages.toString()), d);
 
 
         } catch (Exception e) {

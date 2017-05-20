@@ -2,8 +2,12 @@ package com.example.josemartins.sdis_weeat.gui;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -13,13 +17,11 @@ import android.widget.TextView;
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.ActionObject;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
-import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import network.NotificationsWebSocket;
@@ -28,20 +30,22 @@ import network.messaging.distributor.server.ServerDistributor;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private TextView title;
     private TextView messageView;
     private ListView msgList;
     private ImageView sendBtn;
     private ChatArrayAdapter chatArrayAdapter;
     private LatLng chatId;
     private boolean side = true;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private NavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        title = (TextView) findViewById(R.id.title);
+
         messageView = (TextView) findViewById(R.id.message);
         msgList = (ListView) findViewById(R.id.msgList);
         sendBtn = (ImageView) findViewById(R.id.sendButton);
@@ -70,31 +74,54 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //side bar
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
+
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        navView = (NavigationView) findViewById(R.id.navigationView);
 
 
         //receive chat notifications
         Bundle res = getIntent().getExtras();
         chatId = new LatLng(res.getDouble("lat"),res.getDouble("long"));
-        title.setText(res.getString("title") + "  " + res.getString("date"));
+        setTitle(res.getString("title") + "\n" + res.getString("date"));
 
         NotificationsWebSocket.request(chatArrayAdapter, this,chatId);
 
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(drawerToggle.onOptionsItemSelected(item))
+            return true;
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         try {
+
             ArrayList<Object> actionObject = new ArrayList<>();
             actionObject.add(ActionObject.CHAT_ADAPTER,chatArrayAdapter);
             actionObject.add(ActionObject.CHAT_ACTIVITY,this);
+            actionObject.add(ActionObject.CHAT_MENU,navView.getMenu());
             Utils.client.setActionObjects(actionObject);
 
             JSONObject jsonGetChatMessages = new JSONObject();
             jsonGetChatMessages.put("lat",chatId.latitude);
             jsonGetChatMessages.put("long",chatId.longitude);
 
-            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_MESSAGES , jsonGetChatMessages.toString()));
+            Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.GET_CHAT_DATA, jsonGetChatMessages.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,8 +154,5 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void setTitle(String titleString){
-        title.setText(titleString);
-    }
 
 }

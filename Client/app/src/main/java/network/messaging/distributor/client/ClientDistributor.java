@@ -2,6 +2,8 @@ package network.messaging.distributor.client;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.SubMenu;
 
 import com.example.josemartins.sdis_weeat.gui.MapFragment;
 import com.example.josemartins.sdis_weeat.logic.ActionObject;
@@ -24,14 +26,14 @@ public class ClientDistributor extends Distributor {
     public static final int RESPONSE = 0;
     public static final int UNLOGGED = 1;
     public static final int FILL_MAP_MARKERS = 2;
-    public static final int FILL_MESSAGES = 3;
+    public static final int UPDATE_CHAT = 3;
 
     public ClientDistributor(){
 
         addAction(RESPONSE, (Message m) -> response(m));
         addAction(UNLOGGED, (Message m) -> unLogged(m));
         addAction(FILL_MAP_MARKERS, (Message m) -> fillMapMarkers(m));
-        addAction(FILL_MESSAGES, (Message m) -> fillMessages(m));
+        addAction(UPDATE_CHAT, (Message m) -> updateChat(m));
 
     }
 
@@ -41,6 +43,8 @@ public class ClientDistributor extends Distributor {
 
     public void unLogged(Message m){
         Log.d("debug","Please Login Again");
+
+        //Intent i =
     }
 
 
@@ -78,24 +82,34 @@ public class ClientDistributor extends Distributor {
     }
 
 
-    public void fillMessages(Message m) {
+    public void updateChat(Message m) {
         //fill the chat with the last messages
 
         try {
-            Log.d("debug", "Chat messages:\n " + m.getContent());
+            Log.d("debug", "Chat messageees:\n " + m.getContent());
             ArrayList<Object> actionObjects =  m.getActionObjects();
             ChatArrayAdapter chatAdapter= (ChatArrayAdapter) actionObjects.get(ActionObject.CHAT_ADAPTER);
             Activity chatActivity = (Activity) actionObjects.get(ActionObject.CHAT_ACTIVITY);
+            Menu menu = (Menu) actionObjects.get(ActionObject.CHAT_MENU);
 
 
-            JSONObject markers = new JSONObject((String) m.getContent());
-            JSONArray markersInf = markers.getJSONArray("messages");
+
+            JSONObject messages = new JSONObject((String) m.getContent());
+            JSONArray messagesInf = messages.getJSONArray("messages");
+            JSONArray chatMembersInf = messages.getJSONArray("chatMembers");
 
 
             chatActivity.runOnUiThread(() -> {
                 try {
-                    for (int i = 0; i < markersInf.length(); i++) {
-                        JSONObject message= markersInf.getJSONObject(i);
+                    SubMenu s = menu.addSubMenu("Chat Participants");
+                    for (int i = 0; i < chatMembersInf.length(); i++) {
+                        JSONObject chatMember= chatMembersInf.getJSONObject(i);
+                        s.add((String)chatMember.get("name"));
+
+                    }
+
+                    for (int i = 0; i < messagesInf.length(); i++) {
+                        JSONObject message= messagesInf.getJSONObject(i);
                         chatAdapter.add(new ChatMessage(message));
                     }
                 }catch (JSONException e) {

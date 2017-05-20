@@ -32,6 +32,15 @@ public class ChatRoom {
         return res;
     }
 
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     @Override
     public String toString() {
         return "ChatRoom{" +

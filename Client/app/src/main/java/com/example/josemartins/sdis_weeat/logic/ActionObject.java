@@ -7,5 +7,6 @@ public class ActionObject {
     public static int MAP_ACTIVITY = 1;
     public static int CHAT_ADAPTER = 0;
     public static int CHAT_ACTIVITY = 1;
+    public static int CHAT_MENU = 2;
 
 }

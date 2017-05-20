@@ -4,14 +4,14 @@ import network.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
-import org.postgresql.util.PSQLException;
 
-import javax.xml.crypto.dsig.keyinfo.PGPData;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 
 public class DatabaseConnection {
 
@@ -140,6 +140,29 @@ public class DatabaseConnection {
         return user;
     }
 
+
+    public  ChatRoom get_chat(PGpoint location) {
+
+        ChatRoom chat = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT * FROM chatroom WHERE location ~= ?;");
+            stmt.setObject(1,location);
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+
+            chat = new ChatRoom(rs.getInt("id"),(PGpoint)rs.getObject("location"),rs.getTimestamp("date"), rs.getString("title"));
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return chat;
+    }
+
     public JSONObject get_chatrooms() {
 
         JSONArray jsonArray = null;
@@ -161,7 +184,7 @@ public class DatabaseConnection {
         return res;
     }
 
-    public JSONObject get_chat_messages(PGpoint chat_location) {
+    public JSONArray get_chat_messages(PGpoint chat_location) {
 
         JSONArray jsonArray = new JSONArray();
 
@@ -191,13 +214,11 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
 
-        JSONObject res = new JSONObject();
-        res.put("messages",jsonArray);
 
-        return res;
+        return jsonArray;
     }
 
-    public JSONObject get_chat_members(double x,double y) {
+    public JSONArray get_chat_members(double x,double y) {
 
         PGpoint location = new PGpoint(x,y);
         JSONArray jsonArray = new JSONArray();
@@ -205,7 +226,7 @@ public class DatabaseConnection {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("SELECT * FROM chat_member WHERE chat_location = ?;");
+            stmt = conn.prepareStatement("SELECT * FROM chat_member WHERE chat_location ~= ?;");
             stmt.setObject(1,location);
             ResultSet rs = stmt.executeQuery();
 
@@ -224,10 +245,8 @@ public class DatabaseConnection {
         }
 
 
-        JSONObject res = new JSONObject();
-        res.put("chat_users",jsonArray);
 
-        return res;
+        return jsonArray;
     }
 
     public void add_chatroom(ChatRoom cr) {
@@ -259,14 +278,26 @@ public class DatabaseConnection {
         PGpoint location_chat = cm.chat_location;
         String member = cm.member;
         PreparedStatement stmt = null;
+        PreparedStatement check_stmt = null;
+
         try {
-            stmt = conn.prepareStatement("INSERT INTO chat_member (chat_location, member) VALUES (?, ?)");
-            stmt.setObject(1,location_chat);
-            stmt.setString(2,member);
 
-            Boolean rs = stmt.execute();
+            check_stmt = conn.prepareStatement("SELECT * FROM chat_member WHERE  member = ? AND chat_location ~= ?;");
+            check_stmt.setString(1,member);
+            check_stmt.setObject(2,location_chat);
 
-            stmt.close();
+            if(!check_stmt.executeQuery().next()) {
+                stmt = conn.prepareStatement("INSERT INTO chat_member (chat_location, member) VALUES (?, ?)");
+                stmt.setObject(1, location_chat);
+                stmt.setString(2, member);
+
+                Boolean rs = stmt.execute();
+
+                stmt.close();
+
+            }
+
+            check_stmt.close();
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

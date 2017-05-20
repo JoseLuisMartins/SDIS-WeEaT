@@ -5,13 +5,11 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.util.Log;
@@ -19,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.example.josemartins.sdis_weeat.R;
@@ -41,8 +40,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
@@ -56,6 +53,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     private GoogleMap myMap;
     private MapView mMapView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
 
 
     @Override
@@ -258,6 +256,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
     public void openTimePicker(EditText group_date) {
         final Calendar c = Calendar.getInstance();
+
         int mHour = c.get(Calendar.HOUR_OF_DAY);
         int mMinute = c.get(Calendar.MINUTE);
 
@@ -275,5 +274,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     public void changeMapType(int type) {
         myMap.setMapType(type);
     }
+
 
 }

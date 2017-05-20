@@ -2,7 +2,6 @@ package com.example.josemartins.sdis_weeat.gui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.logic.Utils;
 import network.Client;
-import network.NotificationsWebSocket;
 import network.messaging.Message;
 import network.messaging.distributor.server.ServerDistributor;
 
@@ -27,10 +25,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     Context context;
     private SignInButton signIn;
@@ -41,15 +38,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
+
 
         this.context = this;
 
-        try {
-            Utils.client = new Client(context);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         signIn = (SignInButton) findViewById(R.id.signInButton);
         signIn.setOnClickListener(signInListener);
@@ -59,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken("1077664049472-kcih82jenig0b27oge2ubekqqk5414qp.apps.googleusercontent.com").build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
 
-
+        try {
+            Utils.client = new Client(context,googleApiClient);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -95,23 +92,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             GoogleSignInAccount account = result.getSignInAccount();
 
             Utils.client.setAccount(account);
-
-            findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
-            //findViewById(R.id.logout).setVisibility(View.VISIBLE);
-
             request();
         }
     }
 
 
-    public void logout(View v){
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
-                findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
-                findViewById(R.id.logout).setVisibility(View.INVISIBLE);
-                Utils.client.setAccount(null);
-            }
-        );
-    }
 
     public void request(){
 

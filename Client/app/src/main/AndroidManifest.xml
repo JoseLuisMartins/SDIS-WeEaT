@@ -14,14 +14,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCDmvfkFQgLAmlMENLAt4Z8OqGHUDY3ZRs"/>
 
         <activity
-            android:name=".gui.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".gui.LoginActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,7 +35,8 @@
         <activity
             android:name=".gui.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"
+          ></activity>
     </application>
 
 </manifest>

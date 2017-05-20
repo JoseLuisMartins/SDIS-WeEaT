@@ -5,20 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background_image"
     >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background"
-        android:scaleType="center"
-        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="WeEat"
-        android:textColor="#C0C0C0"
+        android:textColor="@color/white"
         android:id="@+id/title"
         android:textSize="90dp"
         tools:layout_constraintRight_creator="1"
@@ -39,25 +34,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
-    <!-- Button
-        android:id="@+id/request"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
-        android:onClick="request"
-        android:text="Request" / -->
 
-    <Button
-        android:id="@+id/logout"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signInButton"
-        android:layout_marginTop="23dp"
-        android:onClick="logout"
-        android:text="Logout" />
 
 
 </RelativeLayout>

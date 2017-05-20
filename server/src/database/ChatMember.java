@@ -1,5 +1,6 @@
 package database;
 
+import network.Utils;
 import org.json.JSONObject;
 import org.postgresql.geometric.PGpoint;
 
@@ -15,9 +16,12 @@ public class ChatMember {
 
     public JSONObject toJson(){
         JSONObject res= new JSONObject();
+        UserWeeat user = Utils.db.get_user(member);
+
         res.put("chat_lat",chat_location.x);
         res.put("chat_long",chat_location.y);
-        res.put("member",member);
+        res.put("name",user.getUsername());
+
 
         return res;
     }

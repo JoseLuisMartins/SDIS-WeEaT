@@ -20,6 +20,7 @@ public class ChooseLocal extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         MapFragment mf =new MapFragment();
 
+        setTitle("Choose a place to eat");
 
         Button btTerrain = (Button) findViewById(R.id.terrain);
         Button btHybrid = (Button) findViewById(R.id.hybrid);
@@ -36,4 +37,8 @@ public class ChooseLocal extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

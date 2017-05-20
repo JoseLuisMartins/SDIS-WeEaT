@@ -9,7 +9,7 @@ public class ClientDistributor extends Distributor{
     public static final int RESPONSE = 0;
     public static final int UNLOGGED = 1;
     public static final int FILL_MAP_MARKERS = 2;
-    public static final int FILL_MESSAGES = 3;
+    public static final int UPDATE_CHAT = 3;
 
     private Client client;
 

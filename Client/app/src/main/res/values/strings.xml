@@ -16,4 +16,7 @@
     <string name="title_activity_choose_local">ChooseLocal</string>
     <string name="title_activity_chat">ChatActivity</string>
 
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>
