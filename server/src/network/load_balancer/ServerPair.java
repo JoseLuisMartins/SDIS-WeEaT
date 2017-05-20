@@ -13,11 +13,14 @@ public class ServerPair {
         System.out.println("REMOVING!! Connection");
 
         if(operatingServer.equals(connection)){
-
-            backupServer.removeServerData("ROPE");
-            operatingServer = backupServer;
-            operatingServer.setMode(SERVER_OPERATING);
-            backupServer = null;
+            if(backupServer != null) {
+                backupServer.removeServerData("ROPE");
+                operatingServer = backupServer;
+                operatingServer.setMode(SERVER_OPERATING);
+                backupServer = null;
+            }else{
+                operatingServer = null;
+            }
 
         }else if(backupServer.equals(connection)){
             backupServer = null;
