@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class SecureClientQuarters extends SecureClient{
 
-    private static String confirmationCode = "Batata";
+    private static String confirmationCode = "Confirmed";
     private String location;
     private int webSocketPort;
     private String webSocketIP;

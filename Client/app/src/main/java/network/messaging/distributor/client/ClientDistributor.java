@@ -2,6 +2,7 @@ package network.messaging.distributor.client;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.SubMenu;
@@ -22,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import network.messaging.Message;
 import network.messaging.distributor.Distributor;
@@ -55,7 +58,6 @@ public class ClientDistributor extends Distributor {
     public void unLogged(Message m){
         Log.d("debug","Please Login Again");
 
-        //Intent i =
     }
 
 
@@ -79,7 +81,12 @@ public class ClientDistributor extends Distributor {
                     for (int i = 0; i < markersInf.length(); i++) {
                         JSONObject marker = markersInf.getJSONObject(i);
                         LatLng pos = new LatLng(marker.getDouble("lat"),marker.getDouble("long"));
-                        mapFragment.addMarker(pos,marker.getString("title"),Long.valueOf(marker.getLong("date")).toString());
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(Long.valueOf(marker.getLong("date")));
+                        String date = DateFormat.format("HH:mm", cal).toString();
+
+                        mapFragment.addMarker(pos,marker.getString("title"),date);
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -183,12 +190,14 @@ public class ClientDistributor extends Distributor {
             Utils.serverUrl=sbHttps.toString();
 
             StringBuilder sbWs = new StringBuilder();
-            sbHttps.append("ws://");
-            sbHttps.append(serverInf.getString("ip"));
-            sbHttps.append(":");
-            sbHttps.append(serverInf.getString("webPort"));
+            sbWs.append("ws://");
+            sbWs.append(serverInf.getString("ip"));
+            sbWs.append(":");
+            sbWs.append(serverInf.getString("webPort"));
 
             Utils.webSocketUrl = sbWs.toString();
+            Log.d("debug","webSocket" + Utils.webSocketUrl);
+
 
             //Add user
             JSONObject jsonUser = new JSONObject();

@@ -93,6 +93,7 @@ public class ServerDistributor extends Distributor {
 
         PGpoint point = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         Timestamp ts = new Timestamp(obj.getLong("timestamp"));
+        System.out.println("Adding chat: " + "long: " + obj.getLong("timestamp") +  "timestamp: " + ts.getTime());
         String title = obj.getString("title");
 
         Utils.db.add_chatroom(new ChatRoom(-1,point,ts, title));
