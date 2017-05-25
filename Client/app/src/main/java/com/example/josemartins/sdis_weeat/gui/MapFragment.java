@@ -53,6 +53,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
     private GoogleMap myMap;
     private MapView mMapView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private long lastMarkerTime;
+    private TimePickerDialog timePickerDialog;
 
 
 
@@ -133,16 +135,33 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         EditText group_name = (EditText) v.findViewById(R.id.group_name);
         EditText group_date = (EditText) v.findViewById(R.id.group_date);
 
+        //set time variables
+        final Calendar c = Calendar.getInstance();
+
+        this.lastMarkerTime = c.getTimeInMillis();
+
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+        updateTimeView(group_date,mHour,mMinute);
+
+        timePickerDialog = new TimePickerDialog(getActivity(), (view, hourOfDay, minute) -> {
+            c.setTimeInMillis(0);
+            c.set(0,0,0,hourOfDay,minute);
+            this.lastMarkerTime = c.getTimeInMillis();
+            updateTimeView(group_date,hourOfDay,minute);
+        }, mHour, mMinute, false);
+
+
         group_date.setInputType(InputType.TYPE_NULL);
-        group_date.setOnClickListener(v1 -> openTimePicker(group_date));
+        group_date.setOnClickListener((View v1) -> timePickerDialog.show());
 
         createGroup.setView(v);
 
-        createGroup.setTitle("Marcar encontro");
+        createGroup.setTitle("Schedule a meal");
 
-        createGroup.setNegativeButton("Cancelar", (dialog, id) -> dialog.cancel());
+        createGroup.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
 
-        createGroup.setPositiveButton("Criar", (dialog, id) -> {
+        createGroup.setPositiveButton("Create", (dialog, id) -> {
 
             if (!group_name.getText().toString().trim().equals("")) {
                 String groupNameValue = group_name.getText().toString();
@@ -155,8 +174,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
                     JSONObject jsonChatRoom = new JSONObject();
                     jsonChatRoom.put("lat",latLng.latitude);
                     jsonChatRoom.put("long",latLng.longitude);
-                    jsonChatRoom.put("timestamp",456456465);//Todo -> Hard - Coded
+                    jsonChatRoom.put("timestamp",this.lastMarkerTime);
                     jsonChatRoom.put("title",groupNameValue);
+
 
                     Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_CHAT_GROUP, jsonChatRoom.toString()));
                 } catch (Exception e) {
@@ -165,9 +185,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
 
                 AlertDialog.Builder toChat = new AlertDialog.Builder(getActivity());
 
-                toChat.setMessage("Deseja ir para o chat?");
-                toChat.setNegativeButton("Não", (dialog1, which) -> dialog1.cancel());
-                toChat.setPositiveButton("Sim", (dialog1, which) -> goToChat(marker));
+                toChat.setMessage("Go to the chat?");
+                toChat.setNegativeButton("No", (dialog1, which) -> dialog1.cancel());
+                toChat.setPositiveButton("Yes", (dialog1, which) -> goToChat(marker));
 
                 AlertDialog chatView = toChat.create();
                 chatView.show();
@@ -254,23 +274,14 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         startActivity(i);
     }
 
-    public void openTimePicker(EditText group_date) {
-        final Calendar c = Calendar.getInstance();
 
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
-                (view, hourOfDay, minute) -> {
-                    if (minute < 10 && minute > 0)
-                        group_date.setText(hourOfDay + ":0" + minute);
-                    else
-                        group_date.setText(hourOfDay + ":" + minute);
-                }, mHour, mMinute, false);
-
-        timePickerDialog.show();
+    public void updateTimeView(EditText group_date,int hourOfDay,int minute){
+        if (minute < 10 && minute > 0)
+            group_date.setText(hourOfDay + ":0" + minute);
+        else
+            group_date.setText(hourOfDay + ":" + minute);
     }
-
     public void changeMapType(int type) {
         myMap.setMapType(type);
     }

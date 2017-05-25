@@ -13,7 +13,7 @@ public class ConnectionArmy {
     int sameIPConnectionsNum = 1;
     int basePort = 27015;
 
-    private static String confirmationCode = "Batata";
+    private static String confirmationCode = "Confirmed";
 
     private ConcurrentHashMap<String, ServerPair> servers = new ConcurrentHashMap<>();
 

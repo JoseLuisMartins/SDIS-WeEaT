@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.josemartins.sdis_weeat.R;
@@ -39,13 +43,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         this.context = this;
 
 
         signIn = (SignInButton) findViewById(R.id.signInButton);
         signIn.setOnClickListener(signInListener);
+
+        Button settingBtn= (Button) findViewById(R.id.settings_btn);
+        settingBtn.setOnClickListener((View v) -> settingsHandler());
+
 
         customizeSignInButton();
 
@@ -111,4 +117,39 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         }
     }
+
+    public void settingsHandler(){
+
+        LayoutInflater li = LayoutInflater.from(context);
+        View prompt = li.inflate(R.layout.start_dialog,null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(prompt);
+        alertDialogBuilder.setTitle("Finding a new experience");
+        alertDialogBuilder.setPositiveButton("Go", (dialog, id) -> {
+            String ip = ((EditText) prompt.findViewById(R.id.ipValue)).getText().toString();
+            String port= ((EditText) prompt.findViewById(R.id.portValue)).getText().toString();
+
+
+            StringBuilder sbLoadBalancer = new StringBuilder();
+            sbLoadBalancer.append("https://");
+            sbLoadBalancer.append(ip);
+            sbLoadBalancer.append(":");
+            sbLoadBalancer.append(port);
+
+            Log.d("debug", "url-> " + Utils.loadBalancerUrl + " newurl-> " + sbLoadBalancer.toString());
+
+            Utils.loadBalancerUrl = sbLoadBalancer.toString();
+        });
+
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+
+        signIn = (SignInButton) findViewById(R.id.signInButton);
+        signIn.setOnClickListener(signInListener);
+
+        alertDialogBuilder.show();
+    }
+
+
 }
