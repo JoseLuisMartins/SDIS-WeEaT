@@ -3,6 +3,7 @@ package network;
 
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
+import database.DatabaseManager;
 import network.messaging.distributor.server.ServerDistributor;
 import network.protocol.SecureClientBermuda;
 import network.protocol.SecureServerBermuda;
@@ -35,8 +36,8 @@ public class ServerWeEat {
 
     public static void main(String args[]){
 
-        if(args.length != 7){
-            System.out.print("USAGE: \n \t <locationString> <serverIp> <serverPort> <balancerIp> <balancerPort> <WebSocketPort> <backupPort> \n");
+        if(args.length != 8){
+            System.out.print("USAGE: \n \t <locationString> <serverIp> <serverPort> <balancerIp> <balancerPort> <WebSocketPort> <backupPort> <path_to_pgsql_bin>\n");
             return;
         }
 
@@ -47,6 +48,7 @@ public class ServerWeEat {
         int balancerPort= Integer.parseInt(args[4]);
         int webSocketPort= Integer.parseInt(args[5]);
         int backup_to_connect= Integer.parseInt(args[6]);
+        DatabaseManager.bin_path = args[7];
 
         try {
 
