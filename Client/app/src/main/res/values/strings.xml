@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">SDIS-WeEaT</string>
+    <string name="app_name">WeEaT</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="main">WeEat</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
