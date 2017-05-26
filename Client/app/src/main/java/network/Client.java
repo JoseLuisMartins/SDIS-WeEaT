@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.gui.LoginActivity;
+import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -134,11 +136,8 @@ public class Client {
 
                 con.setRequestProperty("token",getToken());
 
-                try {
-                    con.setSSLSocketFactory(sslContext.getSocketFactory());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                con.setSSLSocketFactory(sslContext.getSocketFactory());
 
                 con.setRequestMethod(requestMethod);
                 con.setDoInput(true);
@@ -154,24 +153,24 @@ public class Client {
 
 
                 Message messageReceived = null;
-                try {
-                    messageReceived = (Message)inputStream.readObject();
-                    messageReceived.setActionObjects(actionObjects);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+
+                messageReceived = (Message)inputStream.readObject();
+                messageReceived.setActionObjects(actionObjects);
 
                 distributor.distribute(messageReceived);
 
                 inputStream.close();
 
 
-            } catch (MalformedURLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                ((Activity)Utils.context).runOnUiThread(() -> {
+                    Toast.makeText(Utils.context, "Connection lost, please login again", Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(Utils.context,LoginActivity.class);
+                    Utils.context.startActivity(i);
+
+                });
             }
 
             return null;

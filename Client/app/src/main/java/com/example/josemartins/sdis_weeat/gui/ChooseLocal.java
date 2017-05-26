@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.josemartins.sdis_weeat.R;
+import com.example.josemartins.sdis_weeat.logic.Utils;
 import com.google.android.gms.maps.GoogleMap;
 
 public class ChooseLocal extends AppCompatActivity {
@@ -17,6 +18,7 @@ public class ChooseLocal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_local);
 
+        Utils.context = this;
         android.app.FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         MapFragment mf =new MapFragment();

@@ -46,7 +46,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
+        Utils.context = this;
         messageView = (TextView) findViewById(R.id.message);
         msgList = (ListView) findViewById(R.id.msgList);
         sendBtn = (ImageView) findViewById(R.id.sendButton);

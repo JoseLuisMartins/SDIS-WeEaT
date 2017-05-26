@@ -8,9 +8,12 @@ import android.view.Menu;
 import android.view.SubMenu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.gui.ChooseLocal;
+import com.example.josemartins.sdis_weeat.gui.ChooseServer;
+import com.example.josemartins.sdis_weeat.gui.LoginActivity;
 import com.example.josemartins.sdis_weeat.gui.MapFragment;
 import com.example.josemartins.sdis_weeat.logic.ActionObject;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
@@ -57,6 +60,15 @@ public class ClientDistributor extends Distributor {
 
     public void unLogged(Message m){
         Log.d("debug","Please Login Again");
+
+        ((Activity)Utils.context).runOnUiThread(() -> {
+                Toast.makeText(Utils.context, "Connection lost, please login again", Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(Utils.context,LoginActivity.class);
+                Utils.context.startActivity(i);
+
+            });
+
 
     }
 

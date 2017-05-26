@@ -32,6 +32,8 @@ public class ChooseServer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_server);
 
+        Utils.context = this;
+
         ListView serverListView = (ListView) findViewById(R.id.serverList);
 
         ArrayList<Object> actionObject = new ArrayList<>();

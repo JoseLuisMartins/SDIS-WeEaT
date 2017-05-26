@@ -33,7 +33,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
-    Context context;
+
     private SignInButton signIn;
     private GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE = 9001;
@@ -43,7 +43,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        this.context = this;
+
+        Utils.context = this;
 
 
         signIn = (SignInButton) findViewById(R.id.signInButton);
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
 
         try {
-            Utils.client = new Client(context,googleApiClient);
+            Utils.client = new Client(Utils.context,googleApiClient);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,9 +121,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void settingsHandler(){
 
-        LayoutInflater li = LayoutInflater.from(context);
+        LayoutInflater li = LayoutInflater.from(Utils.context);
         View prompt = li.inflate(R.layout.start_dialog,null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Utils.context);
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(prompt);

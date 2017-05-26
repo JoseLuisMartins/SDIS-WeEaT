@@ -33,6 +33,7 @@ public class Utils {
     public static String loadBalancerUrl = "https://192.168.1.64:8000";
     public static String serverUrl;
     public static String webSocketUrl = "ws://192.168.1.64:8887";
+    public static Context context;
 
 
 
