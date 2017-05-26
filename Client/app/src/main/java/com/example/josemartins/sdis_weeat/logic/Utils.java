@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.format.DateFormat;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.gui.ChatActivity;
@@ -18,6 +19,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Calendar;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -41,17 +43,22 @@ public class Utils {
             return;
 
         //create a notification
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(message.getChatDate());
+        String date = DateFormat.format("HH:mm", cal).toString();
+
+
         Notification.Builder notification = new Notification.Builder(activity.getApplicationContext());
-        notification.setSmallIcon(R.mipmap.ic_launcher);
+        notification.setSmallIcon(R.drawable.ic_food);
         notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle(message.getChatTitle() + " " + Long.toString(message.getChatDate()));
+        notification.setContentTitle(message.getChatTitle() + " " + date);
         notification.setContentText(message.getName() + ": " + message.getMessage());
 
         Intent i = new Intent(activity.getApplicationContext(), ChatActivity.class);
         i.putExtra("lat",message.getLatitude());
         i.putExtra("long",message.getLongitude());
         i.putExtra("title",message.getChatTitle());
-        i.putExtra("date",message.getChatDate());
+        i.putExtra("date",date);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(),0,i,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setContentIntent(pendingIntent);

@@ -30,7 +30,7 @@ public class ChooseLocal extends AppCompatActivity {
 
 
         btTerrain.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_TERRAIN));
-        btSatellite.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_SATELLITE));
+        btSatellite.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_HYBRID));
         btNormal.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_NORMAL));
 
         ft.add(R.id.map,mf);
