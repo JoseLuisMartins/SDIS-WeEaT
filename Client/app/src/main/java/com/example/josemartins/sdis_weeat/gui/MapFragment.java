@@ -91,7 +91,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
             }
 
 
-
             LatLng currPoint = new LatLng(latitude, longitude);
             CameraPosition cameraPosition = new CameraPosition.Builder().target(currPoint).zoom(12).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -99,6 +98,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMapLongClickLis
         } else {
             Log.d("debug","no permissions");
         }
+
     }
 
 

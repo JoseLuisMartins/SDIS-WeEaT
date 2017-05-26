@@ -108,6 +108,7 @@ public class Client {
 
         sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, tmf.getTrustManagers(), null);
+
     }
 
     public void setActionObjects( ArrayList<Object> actionObject) {

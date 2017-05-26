@@ -37,7 +37,7 @@ public class MessageDB {
         UserWeeat user = Utils.db.get_user(poster);
         ChatRoom chat = Utils.db.get_chat(chat_location);
 
-        res.put("date","Pass data string");
+        res.put("date",date);
         res.put("content",content);
         res.put("chat_lat",chat_location.x);
         res.put("chat_long",chat_location.y);

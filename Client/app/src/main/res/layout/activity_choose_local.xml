@@ -5,54 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:background="@color/black"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.example.josemartins.sdis_weeat.gui.ChooseLocal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:orientation="horizontal"
             android:gravity="center|top">
 
-                <Button
+                <ImageButton
+                    android:adjustViewBounds="true"
                     android:id="@+id/normal"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="normal"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_map_black_24dp"
                     />
 
-                <Button
+                <ImageButton
+                    android:adjustViewBounds="true"
                     android:id="@+id/hybrid"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="hybrid"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_terrain_black_24dp"
                     />
 
-                <Button
+                <ImageButton
+                    android:adjustViewBounds="true"
                     android:id="@+id/satellite"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="satellite"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_satellite_black_24dp"
                     />
 
-                <Button
-                    android:id="@+id/terrain"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="terrain"
-                    />
+
 
         </LinearLayout>
 
         <include
             layout="@layout/map_fragment"
             android:layout_width="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="6"
             android:layout_height="wrap_content"
             />
 

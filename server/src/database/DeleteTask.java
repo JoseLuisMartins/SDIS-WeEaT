@@ -14,7 +14,7 @@ public class DeleteTask implements Runnable {
 
             PreparedStatement stmt = null;
             try {
-                stmt = Utils.db.conn.prepareStatement("DELETE FROM messages;");
+                stmt = Utils.db.conn.prepareStatement("DELETE FROM message;");
                 stmt.execute();
 
                 stmt = Utils.db.conn.prepareStatement("DELETE FROM chat_member;");

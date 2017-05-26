@@ -60,14 +60,14 @@ public class NotificationsWebSocket extends WebSocketListener {
 
 
         activity.runOnUiThread(() -> {
-                try {
-                    JSONObject messageJson= new JSONObject(text);
-                    ChatMessage message = new ChatMessage(messageJson);
-                    Utils.createChatNotification(activity,message);
-                    chatArrayAdapter.add(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            try {
+                JSONObject messageJson= new JSONObject(text);
+                ChatMessage message = new ChatMessage(messageJson);
+                Utils.createChatNotification(activity,message);
+                chatArrayAdapter.add(message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
 
     }
@@ -102,4 +102,3 @@ public class NotificationsWebSocket extends WebSocketListener {
         Log.d("debug","------Starting WebSocket-------");
     }
 }
-

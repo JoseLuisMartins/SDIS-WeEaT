@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import network.NotificationsWebSocket;
 import network.messaging.Message;
@@ -133,11 +134,14 @@ public class ChatActivity extends AppCompatActivity {
         if(!(messageView.getText().length() == 0)){
 
             try {
+                Calendar c = Calendar.getInstance();
+                long date = c.getTimeInMillis();
 
                 JSONObject jsonAddMessage = new JSONObject();
                 jsonAddMessage.put("content", messageView.getText().toString());
                 jsonAddMessage.put("lat",chatId.latitude);
                 jsonAddMessage.put("long",chatId.longitude);
+                jsonAddMessage.put("date",date);
 
                 Utils.client.makeRequest(Utils.serverUrl,"POST",new Message(ServerDistributor.ADD_CHAT_MESSAGE, jsonAddMessage.toString()));
 

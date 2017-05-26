@@ -105,29 +105,29 @@ public class NotificationWebSocketServer {
 
         System.out.println("Sending notifications");
 
-            try {
-                ArrayList<Session> usersToNotify = sessions.get(chatLocation);
+        try {
+            ArrayList<Session> usersToNotify = sessions.get(chatLocation);
 
-                if (usersToNotify == null)
-                    return;
+            if (usersToNotify == null)
+                return;
 
-                ArrayList<Session > closedSessions= new ArrayList<>();
+            ArrayList<Session > closedSessions= new ArrayList<>();
 
-                for (Session session : usersToNotify) {
-                    if(!session.isOpen()) {
-                        System.err.println("|Closed session| policy: "+ session.getPolicy());
-                        closedSessions.add(session);
-                    }
-                    else
-                        session.getRemote().sendString(msg);
+            for (Session session : usersToNotify) {
+                if(!session.isOpen()) {
+                    System.err.println("|Closed session| policy: "+ session.getPolicy());
+                    closedSessions.add(session);
                 }
-
-                usersToNotify.removeAll(closedSessions);
-                System.out.println("Sending "+msg+" to "+usersToNotify.size() + " clients on chat with location " + chatLocation);
-
-            } catch (Throwable e) {
-                e.printStackTrace();
+                else
+                    session.getRemote().sendString(msg);
             }
+
+            usersToNotify.removeAll(closedSessions);
+            System.out.println("Sending "+msg+" to "+usersToNotify.size() + " clients on chat with location " + chatLocation);
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
 }

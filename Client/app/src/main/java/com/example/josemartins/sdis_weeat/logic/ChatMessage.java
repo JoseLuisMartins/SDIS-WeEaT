@@ -18,7 +18,7 @@ public class ChatMessage {
     private Double latitude;
     private Double longitude;
     private long chatDate;
-    private long date;
+
 
 
     public ChatMessage(String message, MessageType messageType, String name, String image_url, String email, String chatTitle, long chatdate, long date) {
@@ -29,7 +29,7 @@ public class ChatMessage {
         this.email = email;
         this.chatTitle = chatTitle;
         this.chatDate = chatdate;
-        this.date = date;
+        this.chatDate = date;
     }
 
     public ChatMessage(JSONObject m){
@@ -43,7 +43,6 @@ public class ChatMessage {
             this.email = m.getString("poster");
             this.chatTitle = m.getString("title");
             this.chatDate = m.getLong("chatDate");
-            this.date = new Date().getTime();
             this.latitude = m.getDouble("chat_lat");
             this.longitude = m.getDouble("chat_long");
 
@@ -89,9 +88,6 @@ public class ChatMessage {
         return name;
     }
 
-    public long getDate() {
-        return date;
-    }
 
     public String getImage_url() {
         return image_url;

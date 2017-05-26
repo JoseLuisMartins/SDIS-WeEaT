@@ -13,6 +13,16 @@ import android.support.annotation.RequiresApi;
 import com.example.josemartins.sdis_weeat.R;
 import com.example.josemartins.sdis_weeat.gui.ChatActivity;
 
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+
 import network.Client;
 
 public class Utils {
@@ -49,4 +59,5 @@ public class Utils {
         NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(55555,notification.build());
     }
+
 }

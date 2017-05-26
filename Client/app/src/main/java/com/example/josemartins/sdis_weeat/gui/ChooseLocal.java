@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.josemartins.sdis_weeat.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,12 +23,12 @@ public class ChooseLocal extends AppCompatActivity {
 
         setTitle("Choose a place to eat");
 
-        Button btTerrain = (Button) findViewById(R.id.terrain);
-        Button btHybrid = (Button) findViewById(R.id.hybrid);
-        Button btSatellite = (Button) findViewById(R.id.satellite);
-        Button btNormal = (Button) findViewById(R.id.normal);
 
-        btTerrain.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_TERRAIN));
+        ImageButton btHybrid = (ImageButton) findViewById(R.id.hybrid);
+        ImageButton btSatellite = (ImageButton) findViewById(R.id.satellite);
+        ImageButton btNormal = (ImageButton) findViewById(R.id.normal);
+
+
         btHybrid.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_HYBRID));
         btSatellite.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_SATELLITE));
         btNormal.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_NORMAL));
@@ -37,8 +38,4 @@ public class ChooseLocal extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-
-    }
 }

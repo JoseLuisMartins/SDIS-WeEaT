@@ -160,8 +160,9 @@ public class ServerDistributor extends Distributor {
         String content = obj.getString("content");
         PGpoint chat_location = new PGpoint(obj.getDouble("lat"),obj.getDouble("long"));
         String poster = (String) userInfo.get("email");
+        Timestamp date = new Timestamp(obj.getLong("date"));
 
-        MessageDB chatMessage = new MessageDB(null,content,chat_location,poster);
+        MessageDB chatMessage = new MessageDB(date,content,chat_location,poster);
 
         Utils.db.add_message(chatMessage);
         Utils.db.debug_chatmessages();

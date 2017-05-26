@@ -27,7 +27,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="2dp"
         android:textStyle="bold"
-        android:text=""
+        android:text="Jose Martins"
         android:textSize="10dp"/>
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_marginRight="7dp"
         android:layout_marginLeft="-37dp"
         android:layout_marginTop="2dp"
-        android:text=""
+        android:text="14:00"
         android:textSize="10dp"/>
 
     <ImageView
@@ -53,8 +53,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginRight="8dp"
-        />
+        android:layout_marginRight="8dp" />
 
 
 </LinearLayout>
