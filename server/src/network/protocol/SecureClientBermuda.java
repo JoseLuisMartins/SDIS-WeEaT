@@ -63,6 +63,9 @@ public class SecureClientBermuda extends SecureClient {
 
                 System.out.println("Connected!");
 
+                if(file_size  < 0 )
+                    continue;
+
                 byte[] byte_array = new byte[file_size];
                 // Writing the file to disk
                 // Instantiating a new output stream object
@@ -71,13 +74,17 @@ public class SecureClientBermuda extends SecureClient {
                 int count = 0;
                 do {
                     bytesRead = in.read(byte_array);
+
+                    if(bytesRead == -1)
+                        break;
+
                     System.out.println("Count : " + count + " | Bytes Read : " + bytesRead);
                     output.write(byte_array, count, bytesRead);
                     count += bytesRead;
                 } while (count < file_size);
 
                 output.close();
-                //socket.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 return;

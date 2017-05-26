@@ -130,6 +130,7 @@ public class DatabaseManager {
         commands.add("-F");
         commands.add("c");
         commands.add("-v");
+        commands.add("-b");
         commands.add("-f");
         commands.add("." + File.separator + "db.backup");
         commands.add("weeat");
@@ -139,14 +140,14 @@ public class DatabaseManager {
         System.out.println("Backup Successfull");
     };
 
-    public static void database_restore(){
+    public static void database_restore(String path){
 
         List<String> commands = get_commands("pg_restore");
 
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
         commands.add("-v");
-        commands.add("." + File.separator + "received.backup"); //received.backup local do file output após backup
+        commands.add("." + File.separator + path); //received.backup local do file output após backup
 
         launch_process(commands);
 
@@ -161,7 +162,7 @@ public class DatabaseManager {
 
         try {
             Process p = pb.start();
-/*
+
             // Handle de erros
             BufferedReader buf = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = buf.readLine();
@@ -171,7 +172,7 @@ public class DatabaseManager {
                 line = buf.readLine();
             }
             buf.close();
-*/
+
             p.waitFor();
             p.destroy();
         } catch (IOException e) {

@@ -104,7 +104,7 @@ public class ServerWeEat {
                 }
             } else {//SERVER OPERATOR
                 if(server_bermuda == null){
-                    start_operation(false);
+                    start_operation(true,"db.backup");
                 }
             }
         } else {
@@ -113,7 +113,7 @@ public class ServerWeEat {
                 if(client_bermuda != null)
                     client_bermuda.close();
                 client_bermuda = null;
-                start_operation(true);
+                start_operation(true,"received.backup");
             } else {//Switching to backup (never happens, just in case)
                 if(server_bermuda != null)
                     server_bermuda.close();
@@ -125,12 +125,12 @@ public class ServerWeEat {
         this.mode = mode;
     }
 
-    private void start_operation(boolean restore) {
+    private void start_operation(boolean restore, String path) {
 
         try {
             server_bermuda = new SecureServerBermuda(backupPort);
             Utils.init(this.webSocketIP, this.webSocketPort);
-            Utils.initDB(restore);
+            Utils.initDB(restore,path);
 
             if(server == null) {
 
@@ -158,8 +158,6 @@ public class ServerWeEat {
 
         SSLContext serverContext = SSLContext.getInstance("TLS");
 
-        //ponto 4.3
-        //https://web.fe.up.pt/~pfs/aulas/sd2017/labs/l05/jsse_l05.html
 
         // initialise the keystore
         char[] password = "123456".toCharArray ();

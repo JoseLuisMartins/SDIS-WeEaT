@@ -11,7 +11,7 @@ public class DeleteTask implements Runnable {
     public void run() {
 
         synchronized (Utils.db){
-
+            System.out.println("On delete task");
             PreparedStatement stmt = null;
             try {
                 stmt = Utils.db.conn.prepareStatement("DELETE FROM message;");

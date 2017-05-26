@@ -31,15 +31,16 @@ public class DatabaseConnection {
     * ALTER USER postgres with encrypted password 'sua_senha';
     * sudo systemctl restart postgresql.service
     */
-    public DatabaseConnection(boolean restore) {
+    public DatabaseConnection(boolean restore, String path) {
 
+        DatabaseManager.database_delete();
         DatabaseManager.database_create();
         DatabaseManager.database_init();
 
 
-        if(restore && Files.exists(Paths.get(System.getProperty("user.dir") + File.separator + "received.backup"))) {
+        if(restore && Files.exists(Paths.get(System.getProperty("user.dir") + File.separator + path))) {
             System.out.println("Restoring Database in DatabaseConnection Constructor!");
-            DatabaseManager.database_restore();
+            DatabaseManager.database_restore(path);
         }
         connect();
 
@@ -482,19 +483,5 @@ public class DatabaseConnection {
         }
     }
 
-    public static void main(String args[]) {
 
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
-        DatabaseConnection db = new DatabaseConnection(false);
-
-        db.close();
-        DatabaseManager.database_delete();
-        DatabaseManager.database_create();
-        DatabaseManager.database_init();
-        db.connect();
-
-        System.out.println("Closing...");
-        db.close();
-    }
 }

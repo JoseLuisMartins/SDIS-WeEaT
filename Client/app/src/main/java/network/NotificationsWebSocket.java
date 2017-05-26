@@ -59,19 +59,20 @@ public class NotificationsWebSocket extends WebSocketListener {
                 Utils.createChatNotification(activity,message);
                 chatArrayAdapter.add(message);
 
-
-                SubMenu m = menu.getItem(0).getSubMenu();
-                String user = message.getName();
-                boolean addUser = true;
-                for (int i = 0; i < m.size(); i++) {
-                   String item = (String) m.getItem(i).getTitle();
-                   if(item.equals(user)) {
-                       addUser = false;
-                        break;
-                   }
+                if(menu.size() > 0) {
+                    SubMenu m = menu.getItem(0).getSubMenu();
+                    String user = message.getName();
+                    boolean addUser = true;
+                    for (int i = 0; i < m.size(); i++) {
+                        String item = (String) m.getItem(i).getTitle();
+                        if (item.equals(user)) {
+                            addUser = false;
+                            break;
+                        }
+                    }
+                    if (addUser)
+                        m.add(user);
                 }
-                if(addUser)
-                    m.add(user);
 
             } catch (JSONException e) {
                 e.printStackTrace();

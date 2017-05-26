@@ -66,7 +66,7 @@ public class ServerPair {
     }
 
     public int addServerConnection(ServerConnection con){
-        System.out.println("TET" + this.toString());
+        System.out.println("BEFORE" + this.toString());
         if(operatingServer == null) {
             operatingServer = con;
             operatingServer.setServerPair(this);
