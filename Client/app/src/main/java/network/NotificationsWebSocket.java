@@ -2,21 +2,13 @@ package network;
 
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.Menu;
+import android.view.SubMenu;
 
 
-import com.bumptech.glide.util.Util;
-import com.example.josemartins.sdis_weeat.R;
-import com.example.josemartins.sdis_weeat.gui.ChatActivity;
-import com.example.josemartins.sdis_weeat.gui.ChooseLocal;
 import com.example.josemartins.sdis_weeat.logic.ChatArrayAdapter;
 import com.example.josemartins.sdis_weeat.logic.ChatMessage;
 import com.example.josemartins.sdis_weeat.logic.Utils;
@@ -36,6 +28,7 @@ public class NotificationsWebSocket extends WebSocketListener {
     private Activity activity;
     private ChatArrayAdapter chatArrayAdapter;
     private LatLng chatId;
+    private Menu menu;
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
@@ -65,6 +58,21 @@ public class NotificationsWebSocket extends WebSocketListener {
                 ChatMessage message = new ChatMessage(messageJson);
                 Utils.createChatNotification(activity,message);
                 chatArrayAdapter.add(message);
+
+
+                SubMenu m = menu.getItem(0).getSubMenu();
+                String user = message.getName();
+                boolean addUser = true;
+                for (int i = 0; i < m.size(); i++) {
+                   String item = (String) m.getItem(i).getTitle();
+                   if(item.equals(user)) {
+                       addUser = false;
+                        break;
+                   }
+                }
+                if(addUser)
+                    m.add(user);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -86,17 +94,18 @@ public class NotificationsWebSocket extends WebSocketListener {
     }
 
 
-    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter,Activity activity ,LatLng chatId) {
+    public NotificationsWebSocket(ChatArrayAdapter chatArrayAdapter,Activity activity ,LatLng chatId,Menu menu) {
         this.chatArrayAdapter = chatArrayAdapter;
         this.activity = activity;
         this.chatId = chatId;
+        this.menu = menu;
     }
 
-    public static  void request(ChatArrayAdapter chatArrayAdapter , Activity activity ,LatLng chatId){
+    public static  void request(ChatArrayAdapter chatArrayAdapter , Activity activity ,LatLng chatId,Menu menu){
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder().url(Utils.webSocketUrl).build();
-        NotificationsWebSocket listener = new NotificationsWebSocket(chatArrayAdapter,activity, chatId);
+        NotificationsWebSocket listener = new NotificationsWebSocket(chatArrayAdapter,activity, chatId, menu);
         WebSocket ws = client.newWebSocket(request,listener);
 
         Log.d("debug","------Starting WebSocket-------");

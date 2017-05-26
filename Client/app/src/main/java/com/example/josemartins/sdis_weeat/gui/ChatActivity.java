@@ -93,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
         chatId = new LatLng(res.getDouble("lat"),res.getDouble("long"));
         setTitle(res.getString("title") + "\n" + res.getString("date"));
 
-        NotificationsWebSocket.request(chatArrayAdapter, this,chatId);
+        NotificationsWebSocket.request(chatArrayAdapter, this,chatId,navView.getMenu());
 
     }
 

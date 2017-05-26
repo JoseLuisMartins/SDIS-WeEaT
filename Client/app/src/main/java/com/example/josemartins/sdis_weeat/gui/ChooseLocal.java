@@ -24,12 +24,12 @@ public class ChooseLocal extends AppCompatActivity {
         setTitle("Choose a place to eat");
 
 
-        ImageButton btHybrid = (ImageButton) findViewById(R.id.hybrid);
+        ImageButton btTerrain = (ImageButton) findViewById(R.id.terrain);
         ImageButton btSatellite = (ImageButton) findViewById(R.id.satellite);
         ImageButton btNormal = (ImageButton) findViewById(R.id.normal);
 
 
-        btHybrid.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_HYBRID));
+        btTerrain.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_TERRAIN));
         btSatellite.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_SATELLITE));
         btNormal.setOnClickListener(v -> mf.changeMapType(GoogleMap.MAP_TYPE_NORMAL));
 
