@@ -140,12 +140,14 @@ public class DatabaseManager {
         System.out.println("Backup Successfull");
     };
 
-    public static void database_restore(String path){
+    public static void database_restore(String path,String table){
 
         List<String> commands = get_commands("pg_restore");
 
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
+        commands.add("-t");
+        commands.add(table);
         commands.add("-v");
         commands.add("." + File.separator + path); //received.backup local do file output após backup
 

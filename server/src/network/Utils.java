@@ -22,6 +22,7 @@ public class Utils {
 
     public static void initDB(boolean restore,String path){
         db = new DatabaseConnection(restore,path);
+        db.debug_database();
     }
 
 

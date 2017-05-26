@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS chat_member CASCADE;
-
-CREATE TABLE chat_member (
-    chat_location point NOT NULL,
-    member text NOT NULL
+DROP TABLE IF EXISTS user_weeat CASCADE;
+CREATE TABLE user_weeat (
+    username text NOT NULL,
+    email text NOT NULL,
+    image_url text
 );
 
-ALTER TABLE chat_member OWNER TO postgres;
+ALTER TABLE user_weeat OWNER TO postgres;
 
 DROP TABLE IF EXISTS chatroom CASCADE;
 CREATE TABLE chatroom (
@@ -17,6 +17,15 @@ CREATE TABLE chatroom (
 
 ALTER TABLE chatroom OWNER TO postgres;
 
+DROP TABLE IF EXISTS chat_member CASCADE;
+
+CREATE TABLE chat_member (
+    chat_location point NOT NULL,
+    member text NOT NULL
+);
+
+ALTER TABLE chat_member OWNER TO postgres;
+
 DROP TABLE IF EXISTS message CASCADE;
 CREATE TABLE message (
     id SERIAL,
@@ -27,15 +36,6 @@ CREATE TABLE message (
 );
 
 ALTER TABLE message OWNER TO postgres;
-
-DROP TABLE IF EXISTS user_weeat CASCADE;
-CREATE TABLE user_weeat (
-    username text NOT NULL,
-    email text NOT NULL,
-    image_url text
-);
-
-ALTER TABLE user_weeat OWNER TO postgres;
 
 CREATE INDEX index_message_date ON message USING btree (date);
 

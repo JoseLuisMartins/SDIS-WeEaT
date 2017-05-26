@@ -40,7 +40,11 @@ public class DatabaseConnection {
 
         if(restore && Files.exists(Paths.get(System.getProperty("user.dir") + File.separator + path))) {
             System.out.println("Restoring Database in DatabaseConnection Constructor!");
-            DatabaseManager.database_restore(path);
+            DatabaseManager.database_restore(path,"user_weeat");
+            DatabaseManager.database_restore(path,"chatroom");
+            DatabaseManager.database_restore(path,"chat_member");
+            DatabaseManager.database_restore(path,"message");
+
         }
         connect();
 
@@ -481,6 +485,13 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void debug_database() {
+        debug_users();
+        debug_chatrooms();
+        debug_chatmembers();
+        debug_chatmessages();
     }
 
 
