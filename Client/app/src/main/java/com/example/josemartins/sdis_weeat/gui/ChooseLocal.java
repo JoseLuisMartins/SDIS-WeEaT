@@ -37,5 +37,8 @@ public class ChooseLocal extends AppCompatActivity {
         ft.commit();
     }
 
+    @Override
+    public void onBackPressed() {
 
+    }
 }

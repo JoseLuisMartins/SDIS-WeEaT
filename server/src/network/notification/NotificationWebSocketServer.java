@@ -1,9 +1,7 @@
 package network.notification;
 
 
-import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -28,37 +26,14 @@ public class NotificationWebSocketServer {
         server.setHandler(new WebSocketHandler());
 
 
+
         //WS
         ServerConnector wsConnector = new ServerConnector(server);
-        wsConnector.setHost(webSocketIP);        //wsConnector.setHost("172.30.26.247");
+        wsConnector.setHost(webSocketIP);
         wsConnector.setPort(webSocketPort);
         server.addConnector(wsConnector);
 
-        //WSS
-/*
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setTrustAll(true);
-        sslContextFactory.setValidateCerts(false);
-        //sslContextFactory.setKeyStorePath("keystore.jks");
-        //sslContextFactory.setKeyStorePassword("OBF:1l1a1s3g1yf41xtv20731xtn1yf21s3m1kxs");
 
-        HttpConfiguration http_config = new HttpConfiguration();
-        http_config.setSecureScheme("https");
-        http_config.setSecurePort(8443);
-        http_config.setOutputBufferSize(32768);
-        http_config.setRequestHeaderSize(8192);
-        http_config.setResponseHeaderSize(8192);
-        http_config.setSendServerVersion(true);
-        http_config.setSendDateHeader(false);
-
-        HttpConfiguration https_config = new HttpConfiguration(http_config);
-        https_config.addCustomizer(new SecureRequestCustomizer());
-
-        ServerConnector wssConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),new HttpConnectionFactory(https_config));
-        wssConnector.setHost("127.0.0.1");
-        wssConnector.setPort(8443);
-        server.addConnector(wssConnector);
-*/
         server.start();
         server.join();
 

@@ -111,7 +111,6 @@ public class ClientDistributor extends Distributor {
             Menu menu = (Menu) actionObjects.get(ActionObject.CHAT_MENU);
 
 
-
             JSONObject messages = new JSONObject((String) m.getContent());
             JSONArray messagesInf = messages.getJSONArray("messages");
             JSONArray chatMembersInf = messages.getJSONArray("chatMembers");
@@ -119,6 +118,9 @@ public class ClientDistributor extends Distributor {
 
             chatActivity.runOnUiThread(() -> {
                 try {
+                    menu.clear();
+                    chatAdapter.clear();
+
                     SubMenu s = menu.addSubMenu("Chat Participants");
                     for (int i = 0; i < chatMembersInf.length(); i++) {
                         JSONObject chatMember= chatMembersInf.getJSONObject(i);

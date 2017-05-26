@@ -40,6 +40,11 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         super.add(object);
     }
 
+    @Override
+    public void clear() {
+        chatMessageList.clear();
+    }
+
     public int getCount() {
         return this.chatMessageList.size();
     }
