@@ -1,5 +1,6 @@
 package com.example.josemartins.sdis_weeat.gui;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -158,5 +159,11 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        Intent i = new Intent(Utils.context,ChooseLocal.class);
+        Utils.context.startActivity(i);
+    }
 }

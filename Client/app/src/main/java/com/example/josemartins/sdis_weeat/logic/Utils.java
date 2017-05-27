@@ -50,6 +50,7 @@ public class Utils {
 
 
         Notification.Builder notification = new Notification.Builder(activity.getApplicationContext());
+        notification.setAutoCancel(true);
         notification.setSmallIcon(R.drawable.ic_food);
         notification.setWhen(System.currentTimeMillis());
         notification.setContentTitle(message.getChatTitle() + " " + date);

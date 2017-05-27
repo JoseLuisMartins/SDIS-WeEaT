@@ -1,17 +1,12 @@
 package network.protocol;
 
-import database.DatabaseManager;
-import network.Utils;
+
 import network.sockets.SecureServer;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 
 public class SecureServerBermuda extends SecureServer {
@@ -96,6 +91,9 @@ public class SecureServerBermuda extends SecureServer {
                     System.out.println("Accepted connection : " + socket);
                     // send file
                     File myFile = new File(backup_file);
+
+                    if(!myFile.exists())
+                        return;
 
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     fis = new FileInputStream(myFile);
