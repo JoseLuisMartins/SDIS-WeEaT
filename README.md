@@ -56,3 +56,23 @@ The application will be focused on students, it’s main goal is to provide to s
 * Security
 * Scalability
 * Consistency
+
+
+# Run Instructions
+
+
+## LoadBalancer:
+
+    USAGE:
+     	<loadBalancer_HTTPS_Port> <loadBalancer_SSLSOCKET_Port>
+
+## Servidor:
+
+    USAGE:
+     	<locationString> <serverIp> <serverPort> <balancerIp> <balancerPort> <WebSocketPort> <backupPort> <path_to_pgsql_bin>
+
+    
+
+## Client
+
+Install the apk.
