@@ -82,8 +82,7 @@ public class SecureServerBermuda extends SecureServer {
                 System.out.println("Sending backup file!");
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;
-                OutputStream os = null;
-
+                DataOutputStream dataOutputStream = null;
                 System.out.println("Waiting...");
                 try {
 
@@ -102,21 +101,22 @@ public class SecureServerBermuda extends SecureServer {
                     fis = new FileInputStream(myFile);
                     bis = new BufferedInputStream(fis);
                     bis.read(mybytearray, 0, mybytearray.length);
-                    os = socket.getOutputStream();
                     System.out.println("Sending " + backup_file + "(" + mybytearray.length + " bytes)");
-                    os.write(mybytearray.length >> 8 * 3 & 0xFF);
-                    os.write(mybytearray.length >> 8 * 2 & 0xFF);
-                    os.write(mybytearray.length >> 8 * 1 & 0xFF);
-                    os.write(mybytearray.length >> 8 * 0 & 0xFF);
+                    if(dataOutputStream == null)
+                        dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-                    os.write(mybytearray, 0, mybytearray.length);
+                    dataOutputStream.writeInt(mybytearray.length);
+                    dataOutputStream.write(mybytearray, 0, mybytearray.length);
 
                     System.out.println("Done.");
                 } catch (IOException e) {
                     try {
                         fis.close();
                         bis.close();
-                        os.close();
+                        socket.close();
+                        socket=null;
+                        this.cancel();
+
                     } catch (IOException e1) {
                         e1.printStackTrace();
                         return;

@@ -129,23 +129,37 @@ public class DatabaseManager {
 
         commands.add("-F");
         commands.add("c");
-        commands.add("-v");
-        commands.add("-b");
+        commands.add("weeat");
         commands.add("-f");
         commands.add("." + File.separator + "db.backup");
-        commands.add("weeat");
 
         launch_process(commands);
 
         System.out.println("Backup Successfull");
     };
 
-    public static void database_restore(String path,String table){
+    public static void database_restoreAll(String file ){
+        List<String> cmds = get_commands("pg_restore");
+        cmds.add("-c");
+
+        cmds.add("-d");
+        cmds.add("weeat");
+        cmds.add("." + File.separator + file);
+
+        launch_process(cmds);
+        System.out.println("Restore Successfull");
+    }
+
+    public static void database_restore(String path,String table, String key){
 
         List<String> commands = get_commands("pg_restore");
 
         commands.add("-d");
         commands.add("weeat");		// nome da database a fazer restore
+        if(key != null) {
+            commands.add("-I");
+            commands.add(key);
+        }
         commands.add("-t");
         commands.add(table);
         commands.add("-v");
@@ -197,5 +211,17 @@ public class DatabaseManager {
         res.add("postgres");
 
         return res;
+    }
+
+    public static void reindex() {
+
+        List<String> commands = get_commands("psql");
+        commands.add("-d");
+        commands.add("weeat");
+        commands.add("-c");
+        commands.add("REINDEX SYSTEM weeat");
+        launch_process(commands);
+
+        System.out.println("ReIndex Successfull");
     }
 }

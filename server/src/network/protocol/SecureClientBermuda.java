@@ -30,6 +30,13 @@ public class SecureClientBermuda extends SecureClient {
 
     public void receive_database_backup(){
 
+
+        DataInputStream dataIn = null;
+        try {
+            dataIn = new DataInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while(run) {
             System.out.println("Receiving backup data!");
 
@@ -43,23 +50,8 @@ public class SecureClientBermuda extends SecureClient {
 
                 // receive file
                 InputStream in = socket.getInputStream();
-                byte[] file_size_array = new byte[4];
-
-                int file_size = 0;
-                while(file_size < 4) {
-                    System.out.println("Reading : " + file_size);
-                    System.out.println(file_size_array.toString());
-                    file_size += in.read(file_size_array, file_size, 4 - file_size);
-                }
-
-                //Reading file size
-                System.out.println("Bytes Read : " + file_size);
-                file_size = 0;
-                file_size |= file_size_array[0] << 8 * 3;
-                file_size |= file_size_array[1] << 8 * 2;
-                file_size |= file_size_array[2] << 8;
-                file_size |= file_size_array[3];
-                System.out.println("File Size is : " + file_size);
+                int file_size = dataIn.readInt();
+               System.out.println("File Size is : " + file_size);
 
                 System.out.println("Connected!");
 
@@ -69,11 +61,13 @@ public class SecureClientBermuda extends SecureClient {
                 byte[] byte_array = new byte[file_size];
                 // Writing the file to disk
                 // Instantiating a new output stream object
-                OutputStream output = new FileOutputStream(file_path);
+                FileOutputStream output = new FileOutputStream(file_path, false);
+                output.flush();
+
 
                 int count = 0;
                 do {
-                    bytesRead = in.read(byte_array);
+                    bytesRead = dataIn.read(byte_array);
 
                     if(bytesRead == -1)
                         break;
@@ -82,13 +76,17 @@ public class SecureClientBermuda extends SecureClient {
                     output.write(byte_array, count, bytesRead);
                     count += bytesRead;
                 } while (count < file_size);
-
                 output.close();
 
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
+        }
+        try {
+            dataIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
