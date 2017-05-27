@@ -12,7 +12,4 @@ public class ClientDistributor extends Distributor{
     public static final int ADD_SERVER_LOCATIONS = 4;
     public static final int START_SERVER_CONNECTION = 5;
 
-
-
-
 }
