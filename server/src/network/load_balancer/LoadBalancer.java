@@ -46,9 +46,16 @@ public class LoadBalancer implements HttpHandler {
 
     }
 
-    public static void main(String[] r){
+    public static void main(String[] args){
+        if(args.length != 2){
+            System.out.print("USAGE: \n \t <loadBalancer_HTTPS_Port> <loadBalancer_SSLSOCKET_Port>\n");
+            return;
+        }
 
-        LoadBalancer lb = new LoadBalancer(8000, 27015,3);
+        int balancer_Https_Port= Integer.parseInt(args[0]);
+        int balancer_SslSocket_Port= Integer.parseInt(args[1]);
+
+        LoadBalancer lb = new LoadBalancer(balancer_Https_Port, balancer_SslSocket_Port,3);
 
     }
 
