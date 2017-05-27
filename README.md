@@ -76,3 +76,10 @@ The application will be focused on students, it’s main goal is to provide to s
 ## Client
 
 Install the apk.
+
+## Developers :
+
+* [David Azevedo](https://github.com/PeaceOff)
+* [João Ferreira](https://github.com/joaocsf)
+* [José Martins](https://github.com/JoseLuisMartins)
+* [Marcelo Ferreira](https://github.com/mferreira96)
